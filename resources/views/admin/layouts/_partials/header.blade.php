@@ -159,6 +159,21 @@
                         </li>
                     @endcan
 
+                    @can('orders_manage')
+                        <li class="has-submenu">
+                            <a href="{{ route('orders.index') }}"><i class="zmdi zmdi-view-list"></i>
+                                <span>  الحجوزات </span>
+                            </a>
+                            <ul class="submenu">
+                                <li style="padding:  0 25px"><a href="{{ route('orders.index') }}">عرض
+                                        الحجوزات</a></li>
+                                <li style="padding:  0 25px"><a href="{{ route('orders.financial_reports') }}">التقارير المالية</a></li>
+                                <li style="padding:  0 25px"><a href="{{ route('orders.financial_accounts') }}">الحسابات المالية</a></li>
+                                
+                            </ul>
+                        </li>
+                    @endcan
+
                     @can('cities_manage')
 
                         <li>

@@ -66,11 +66,6 @@
                             </div>
 
                             <div class="col-lg-3 col-xs-12">
-                                <label>  مكان الخدمة :</label>
-                                <p>{{ $company->place == 0 ? 'منازل' : 'مركز' }}</p>
-                            </div>
-
-                            <div class="col-lg-3 col-xs-12">
                                 <label> نوع مزود الخدمة :</label>
                                 <p>{{ $company->type == 0 ? 'فرد' : 'منشأة' }}</p>
                             </div>

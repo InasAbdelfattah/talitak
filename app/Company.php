@@ -67,6 +67,17 @@ class Company extends Model
 
     }
 
+    public function provider()
+    {
+        return $this->belongsTo(User::class ,'provider_id');
+
+    }
+
+    public function serviceType()
+    {
+        return $this->belongsTo(ServiceType::class);
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

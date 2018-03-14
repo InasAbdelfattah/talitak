@@ -649,16 +649,29 @@ Enjoy responsibly!
 
     @if(session()->has('success'))
     setTimeout(function () {
-        showMessage('{{ session()->get('success') }}');
+        showMessage('{{ session()->get('success') }}','success');
     }, 3000);
 
     @endif
 
-    function showMessage(message) {
+    @if(session()->has('fail'))
+    setTimeout(function () {
+        showMessage('{{ session()->get('fail') }}' , 'fail');
+    }, 3000);
 
-        var shortCutFunction = 'success';
+    @endif
+
+    function showMessage(message , type) {
+
+        var shortCutFunction = type;
         var msg = message;
-        var title = 'نجاح!';
+
+        var title = '';
+        if(type == 'success'){
+            title = 'نجاح';
+        }else{
+            title = 'فشل';
+        }
         toastr.options = {
             positionClass: 'toast-top-center',
             onclick: null,

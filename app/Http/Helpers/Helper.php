@@ -10,4 +10,14 @@
         $days_arr = ['saturday'=>'السبت' , 'sunday'=>'الأحد' , 'monday'=>'الإثنين' ,'tuesday'=>'الثلاثاء' , 'wednesday'=>'الأربعاء' , 'thursday'=>'الخميس' , 'friday'=>'الجمعة'] ;
          return $days_arr[$key];
     }
+
+    function user($id){
+        return App\User::find($id);
+    }
+
+    function type($id){
+        return App\Category::find($id);
+        
+        
+    }
 ?>

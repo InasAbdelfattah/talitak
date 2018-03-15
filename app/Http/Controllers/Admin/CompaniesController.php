@@ -57,7 +57,6 @@ class CompaniesController extends Controller
     public function activation(Request $request)
     {
 
-
         if ($request->agree == '') {
             return response()->json([
                 'status' => false,
@@ -65,23 +64,8 @@ class CompaniesController extends Controller
             ]);
         }
 
-        // if ($request->membership == '') {
-        //     return response()->json([
-        //         'status' => false,
-        //         'message' => 'من فضلك اختار العضوية ',
-        //     ]);
-       // }
-
-        if ($request->agree == '') {
-            return response()->json([
-                'status' => false,
-                'message' => 'يجب الموافقة على العضوية المختارة للشركة',
-            ]);
-        }
-
         $compay = Company::find($request->companyId);
         if ($compay) {
-            //$compay->membership_id = $request->membership;
             $compay->is_agree = 1;
             if ($compay->save()) {
                 return response()->json([

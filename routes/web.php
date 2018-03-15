@@ -124,13 +124,17 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'admin'], function ()
     Route::post('districts/delete', 'Admin\DistrictsController@delete')->name('district.delete');
     Route::resource('districts', 'Admin\DistrictsController');
     
-    Route::resource('orders', 'Admin\OrdersController');
+    
     Route::post('orders/delete/group', 'Admin\OrdersController@groupDelete')->name('orders.group.delete');
     Route::post('orders/delete', 'Admin\OrdersController@delete')->name('orders.delete');
     Route::post('orders/search', 'Admin\OrdersController@search')->name('orders.search');
-    Route::get('orders/financial_reports', 'Admin\OrdersController@getFinancialReports')->name('orders.financial_reports');
+    Route::get('orders/financial-reports', 'Admin\OrdersController@getFinancialReports')->name('orders.financial_reports');
     Route::get('orders/financial_accounts', 'Admin\OrdersController@getFinancialAccounts')->name('orders.financial_accounts');
-    
+    Route::post('orders/search_financial_reports', 'Admin\OrdersController@searchFinancialReports')->name('orders.search_reports');
+    Route::get('orders/search_financial_accounts', 'Admin\OrdersController@searchFinancialAccounts')->name('orders.search_accounts');
+    Route::post('orders/delete_financial_account', 'Admin\OrdersController@deleteAccount')->name('orders.delete_accounts');    
+    Route::post('orders/confirm-payment', 'Admin\OrdersController@confirmPayment')->name('account.confirmPayment');    
+    Route::resource('orders', 'Admin\OrdersController');
     
 
     Route::post('sponsor/delete/group', 'Admin\SponsorsController@groupDelete')->name('sponsors.group.delete');

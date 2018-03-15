@@ -6,7 +6,6 @@ use App\Category;
 use App\Comment;
 use App\Company;
 use App\Service;
-use App\ServiceType;
 use App\Order;
 use App\User;
 use App\Rate;
@@ -25,7 +24,6 @@ class HomeController extends Controller
         $data['centersCount'] = Company::count();
         $data['usersCount'] = User::whereDoesntHave('roles')->where('is_provider',0)->get()->count();
         $data['providersCount'] = User::whereDoesntHave('roles')->where('is_provider',1)->get()->count();
-        $data['serviceTypes_app'] = ServiceType::get()->count();
         $data['services_app'] = Service::get()->count();
         $data['orders'] = Order::get()->count();
         $data['read_contacts'] = Support::where('is_read',1)->get()->count();

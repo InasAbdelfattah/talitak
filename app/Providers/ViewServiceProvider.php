@@ -31,7 +31,6 @@ class ViewServiceProvider extends ServiceProvider
             $setting = new Setting;
             $main = new Main();
 
-
             $view->with(compact('cats', 'helper', 'main', 'setting','main_helper'));
         });
     }

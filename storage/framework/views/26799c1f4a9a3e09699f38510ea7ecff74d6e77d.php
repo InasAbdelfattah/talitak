@@ -7,16 +7,16 @@
     <meta name="author" content="Coderthemes">
 
     <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <link rel="shortcut icon" href="assets/images/favicon.ico">
 
-    <title>لوحة التحكم | @yield('title')</title>
+    <title>لوحة التحكم | <?php echo $__env->yieldContent('title'); ?></title>
 
     <!--Morris Chart CSS -->
 
-    @include('admin.layouts._partials.styles')
+    <?php echo $__env->make('admin.layouts._partials.styles', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
-    @yield('styles')
+    <?php echo $__env->yieldContent('styles'); ?>
 
 
     <style>
@@ -135,7 +135,7 @@ Enjoy responsibly!
             }
         }
 
-        @keyframes spin {
+        @keyframes  spin {
             0% {
                 -webkit-transform: rotate(0deg); /* Chrome, Opera 15+, Safari 3.1+ */
                 -ms-transform: rotate(0deg); /* IE 9 */
@@ -327,11 +327,11 @@ Enjoy responsibly!
            Modify as content requires.
            ========================================================================== */
 
-        @media only screen and (min-width: 35em) {
+        @media  only screen and (min-width: 35em) {
             /* Style adjustments for viewports that meet the condition */
         }
 
-        @media print,
+        @media  print,
         (-o-min-device-pixel-ratio: 5/4),
         (-webkit-min-device-pixel-ratio: 1.25),
         (min-resolution: 120dpi) {
@@ -343,7 +343,7 @@ Enjoy responsibly!
            Inlined to avoid required HTTP connection: h5bp.com/r
            ========================================================================== */
 
-        @media print {
+        @media  print {
             * {
                 background: transparent !important;
                 color: #000 !important; /* Black prints faster: h5bp.com/s */
@@ -392,7 +392,7 @@ Enjoy responsibly!
                 max-width: 100% !important;
             }
 
-            @page {
+            @page  {
                 margin: 0.5cm;
             }
 
@@ -446,7 +446,7 @@ Enjoy responsibly!
         /*transform: translate(-50%, -50%);*/
         /*}*/
 
-        /*@keyframes slideInFromLeft {*/
+        /*@keyframes  slideInFromLeft {*/
         /*0% {*/
         /*transform: translateX(-100%);*/
         /*}*/
@@ -506,11 +506,11 @@ Enjoy responsibly!
     <div class="loader-section section-right"></div>
 
 </div>
-@include('admin.layouts._partials.header')
+<?php echo $__env->make('admin.layouts._partials.header', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
 
 
-@yield('content')
+<?php echo $__env->yieldContent('content'); ?>
 
 <!-- Footer -->
 <footer class="footer text-right">
@@ -526,7 +526,7 @@ Enjoy responsibly!
 <!-- End Footer -->
 
 
-@include('admin.layouts._partials.scripts')
+<?php echo $__env->make('admin.layouts._partials.scripts', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
 <script>
 
@@ -559,7 +559,7 @@ Enjoy responsibly!
 
 </script>
 
-{{--Datatables--}}
+
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -620,45 +620,45 @@ Enjoy responsibly!
 <script type="text/javascript">
 
 
-    {{--$(function () {--}}
-    {{--$('body').on('click', 'datatable-fixed-header_paginate .pagination a', function (e) {--}}
-    {{--e.preventDefault();--}}
+    
+    
+    
 
 
-    {{--alert('hassan');--}}
+    
 
-    {{--$('#load a').css('color', '#dfecf6');--}}
-    {{--$('#load').append('<img style="position: absolute; right: 0; top: 0; z-index: 100000;" with: 20%; src="{{ request()->root() }}/assets/admin/custom/images/loader.gif" />');--}}
+    
+    
 
-    {{--var url = $(this).attr('href');--}}
-    {{--getArticles(url);--}}
-    {{--window.history.pushState("", "", url);--}}
-    {{--});--}}
+    
+    
+    
+    
 
-    {{--function getArticles(url) {--}}
-    {{--$.ajax({--}}
-    {{--url: url--}}
-    {{--}).done(function (data) {--}}
-    {{--$('.articles').html(data);--}}
-    {{--}).fail(function () {--}}
-    {{--alert('Articles could not be loaded.');--}}
-    {{--});--}}
-    {{--}--}}
-    {{-- }); --}}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-    @if(session()->has('success'))
+    <?php if(session()->has('success')): ?>
     setTimeout(function () {
-        showMessage('{{ session()->get('success') }}' , 'success');
+        showMessage('<?php echo e(session()->get('success')); ?>' , 'success');
     }, 3000);
 
-    @endif
+    <?php endif; ?>
 
-    @if(session()->has('error'))
+    <?php if(session()->has('error')): ?>
     setTimeout(function () {
-        showMessage('{{ session()->get('error') }}' , 'error');
+        showMessage('<?php echo e(session()->get('error')); ?>' , 'error');
     }, 3000);
 
-    @endif
+    <?php endif; ?>
 
     function showMessage(message , type) {
 
@@ -689,13 +689,13 @@ Enjoy responsibly!
                 var url = $(this).attr('data-url');
 
                 if (keyName != '' && pageSize != '') {
-                    var path = '{{  request()->root().'/'.request()->path() }}' + '?name=' + keyName + '&pageSize=' + pageSize;
+                    var path = '<?php echo e(request()->root().'/'.request()->path()); ?>' + '?name=' + keyName + '&pageSize=' + pageSize;
                 } else if (keyName != '' && pageSize == '' && pageSize == 'all') {
-                    var path = '{{  request()->root().'/'.request()->path() }}' + '?name=' + keyName;
+                    var path = '<?php echo e(request()->root().'/'.request()->path()); ?>' + '?name=' + keyName;
                 } else if (keyName == '' && pageSize != '') {
-                    var path = '{{  request()->root().'/'.request()->path() }}' + '?pageSize=' + pageSize;
+                    var path = '<?php echo e(request()->root().'/'.request()->path()); ?>' + '?pageSize=' + pageSize;
                 } else {
-                    var path = '{{  request()->root().'/'.request()->path() }}' + '?pageSize=' + pageSize;
+                    var path = '<?php echo e(request()->root().'/'.request()->path()); ?>' + '?pageSize=' + pageSize;
                 }
 
                 $.ajax({

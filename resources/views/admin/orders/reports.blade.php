@@ -5,19 +5,8 @@
     <!-- Page-Title -->
     <div class="row">
         <div class="col-sm-12">
-            <div class="btn-group pull-right m-t-15">
-                <button type="button" class="btn btn-custom dropdown-toggle waves-effect waves-light"
-                        data-toggle="dropdown" aria-expanded="false">Settings <span class="m-l-5"><i
-                                class="fa fa-cog"></i></span></button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                </ul>
-            </div>
-            <h4 class="page-title">الحجوزات</h4>
+           
+            <h4 class="page-title">التقارير المالية</h4>
         </div>
     </div>
 
@@ -26,38 +15,45 @@
         <div class="col-lg-12">
             <div class="card-box">
                 <div class="dropdown pull-right">
-                    {{--<a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">--}}
-                    {{--<i class="zmdi zmdi-more-vert"></i>--}}
-                    {{--</a>--}}
-                    {{--<ul class="dropdown-menu" role="menu">--}}
-                    {{--<li><a href="#">Action</a></li>--}}
-                    {{--<li><a href="#">Another action</a></li>--}}
-                    {{--<li><a href="#">Something else here</a></li>--}}
-                    {{--<li class="divider"></li>--}}
-                    {{--<li><a href="#">Separated link</a></li>--}}
-                    {{--</ul>--}}
-
+                    
                     <a style="float: left; margin-right: 15px;" class="btn btn-danger btn-sm getSelected">
                         <i class="fa fa-trash" style="margin-left: 5px"></i> حذف المحدد
                     </a>
                 </div>
 
-                <div class="row">
-                <form action="{{route('orders.search')}}" method="post">
+                <form action="{{route('orders.search_reports')}}" method="post">
                     {{csrf_field()}}
-                    <div class="col-lg-3">
-                        نوع الخدمة : 
-                        <input type="text" name="service_type" class="filteriTems" id="filterItems"/>
+                    <div class="row form-group">
+                        <div class="col-lg-3">
+                            نوع الخدمة : 
+                            <input type="text" name="service_type" class="form-control"/>
+                        </div>
+                        <div class="col-lg-3">
+                            مزود الخدمة : 
+                            <input type="text" name="service_provider" class="form-control"/>
+                        </div>
+                        
                     </div>
-                    <div class="col-lg-3">
-                        مزود الخدمة : 
-                        <input type="text" name="service_provider" class="filteriTems" id="filterItems"/>
+                    <div class="row">
+                            <div class="col-lg-3">وقت الخدمة : </div>
                     </div>
-                    <div class="col-lg-3">
-                        <button type="submit" class="btn btn-primary">بحث</button>
+                    <div class="row form-group">
+                            
+                        <div class="col-lg-3">
+                            من : 
+                            <input type="date" name="from" class="form-control"/>
+                        </div>
+
+                        <div class="col-lg-3">
+                            إلى : 
+                            <input type="date" name="to" class="form-control"/>
+                        </div>
+                        <div class="col-lg-3">
+                            <button type="submit" class="btn btn-primary">بحث</button>
+                        </div>
                     </div>
-                    </form>
-                    </div>
+                </form>
+                    
                 </div>
                 {{--<select id="recordNumber" class="filteriTems">--}}
 
@@ -71,7 +67,7 @@
 
                 {{--</select>--}}
 
-                <h4 class="header-title m-t-0 m-b-30">عرض الحجوزات</h4>
+                <h4 class="header-title m-t-0 m-b-30">عرض التقارير المالية</h4>
 
                 <table id="datatable-fixed-header" class="table table-striped table-hover table-condensed"
                        style="width:100%">
@@ -83,13 +79,9 @@
                         <th>اسم المركز</th>
                         <th>نوع الخدمة</th>
                         <th>اسم الخدمة</th>
-                        <th>مكان الخدمة</th>
-                        <th>وصف الخدمة</th>
-                        <th>مدينة الخدمة</th>
-                        <th>حالة الخدمة</th>
                         <th>وقت وتاريخ الخدمة</th>
                         <th>سعر الخدمة</th>
-                        <th>تقييم الخدمة الخدمة</th>
+                        <th>نسبة التطبيق من الخدمة</th>
                         <th>الخيارات</th>
 
                     </tr>
@@ -111,21 +103,18 @@
 
                             <td>{{ $row->username }}</td>
                             <td>@if(user($row->provider_id)){{ user($row->provider_id)->name }}@endif</td>
-                            <td> @if(type($row->serviceType)) {{type($row->serviceType)->name_ar}} @endif </td>
                             <td>{{ $row->company_name }}</td>
-                            <td> {{$row->service_name}} </td>
-                            <td> {{ $row->company_place == 0 ? 'منازل' : 'مركز' }} </td>
-                            <td>{{$row->service_desc}}</td>                            
-                            <td>
-                            @php $city = App\City::find($row->city_id) ; @endphp
-                            @if($city){{ $city->{'name:ar'} }}@endif</td>                            
-                            <td> {{$row->status}} </td>
-                            
+                            <td> @if(type($row->serviceType)) {{type($row->serviceType)->name_ar}} @endif </td>
 
+                            <td> {{$row->service_name}} </td>
                             <td>{{ $row->created_at }}</td>
                             <td>{{ $row->price }}</td>
                             <td>
-                               <label class="label label-inverse">@if($row->rates){{ $row->rates->avg('rate') }}@else 'لم يقيم' @endif</label>
+                                {{--  <label class="label label-inverse">  --}}
+                                    @if($setting)
+                                    {{ $setting->getBody('commission') * $row->price /100}}
+                                    @endif
+                                {{--  </label>  --}}
                             </td>
                             <td>
                                 <!-- <a href="{{ route('orders.show', $row->id) }}"
@@ -158,8 +147,6 @@
 
 
 @section('scripts')
-
-
 
     <script>
 

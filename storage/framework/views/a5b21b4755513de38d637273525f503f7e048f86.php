@@ -1,23 +1,10 @@
-@extends('admin.layouts.master')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
     <!-- Page-Title -->
     <div class="row">
         <div class="col-sm-12">
-            <div class="btn-group pull-right m-t-15">
-                <button type="button" class="btn btn-custom dropdown-toggle waves-effect waves-light"
-                        data-toggle="dropdown" aria-expanded="false">Settings <span class="m-l-5"><i
-                                class="fa fa-cog"></i></span></button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                </ul>
-            </div>
-            <h4 class="page-title">الحجوزات</h4>
+           
+            <h4 class="page-title">التقارير المالية</h4>
         </div>
     </div>
 
@@ -26,52 +13,60 @@
         <div class="col-lg-12">
             <div class="card-box">
                 <div class="dropdown pull-right">
-                    {{--<a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">--}}
-                    {{--<i class="zmdi zmdi-more-vert"></i>--}}
-                    {{--</a>--}}
-                    {{--<ul class="dropdown-menu" role="menu">--}}
-                    {{--<li><a href="#">Action</a></li>--}}
-                    {{--<li><a href="#">Another action</a></li>--}}
-                    {{--<li><a href="#">Something else here</a></li>--}}
-                    {{--<li class="divider"></li>--}}
-                    {{--<li><a href="#">Separated link</a></li>--}}
-                    {{--</ul>--}}
-
+                    
                     <a style="float: left; margin-right: 15px;" class="btn btn-danger btn-sm getSelected">
                         <i class="fa fa-trash" style="margin-left: 5px"></i> حذف المحدد
                     </a>
                 </div>
 
-                <div class="row">
-                <form action="{{route('orders.search')}}" method="post">
-                    {{csrf_field()}}
-                    <div class="col-lg-3">
-                        نوع الخدمة : 
-                        <input type="text" name="service_type" class="filteriTems" id="filterItems"/>
+                <form action="<?php echo e(route('orders.search_reports')); ?>" method="post">
+                    <?php echo e(csrf_field()); ?>
+
+                    <div class="row form-group">
+                        <div class="col-lg-3">
+                            نوع الخدمة : 
+                            <input type="text" name="service_type" class="form-control"/>
+                        </div>
+                        <div class="col-lg-3">
+                            مزود الخدمة : 
+                            <input type="text" name="service_provider" class="form-control"/>
+                        </div>
+                        
                     </div>
-                    <div class="col-lg-3">
-                        مزود الخدمة : 
-                        <input type="text" name="service_provider" class="filteriTems" id="filterItems"/>
+                    <div class="row">
+                            <div class="col-lg-3">وقت الخدمة : </div>
                     </div>
-                    <div class="col-lg-3">
-                        <button type="submit" class="btn btn-primary">بحث</button>
+                    <div class="row form-group">
+                            
+                        <div class="col-lg-3">
+                            من : 
+                            <input type="date" name="from" class="form-control"/>
+                        </div>
+
+                        <div class="col-lg-3">
+                            إلى : 
+                            <input type="date" name="to" class="form-control"/>
+                        </div>
+                        <div class="col-lg-3">
+                            <button type="submit" class="btn btn-primary">بحث</button>
+                        </div>
                     </div>
-                    </form>
-                    </div>
+                </form>
+                    
                 </div>
-                {{--<select id="recordNumber" class="filteriTems">--}}
+                
 
-                {{--<option value="5">5</option>--}}
-                {{--<option value="10">10</option>--}}
-                {{--<option value="15">15</option>--}}
-                {{--<option value="20">20</option>--}}
-                {{--<option value="25">25</option>--}}
-                {{--<option value="50">50</option>--}}
-                {{--<option value="100">100</option>--}}
+                
+                
+                
+                
+                
+                
+                
 
-                {{--</select>--}}
+                
 
-                <h4 class="header-title m-t-0 m-b-30">عرض الحجوزات</h4>
+                <h4 class="header-title m-t-0 m-b-30">عرض التقارير المالية</h4>
 
                 <table id="datatable-fixed-header" class="table table-striped table-hover table-condensed"
                        style="width:100%">
@@ -83,83 +78,75 @@
                         <th>اسم المركز</th>
                         <th>نوع الخدمة</th>
                         <th>اسم الخدمة</th>
-                        <th>مكان الخدمة</th>
-                        <th>وصف الخدمة</th>
-                        <th>مدينة الخدمة</th>
-                        <th>حالة الخدمة</th>
                         <th>وقت وتاريخ الخدمة</th>
                         <th>سعر الخدمة</th>
-                        <th>تقييم الخدمة الخدمة</th>
+                        <th>نسبة التطبيق من الخدمة</th>
                         <th>الخيارات</th>
 
                     </tr>
                     </thead>
                     <tbody>
 
-                    @if(count($orders) > 0)
-                    @foreach($orders as $row)
+                    <?php if(count($orders) > 0): ?>
+                    <?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <tr>
                             <td>
 
                                 <div class="checkbox checkbox-primary checkbox-single">
                                     <input type="checkbox" class="checkboxes-items"
-                                           value="{{ $row->id }}"
+                                           value="<?php echo e($row->id); ?>"
                                            aria-label="Single checkbox Two">
                                     <label></label>
                                 </div>
                             </td>
 
-                            <td>{{ $row->username }}</td>
-                            <td>@if(user($row->provider_id)){{ user($row->provider_id)->name }}@endif</td>
-                            <td> @if(type($row->serviceType)) {{type($row->serviceType)->name_ar}} @endif </td>
-                            <td>{{ $row->company_name }}</td>
-                            <td> {{$row->service_name}} </td>
-                            <td> {{ $row->company_place == 0 ? 'منازل' : 'مركز' }} </td>
-                            <td>{{$row->service_desc}}</td>                            
-                            <td>
-                            @php $city = App\City::find($row->city_id) ; @endphp
-                            @if($city){{ $city->{'name:ar'} }}@endif</td>                            
-                            <td> {{$row->status}} </td>
-                            
+                            <td><?php echo e($row->username); ?></td>
+                            <td><?php if(user($row->provider_id)): ?><?php echo e(user($row->provider_id)->name); ?><?php endif; ?></td>
+                            <td><?php echo e($row->company_name); ?></td>
+                            <td> <?php if(type($row->serviceType)): ?> <?php echo e(type($row->serviceType)->name_ar); ?> <?php endif; ?> </td>
 
-                            <td>{{ $row->created_at }}</td>
-                            <td>{{ $row->price }}</td>
+                            <td> <?php echo e($row->service_name); ?> </td>
+                            <td><?php echo e($row->created_at); ?></td>
+                            <td><?php echo e($row->price); ?></td>
                             <td>
-                               <label class="label label-inverse">@if($row->rates){{ $row->rates->avg('rate') }}@else 'لم يقيم' @endif</label>
+                                
+                                    <?php if($setting): ?>
+                                    <?php echo e($setting->getBody('commission') * $row->price /100); ?>
+
+                                    <?php endif; ?>
+                                
                             </td>
                             <td>
-                                <!-- <a href="{{ route('orders.show', $row->id) }}"
+                                <!-- <a href="<?php echo e(route('orders.show', $row->id)); ?>"
                                    class="btn btn-icon btn-xs waves-effect btn-info m-b-5">
                                     <i class="fa fa-eye"></i>
                                 </a> -->
 
-                                <a href="javascript:;" id="elementRow{{ $row->id }}"
-                                   data-id="{{ $row->id }}"
+                                <a href="javascript:;" id="elementRow<?php echo e($row->id); ?>"
+                                   data-id="<?php echo e($row->id); ?>"
                                    class="removeElement btn btn-icon btn-trans btn-xs waves-effect waves-light btn-danger m-b-5">
                                     <i class="fa fa-remove"></i>
                                 </a>
 
                             </td>
                         </tr>
-                    @endforeach
-                    @endif
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
                     </tbody>
                 </table>
 
 
-{{--                {{ $companies->links() }}--}}
+
 
             </div>
         </div><!-- end col -->
 
     </div>
     <!-- end row -->
-@endsection
+<?php $__env->stopSection(); ?>
 
 
-@section('scripts')
-
-
+<?php $__env->startSection('scripts'); ?>
 
     <script>
 
@@ -181,7 +168,7 @@
                 if (isConfirm) {
                     $.ajax({
                         type: 'POST',
-                        url: '{{ route('orders.delete') }}',
+                        url: '<?php echo e(route('orders.delete')); ?>',
                         data: {id: id},
                         dataType: 'json',
                         success: function (data) {
@@ -263,7 +250,7 @@
                     if (isConfirm) {
                         $.ajax({
                             type: 'POST',
-                            url: '{{ route('orders.group.delete') }}',
+                            url: '<?php echo e(route('orders.group.delete')); ?>',
                             data: {ids: sum},
                             dataType: 'json',
                             success: function (data) {
@@ -324,4 +311,6 @@
 
     </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

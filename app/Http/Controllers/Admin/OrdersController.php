@@ -149,8 +149,8 @@ class OrdersController extends Controller
                 if($request->paid != ''){
 
                     $finance->paid = $request->paid ;
-                    $request->remain = $finance->net_app_ratio - $request->paid ;
-                    
+                    $finance->remain = $finance->net_app_ratio - $request->paid ;
+
                 }else{
                     return response()->json([
                         'status' => false,

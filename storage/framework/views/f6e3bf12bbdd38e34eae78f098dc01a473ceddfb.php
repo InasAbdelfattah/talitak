@@ -87,9 +87,9 @@
 
                             <td><?php if(user($row->provider_id)): ?><?php echo e(user($row->provider_id)->name); ?><?php endif; ?></td>
                             <td><?php echo e($row->orders_count); ?></td>
-                            <td> <?php echo e($row->net_app_ratio); ?> </td>
-                            <td><?php echo e($row->paid); ?></td>
-                            <td><?php echo e($row->remain); ?></td>
+                            <td id="app_ratio<?php echo e($row->id); ?>"> <?php echo e($row->net_app_ratio); ?> </td>
+                            <td id="paid<?php echo e($row->id); ?>"><?php echo e($row->paid); ?></td>
+                            <td id="remain<?php echo e($row->id); ?>"><?php echo e($row->remain); ?></td>
                             <td> <?php echo e($row->pay_status == 1 ? 'نعم' : 'لا'); ?> </td>
                             <td style="width: 10%;">
                                 <?php if($row->pay_doc != ''): ?>
@@ -122,6 +122,7 @@
          
                                                     <?php echo e(csrf_field()); ?>
 
+                                             <input type="hidden" name="accountId" value="<?php echo e($row->id); ?>">
                                                     <div class="form-group ">
                                                             <div class="checkbox checkbox-custom">
                                                                 <input id="checkbox-signup" type="radio" value="1" required
@@ -150,7 +151,7 @@
                                                                 <br>
                                                                 <input type="number" id="paid-signup" value="<?php echo e(old('paid')); ?>" required
                                                                        required data-parsley-trigger="keyup"
-                                                                       data-parsley-required-message="لابد من كتابة سبب الرفض اولاً"
+                                                                       data-parsley-required-message="لا بد من كتابة المبلغ المحصل"
                                                                        name="paid" id="paid" class="form-control">
                                                             </div>
                                                         </div>
@@ -276,6 +277,9 @@
 
 
             var formData = new FormData(this);
+            for (var value of formData.values()) {
+                console.log(value); 
+            }
             $.ajax({
                 type: 'POST',
                 url: $(this).attr('action'),
@@ -302,15 +306,13 @@
 
                         $("#currentRow" + data.id).html('تم حفظ حالة الدفع');
                         $("#currentRow" + data.id).addClass('btn-danger').removeClass('btn-success');
+                        $("#paid" + data.id).html('تم حفظ حالة الدفع');
                         setTimeout(function () {
                             $('#currentRowOn' + data.id).parents('table').DataTable()
                                 .row($('#currentRowOn' + data.id))
                                 .remove()
                                 .draw();
                         }, 2000);
-
-
-
 
                         
                         

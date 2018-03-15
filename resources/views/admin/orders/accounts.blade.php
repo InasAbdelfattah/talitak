@@ -95,9 +95,9 @@
 
                             <td>@if(user($row->provider_id)){{ user($row->provider_id)->name }}@endif</td>
                             <td>{{ $row->orders_count }}</td>
-                            <td> {{$row->net_app_ratio}} </td>
-                            <td>{{$row->paid}}</td>
-                            <td>{{$row->remain}}</td>
+                            <td id="app_ratio{{ $row->id }}"> {{$row->net_app_ratio}} </td>
+                            <td id="paid{{ $row->id }}">{{$row->paid}}</td>
+                            <td id="remain{{ $row->id }}">{{$row->remain}}</td>
                             <td> {{ $row->pay_status == 1 ? 'نعم' : 'لا' }} </td>
                             <td style="width: 10%;">
                                 @if($row->pay_doc != '')
@@ -129,6 +129,7 @@
                                                        data-id="{{ $row->id }}">
          
                                                     {{ csrf_field() }}
+                                             <input type="hidden" name="accountId" value="{{$row->id}}">
                                                     <div class="form-group ">
                                                             <div class="checkbox checkbox-custom">
                                                                 <input id="checkbox-signup" type="radio" value="1" required
@@ -157,7 +158,7 @@
                                                                 <br>
                                                                 <input type="number" id="paid-signup" value="{{old('paid')}}" required
                                                                        required data-parsley-trigger="keyup"
-                                                                       data-parsley-required-message="لابد من كتابة سبب الرفض اولاً"
+                                                                       data-parsley-required-message="لا بد من كتابة المبلغ المحصل"
                                                                        name="paid" id="paid" class="form-control">
                                                             </div>
                                                         </div>
@@ -283,6 +284,9 @@
 
 
             var formData = new FormData(this);
+            for (var value of formData.values()) {
+                console.log(value); 
+            }
             $.ajax({
                 type: 'POST',
                 url: $(this).attr('action'),
@@ -309,15 +313,13 @@
 
                         $("#currentRow" + data.id).html('تم حفظ حالة الدفع');
                         $("#currentRow" + data.id).addClass('btn-danger').removeClass('btn-success');
+                        $("#paid" + data.id).html('تم حفظ حالة الدفع');
                         setTimeout(function () {
                             $('#currentRowOn' + data.id).parents('table').DataTable()
                                 .row($('#currentRowOn' + data.id))
                                 .remove()
                                 .draw();
                         }, 2000);
-
-
-
 
                         {{--setTimeout(function () {--}}
                         {{--window.location.href = '{{ route('categories.index') }}';--}}

@@ -124,6 +124,7 @@ class OrdersController extends Controller
     }
 
     public function confirmPayment(Request $request){
+
         if ($request->is_confirmed == '') {
             return response()->json([
                 'status' => false,
@@ -132,10 +133,31 @@ class OrdersController extends Controller
         }
 
         $finance = FinancialAccount::find($request->accountId);
-        //dd($finance);
         if ($finance) {
+
             $finance->is_confirmed = $request->is_confirmed ;
             $finance->pay_status = 1 ;
+        
+            if($request ->is_confirmed == 1){
+
+                $finance->paid = $finance->net_app_ratio ;
+                $finance->net_app_ratio = 0 ;
+                $finance->remain = 0 ;
+                
+            }elseif($request->is_confirmed == 2){
+
+                if($request->paid != ''){
+
+                    $finance->paid = $request->paid ;
+                    $request->remain = $finance->net_app_ratio - $request->paid ;
+                    
+                }else{
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Fail',
+                    ]);
+                }
+            }
             if ($finance->save()) {
                 return response()->json([
                     'status' => true,

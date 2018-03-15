@@ -120,60 +120,56 @@
                                                 <form action="<?php echo e(route('account.confirmPayment')); ?>" method="post"
                                                        data-id="<?php echo e($row->id); ?>">
          
-                                                     <?php echo e(csrf_field()); ?>
+                                                    <?php echo e(csrf_field()); ?>
 
-
-                                                     <input type="hidden" value="<?php echo e($row->id); ?>" name="accountId"
-                                                            id="accountID"/>
-                                                 
-                                                     <div class="form-group ">
-                                                         <div>
-                                                             <input id="checkbox-signup" type="radio" value="1" required
-                                                                    required data-parsley-trigger="keyup"
-                                                                    data-parsley-required-message = "لا بد من اختيار حالة تحصيل الدفع"
-                                                                    name="is_confirmed" id="agree" <?php echo e(old('is_confirmed') ? 'checked' : ''); ?>>
-                                                            <label for="checkbox-signup">
-                                                                نعم
-                                                            </label>
-                                                         </div>
-                                                     </div>
-
-                                                     <div class="form-group ">
-                                                            <div>
-                                                                <input id="checkbox-signup" type="radio" value="0" required
+                                                    <div class="form-group ">
+                                                            <div class="checkbox checkbox-custom">
+                                                                <input id="checkbox-signup" type="radio" value="1" required
                                                                        required data-parsley-trigger="keyup"
-                                                                       data-parsley-required-message = "لا بد من اختيار حالة الدفع"
+                                                                       data-parsley-required-message="لا بد من اختيار حالة التحصيل"
                                                                        name="is_confirmed" id="agree" <?php echo e(old('is_confirmed') ? 'checked' : ''); ?>>
                                                                 <label for="checkbox-signup">
-                                                                      لا
+                                                                     نعم
                                                                 </label>
                                                             </div>
-                                                        </div>
-
-                                                        <div class="form-group ">
-                                                                <div>
-                                                                    <label>
-                                                                            المبلغ المحصل
-                                                                        </label>
-                                                                    <input type="number" class="form-control" value="0" required
-                                                                           required data-parsley-trigger="keyup"
-                                                                           data-parsley-required-message = "لا بد من اختيار حالة الدفع"
-                                                                           name="paid" id="agree" <?php echo e(old('paid')); ?>>
-                                                                </div>
+            
+                                                            <div class="checkbox checkbox-custom">
+                                                                <input id="checkbox-signup" type="radio" value="2" required
+                                                                       required data-parsley-trigger="keyup"
+                                                                       data-parsley-required-message="لا بد من اختيار حالة التحصيل"
+                                                                       name="is_confirmed" id="agree" <?php echo e(old('is_confirmed') ? 'checked' : ''); ?>>
+                                                                <label for="checkbox-signup">
+                                                                    لا
+                                                                </label>
                                                             </div>
-         
-                                                     <div class="form-group text-right m-t-20">
-                                                         <button class="btn btn-primary waves-effect waves-light m-t-0"
-                                                                 type="submit">
-                                                             حفظ البيانات
-                                                         </button>
-                                                         <button onclick="Custombox.close();" type="reset"
-                                                                 class="btn btn-default waves-effect waves-light m-l-5 m-t-0">
-                                                             إلغاء
-                                                         </button>
-                                                     </div>
-         
-                                                 </form>
+                                                            <br>
+                                                            <div>
+                                                                <label for="paid-signup">
+                                                                     المبلغ المحصل 
+                                                                </label>
+                                                                <br>
+                                                                <input type="number" id="paid-signup" value="<?php echo e(old('paid')); ?>" required
+                                                                       required data-parsley-trigger="keyup"
+                                                                       data-parsley-required-message="لابد من كتابة سبب الرفض اولاً"
+                                                                       name="paid" id="paid" class="form-control">
+                                                            </div>
+                                                        </div>
+            
+            
+                                                        <div class="form-group text-right m-t-20">
+                                                            <button class="btn btn-primary waves-effect waves-light m-t-0"
+                                                                    type="submit">
+                                                                حفظ البيانات
+                                                            </button>
+                                                            <button onclick="Custombox.close();" type="reset"
+                                                                    class="btn btn-default waves-effect waves-light m-l-5 m-t-0">
+                                                                إلغاء
+                                                            </button>
+                                                        </div>
+            
+                                                    </form>
+                                                     
+                                                </form>
          
                                              </div>
                                          </div>

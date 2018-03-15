@@ -1,7 +1,4 @@
-@extends('admin.layouts.master')
-
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
     <!-- Page-Title -->
     <div class="row">
@@ -21,46 +18,46 @@
         <div class="col-lg-12">
             <div class="card-box">
                 <div class="dropdown pull-right">
-                    {{--<a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">--}}
-                    {{--<i class="zmdi zmdi-more-vert"></i>--}}
-                    {{--</a>--}}
-                    {{--<ul class="dropdown-menu" role="menu">--}}
-                    {{--<li><a href="#">Action</a></li>--}}
-                    {{--<li><a href="#">Another action</a></li>--}}
-                    {{--<li><a href="#">Something else here</a></li>--}}
-                    {{--<li class="divider"></li>--}}
-                    {{--<li><a href="#">Separated link</a></li>--}}
-                    {{--</ul>--}}
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
 
                     <!-- <a style="float: left; margin-right: 15px;" class="btn btn-danger btn-sm getSelected">
                         <i class="fa fa-trash" style="margin-left: 5px"></i> حذف المحدد
                     </a> -->
                 </div>
 
-                {{--<input type="text" name="filter" class="filteriTems" id="filterItems"/>--}}
+                
 
-                {{--<select id="recordNumber" class="filteriTems">--}}
+                
 
-                {{--<option value="5">5</option>--}}
-                {{--<option value="10">10</option>--}}
-                {{--<option value="15">15</option>--}}
-                {{--<option value="20">20</option>--}}
-                {{--<option value="25">25</option>--}}
-                {{--<option value="50">50</option>--}}
-                {{--<option value="100">100</option>--}}
+                
+                
+                
+                
+                
+                
+                
 
-                {{--</select>--}}
+                
 
                 <h4 class="header-title m-t-0 m-b-30">طلبات مزودى الخدمات</h4>
 
-                {{--<div class="articles">--}}
+                
 
-                {{--                    @include('admin.categories.load')--}}
+                
 
-                {{--</div>--}}
+                
 
 
-                {{--<table id="users" class="table table-striped table-hover table-condensed" style="width:100%"--}}
+                
 
 
                 <table id="datatable-fixed-header" class="table table-striped table-hover table-condensed"
@@ -79,41 +76,42 @@
                     <tbody>
 
 
-                    @foreach($providers as $row)
-                        <tr id="currentRowOn{{ $row->id  }}">
+                    <?php $__currentLoopData = $providers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <tr id="currentRowOn<?php echo e($row->id); ?>">
                             <!-- <td>
                                 <div class="checkbox checkbox-primary checkbox-single">
                                     <input type="checkbox" class="checkboxes-items"
-                                           value="{{ $row->id }}"
+                                           value="<?php echo e($row->id); ?>"
                                            aria-label="Single checkbox Two">
                                     <label></label>
                                 </div>
                             </td> -->
-                            <td>{{ $row->name }}</td>
-                            <td><a target="_blank" href="{{ route('companies.show', $row->company_id) }}">{{ $row->company_name }}</a></td>
-                            <td> {{$row->phone}} </td>
-                            <td> {{$row->gender == 'male' ? 'رجال' : 'نساء'}} </td>
+                            <td><?php echo e($row->name); ?></td>
+                            <td><a target="_blank" href="<?php echo e(route('companies.show', $row->company_id)); ?>"><?php echo e($row->company_name); ?></a></td>
+                            <td> <?php echo e($row->phone); ?> </td>
+                            <td> <?php echo e($row->gender == 'male' ? 'رجال' : 'نساء'); ?> </td>
                             <td>
-                                <a href="#custom-modal{{ $row->id }}"
-                                   data-id="{{ $row->id }}" id="currentRow{{ $row->id }}"
+                                <a href="#custom-modal<?php echo e($row->id); ?>"
+                                   data-id="<?php echo e($row->id); ?>" id="currentRow<?php echo e($row->id); ?>"
                                    class="btn btn-success btn-xs btn-trans waves-effect waves-light m-r-5 m-b-10"
                                    data-animation="fadein" data-plugin="custommodal"
                                    data-overlaySpeed="100" data-overlayColor="#36404a">تفعيل</a>
 
                                 <!-- Modal -->
-                                <div id="custom-modal{{ $row->id }}" class="modal-demo"
+                                <div id="custom-modal<?php echo e($row->id); ?>" class="modal-demo"
                                      data-backdrop="static">
                                     <button type="button" class="close" onclick="Custombox.close();">
                                         <span>&times;</span><span class="sr-only">Close</span>
                                     </button>
-                                    <h4 class="custom-modal-title">تفعيل مزود الخدمة {{ $row->name }}</h4>
+                                    <h4 class="custom-modal-title">تفعيل مزود الخدمة <?php echo e($row->name); ?></h4>
                                     <div class="custom-modal-text text-right" style="text-align: right !important;">
-                                        <form action="{{ route('provider.activation') }}" method="post"
-                                              data-id="{{ $row->id }}">
+                                        <form action="<?php echo e(route('provider.activation')); ?>" method="post"
+                                              data-id="<?php echo e($row->id); ?>">
 
-                                            {{ csrf_field() }}
+                                            <?php echo e(csrf_field()); ?>
 
-                                            <input type="hidden" value="{{ $row->id }}" name="providerId"
+
+                                            <input type="hidden" value="<?php echo e($row->id); ?>" name="providerId"
                                                    id="providerID"/>
                                         
                                             <div class="form-group ">
@@ -121,7 +119,7 @@
                                                     <input id="checkbox-signup" type="radio" value="1" required
                                                            required data-parsley-trigger="keyup"
                                                            data-parsley-required-message="لابد من قبول الطلب اولاً"
-                                                           name="agree" id="agree" {{ old('agree') ? 'checked' : '' }}>
+                                                           name="agree" id="agree" <?php echo e(old('agree') ? 'checked' : ''); ?>>
                                                     <label for="checkbox-signup">
                                                         قبول الطلب
                                                     </label>
@@ -131,7 +129,7 @@
                                                     <input id="checkbox-signup" type="radio" value="2" required
                                                            required data-parsley-trigger="keyup"
                                                            data-parsley-required-message="لابد من رفض الطلب اولاً"
-                                                           name="agree" id="agree" {{ old('agree') ? 'checked' : '' }}>
+                                                           name="agree" id="agree" <?php echo e(old('agree') ? 'checked' : ''); ?>>
                                                     <label for="checkbox-signup">
                                                         رفض الطلب
                                                     </label>
@@ -142,10 +140,11 @@
                                                          سبب الرفض
                                                     </label>
                                                     <br>
-                                                    <textarea id="reason-signup" value="{{old('reason')}}" required
+                                                    <textarea id="reason-signup" value="<?php echo e(old('reason')); ?>" required
                                                            required data-parsley-trigger="keyup"
                                                            data-parsley-required-message="لابد من كتابة سبب الرفض اولاً"
                                                            name="reason" id="reason" class="form-control"></textarea>
+                                                    
                                                 </div>
                                             </div>
 
@@ -169,36 +168,36 @@
 
                             </td>
 
-                            <td>{{ $row->created_at }}</td>
+                            <td><?php echo e($row->created_at); ?></td>
                             <!-- <td>
-                                <a href="{{ route('companies.show', $row->id) }}"
+                                <a href="<?php echo e(route('companies.show', $row->id)); ?>"
                                    class="btn btn-icon btn-xs waves-effect btn-info m-b-5">
                                     <i class="fa fa-eye"></i>
                                 </a>
                     
-                                <a href="javascript:;" id="elementRow{{ $row->id }}"
-                                   data-id="{{ $row->id }}"
+                                <a href="javascript:;" id="elementRow<?php echo e($row->id); ?>"
+                                   data-id="<?php echo e($row->id); ?>"
                                    class="removeElement btn btn-icon btn-trans btn-xs waves-effect waves-light btn-danger m-b-5">
                                     <i class="fa fa-remove"></i>
                                 </a>
                             </td> -->
                         </tr>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
 
 
-                {{--                {{ $companies->links() }}--}}
+                
 
             </div>
         </div><!-- end col -->
 
     </div>
     <!-- end row -->
-@endsection
+<?php $__env->stopSection(); ?>
 
 
-@section('scripts')
+<?php $__env->startSection('scripts'); ?>
 
 
 
@@ -222,7 +221,7 @@ $('body').on('click', '.removeElement', function () {
                 if (isConfirm) {
                     $.ajax({
                         type: 'POST',
-                        url: '{{ route('company.delete') }}',
+                        url: '<?php echo e(route('company.delete')); ?>',
                         data: {id: id},
                         dataType: 'json',
                         success: function (data) {
@@ -305,7 +304,7 @@ $('body').on('click', '.removeElement', function () {
                     if (isConfirm) {
                         $.ajax({
                             type: 'POST',
-                            url: '{{ route('companies.group.delete') }}',
+                            url: '<?php echo e(route('companies.group.delete')); ?>',
                             data: {ids: sum},
                             dataType: 'json',
                             success: function (data) {
@@ -414,9 +413,9 @@ $('body').on('click', '.removeElement', function () {
 
 
 
-                        {{--setTimeout(function () {--}}
-                        {{--window.location.href = '{{ route('categories.index') }}';--}}
-                        {{--}, 3000);--}}
+                        
+                        
+                        
                     }
 
                     if (data.status == false) {
@@ -445,7 +444,9 @@ $('body').on('click', '.removeElement', function () {
     </script>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
 
 
+
+<?php echo $__env->make('admin.layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

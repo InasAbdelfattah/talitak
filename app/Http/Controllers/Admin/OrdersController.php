@@ -125,6 +125,14 @@ class OrdersController extends Controller
 
     public function confirmPayment(Request $request){
 
+        $finance = FinancialAccount::find($request->accountId);
+        if($finance->net_app_ratio == 0){
+            return response()->json([
+                'status' => false,
+                'message' => 'لا يوجد مستحقات ',
+            ]);
+        }
+
         if ($request->is_confirmed == '') {
             return response()->json([
                 'status' => false,
@@ -132,7 +140,6 @@ class OrdersController extends Controller
             ]);
         }
 
-        $finance = FinancialAccount::find($request->accountId);
         if ($finance) {
 
             $finance->is_confirmed = $request->is_confirmed ;
@@ -154,7 +161,7 @@ class OrdersController extends Controller
                 }else{
                     return response()->json([
                         'status' => false,
-                        'message' => 'Fail',
+                        'message' => 'لا بد من كتابة المبلغ الذى تم تحصيله',
                     ]);
                 }
             }

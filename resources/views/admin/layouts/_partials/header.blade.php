@@ -174,6 +174,23 @@
                         </li>
                     @endcan
 
+                    @can('discounts_manage')
+
+                        <li class="has-submenu">
+                            <a href="#"><i class="zmdi zmdi-view-dashboard"></i>
+                                <span> الخصومات </span> </a>
+                            <ul class="submenu">
+
+                                <li style="padding:  0 25px"><a href="{{ route('user_discounts.index') }}">الخصومات </a></li>
+
+                                <li style="padding:  0 25px"><a href="{{ route('user_discounts.all') }}">تقارير الخصومات </a></li>
+
+                            </ul>
+                        </li>
+
+                        
+                    @endcan
+
                     @can('cities_manage')
 
                         <li>

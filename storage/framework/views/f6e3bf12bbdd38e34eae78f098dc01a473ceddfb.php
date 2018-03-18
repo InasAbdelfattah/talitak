@@ -3,18 +3,7 @@
     <!-- Page-Title -->
     <div class="row">
         <div class="col-sm-12">
-            <div class="btn-group pull-right m-t-15">
-                <button type="button" class="btn btn-custom dropdown-toggle waves-effect waves-light"
-                        data-toggle="dropdown" aria-expanded="false">Settings <span class="m-l-5"><i
-                                class="fa fa-cog"></i></span></button>
-                <ul class="dropdown-menu" role="menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">Separated link</a></li>
-                </ul>
-            </div>
+            
             <h4 class="page-title">الحجوزات</h4>
         </div>
     </div>
@@ -40,24 +29,7 @@
                     </a>
                 </div>
 
-                <div class="row">
-                <form action="<?php echo e(route('orders.search_accounts')); ?>" method="get">
-                    <?php echo e(csrf_field()); ?>
-
-                    <div class="col-lg-3">
-                        نوع الخدمة : 
-                        <input type="text" name="service_type" class="filteriTems" id="filterItems"/>
-                    </div>
-                    <div class="col-lg-3">
-                        مزود الخدمة : 
-                        <input type="text" name="service_provider" class="filteriTems" id="filterItems"/>
-                    </div>
-                    <div class="col-lg-3">
-                        <button type="submit" class="btn btn-primary">بحث</button>
-                    </div>
-                    </form>
-                    </div>
-                </div>
+                
                 
                 <h4 class="header-title m-t-0 m-b-30">عرض الحجوزات</h4>
 
@@ -103,12 +75,15 @@
                                 <?php endif; ?>
                             </td>
                             <td>
-                                    <a href="#custom-modal<?php echo e($row->id); ?>"
+                                <?php if($row->net_app_ratio != 0): ?>    
+                                <a href="#custom-modal<?php echo e($row->id); ?>"
                                             data-id="<?php echo e($row->id); ?>" id="currentRow<?php echo e($row->id); ?>"
                                             class="btn btn-success btn-xs btn-trans waves-effect waves-light m-r-5 m-b-10"
                                             data-animation="fadein" data-plugin="custommodal"
                                             data-overlaySpeed="100" data-overlayColor="#36404a">تأكيد الدفع</a>
-         
+                                <?php else: ?>
+                                <span style="color:darkgreen;">تم التحصيل </span>
+                                <?php endif; ?>
                                          <!-- Modal -->
                                          <div id="custom-modal<?php echo e($row->id); ?>" class="modal-demo"
                                               data-backdrop="static">
@@ -149,9 +124,7 @@
                                                                      المبلغ المحصل 
                                                                 </label>
                                                                 <br>
-                                                                <input type="number" id="paid-signup" value="<?php echo e(old('paid')); ?>" required
-                                                                       required data-parsley-trigger="keyup"
-                                                                       data-parsley-required-message="لا بد من كتابة المبلغ المحصل"
+                                                                <input type="number" id="paid-signup" value="<?php echo e(old('paid')); ?>" 
                                                                        name="paid" id="paid" class="form-control">
                                                             </div>
                                                         </div>

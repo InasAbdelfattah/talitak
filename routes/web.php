@@ -135,6 +135,11 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'admin'], function ()
     Route::post('orders/delete_financial_account', 'Admin\OrdersController@deleteAccount')->name('orders.delete_accounts');    
     Route::post('orders/confirm-payment', 'Admin\OrdersController@confirmPayment')->name('account.confirmPayment');    
     Route::resource('orders', 'Admin\OrdersController');
+
+    Route::post('user_discounts/add_discount', 'Admin\UserDiscountsController@addDiscount')->name('user_discounts.addDiscount');
+    Route::get('user_discounts/all', 'Admin\UserDiscountsController@userDiscounts')->name('user_discounts.all');
+    
+    Route::resource('user_discounts', 'Admin\UserDiscountsController');
     
 
     Route::post('sponsor/delete/group', 'Admin\SponsorsController@groupDelete')->name('sponsors.group.delete');

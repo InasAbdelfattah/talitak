@@ -619,33 +619,6 @@ Enjoy responsibly!
 
 <script type="text/javascript">
 
-
-    
-    
-    
-
-
-    
-
-    
-    
-
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
     <?php if(session()->has('success')): ?>
     setTimeout(function () {
         showMessage('<?php echo e(session()->get('success')); ?>' , 'success');

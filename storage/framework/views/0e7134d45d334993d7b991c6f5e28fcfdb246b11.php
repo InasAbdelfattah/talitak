@@ -1,6 +1,6 @@
-@extends('admin.layouts.master')
+<?php $__env->startSection('content'); ?>
 
-@section('content')
+    <!-- Page-Title -->
 
     <div class="row">
         <div class="col-xs-6 col-md-4 col-sm-4">
@@ -21,70 +21,70 @@
             <div class="bg-picture card-box">
                 <div class="profile-info-name">
                     <div class="profile-info-detail">
-                        {{--<h3 class="m-t-0 m-b-0">بيانات المركز</h3>--}}
+                        
 
                         <div class="m-t-20 text-center">
-                            @if($company->image)
+                            <?php if($company->image): ?>
                             <a data-fancybox="gallery"
-                               href="{{ url('files/companies/' . $company->image) }}">
-                                <img class="img-thumbnail" src="{{ url('files/companies/' . $company->image) }}"/>
+                               href="<?php echo e(url('files/companies/' . $company->image)); ?>">
+                                <img class="img-thumbnail" src="<?php echo e(url('files/companies/' . $company->image)); ?>"/>
                             </a>
-                            @else
-                            <img class="img-thumbnail" src="{{ request()->root().'/assets/admin/custom/images/default.png' }}"/>
-                            @endif
+                            <?php else: ?>
+                            <img class="img-thumbnail" src="<?php echo e(request()->root().'/assets/admin/custom/images/default.png'); ?>"/>
+                            <?php endif; ?>
                         </div>
 
                         <div class="panel-body">
 
                             <div class="col-lg-3 col-xs-12">
                                 <label>اسم مدير المركز بالكامل :</label>
-                                <p>{{ $company->name }}</p>
+                                <p><?php echo e($company->name); ?></p>
                             </div>
 
                             <div class="col-lg-3 col-xs-12">
                                 <label>رقم الجوال :</label>
-                                <p>@if($company->user) {{ $company->user->phone }} @else -- @endif </p>
+                                <p><?php if($company->user): ?> <?php echo e($company->user->phone); ?> <?php else: ?> -- <?php endif; ?> </p>
                             </div>
 
                             <div class="col-lg-3 col-xs-12">
                                 <label>رقم جوال المركز :</label>
-                                <p>{{ $company->phone }}</p>
+                                <p><?php echo e($company->phone); ?></p>
                             </div>
 
                             <div class="col-lg-3 col-xs-12">
                                 <label>البريد الالكتروني :</label>
-                                <p>@if($company->user) {{ $company->user->email }} @else -- @endif </p>
+                                <p><?php if($company->user): ?> <?php echo e($company->user->email); ?> <?php else: ?> -- <?php endif; ?> </p>
                             </div>
 
                             <div class="col-lg-3 col-xs-12">
                                 <label>  مكان الخدمة :</label>
-                                <p>{{ $company->place == 0 ? 'منازل' : 'مركز' }}</p>
+                                <p><?php echo e($company->place == 0 ? 'منازل' : 'مركز'); ?></p>
                             </div>
 
                             <div class="col-lg-3 col-xs-12">
                                 <label> نوع مزود الخدمة :</label>
-                                <p>{{ $company->type == 0 ? 'فرد' : 'منشأة' }}</p>
+                                <p><?php echo e($company->type == 0 ? 'فرد' : 'منشأة'); ?></p>
                             </div>
 
                             <!-- <div class="col-lg-3 col-xs-12">
                                 <label>العضوية :</label>
-                                <p> {{ $company->membership['name'] }}</p>
+                                <p> <?php echo e($company->membership['name']); ?></p>
                             </div> -->
 
                             <div class="col-lg-3 col-xs-12">
                                 <label>المدينة :</label>
-                                <p>@if($company->city){{ $company->city->{'name:ar'} }}@endif</p>
+                                <p><?php if($company->city): ?><?php echo e($company->city->{'name:ar'}); ?><?php endif; ?></p>
                             </div>
                             
                             <div class="col-lg-6 col-xs-12">
-                                <label> <p>{{ $company->type == 0 ? 'وثيقة الهوية' : 'وثيقة السجل التجارى' }} : </p></label>
-                                @if($company->document_photo != '')
-                                    <a data-fancybox="gallery" href="{{ url('public/files/docs/' . $company->document_photo) }}">
-                                        <img class="img-thumbnail" src="{{ url('public/files/docs/' . $company->document_photo) }}"/>
+                                <label> <p><?php echo e($company->type == 0 ? 'وثيقة الهوية' : 'وثيقة السجل التجارى'); ?> : </p></label>
+                                <?php if($company->document_photo != ''): ?>
+                                    <a data-fancybox="gallery" href="<?php echo e(url('public/files/docs/' . $company->document_photo)); ?>">
+                                        <img class="img-thumbnail" src="<?php echo e(url('public/files/docs/' . $company->document_photo)); ?>"/>
                                     </a>
-                                @else
-                                    <img class="img-thumbnail" src="{{request()->root().'/assets/admin/custom/images/default.png'}}"/>
-                                @endif
+                                <?php else: ?>
+                                    <img class="img-thumbnail" src="<?php echo e(request()->root().'/assets/admin/custom/images/default.png'); ?>"/>
+                                <?php endif; ?>
 
                             </div>
 
@@ -104,7 +104,7 @@
             <div class="card-box">
                 <h4 class="header-title m-t-0 m-b-30">الخدمات</h4>
 
-                @if($company->products->count() > 0)
+                <?php if($company->products->count() > 0): ?>
                     <table class="table table table-hover m-0">
                         <thead>
                         <tr>
@@ -119,36 +119,36 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($company->products  as $row)
+                        <?php $__currentLoopData = $company->products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <td>#</td>
                                 <!-- <td>
                                     <a data-fancybox="gallery"
-                                       href="{{ $helper->getDefaultImage($row->image, request()->root().'/assets/admin/custom/images/default.png') }}">
+                                       href="<?php echo e($helper->getDefaultImage($row->image, request()->root().'/assets/admin/custom/images/default.png')); ?>">
                                         <img style="width: 50px; height: 50px; border-radius: 50%"
-                                             src="{{ $helper->getDefaultImage($row->image, request()->root().'/assets/admin/custom/images/default.png') }}"/>
+                                             src="<?php echo e($helper->getDefaultImage($row->image, request()->root().'/assets/admin/custom/images/default.png')); ?>"/>
                                     </a>
                                 </td> -->
-                                <td>{{ $row->name }}</td>
-                                <td>{{ $row->gender_type == 'male' ? 'رجال' : 'نساء' }}</td>
-                                <td>{{ $row->provider_type == 'male' ? 'رجال' : 'نساء' }}</td>
-                                <td>{{ $row->service_place == 'center' ? 'مركز' : 'منازل' }}</td>
-                                <td> @if($row->district) {{$row->district->{'name:ar'} }} @endif</td>
+                                <td><?php echo e($row->name); ?></td>
+                                <td><?php echo e($row->gender_type == 'male' ? 'رجال' : 'نساء'); ?></td>
+                                <td><?php echo e($row->provider_type == 'male' ? 'رجال' : 'نساء'); ?></td>
+                                <td><?php echo e($row->service_place == 'center' ? 'مركز' : 'منازل'); ?></td>
+                                <td> <?php if($row->district): ?> <?php echo e($row->district->{'name:ar'}); ?> <?php endif; ?></td>
                                 <td>
-                                    <!-- <a href="javascript:;" id="updateRow{{ $row->id }}" data-id="{{ $row->id }}"
-                                       data-url="{{ route('product.update')  }}" class="btn btn-xs btn-info"><i class="fa fa-eye"></i></a> -->
+                                    <!-- <a href="javascript:;" id="updateRow<?php echo e($row->id); ?>" data-id="<?php echo e($row->id); ?>"
+                                       data-url="<?php echo e(route('product.update')); ?>" class="btn btn-xs btn-info"><i class="fa fa-eye"></i></a> -->
 
-                                    <a href="javascript:;" id="elementRow{{ $row->id }}" data-id="{{ $row->id }}"
-                                       data-url="{{ route('product.delete')  }}"
+                                    <a href="javascript:;" id="elementRow<?php echo e($row->id); ?>" data-id="<?php echo e($row->id); ?>"
+                                       data-url="<?php echo e(route('product.delete')); ?>"
                                        class="btn btn-xs btn-danger removeElement">
                                         <i class="fa fa-trash-o"></i>
                                     </a>
                                 </td>
                             </tr>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
                     </table>
-                @else
+                <?php else: ?>
 
                     <div class="row">
                         <div class="col-xs-12">
@@ -158,7 +158,7 @@
                         </div>
                     </div>
 
-                @endif
+                <?php endif; ?>
 
             </div>
 
@@ -168,7 +168,7 @@
             <div class="card-box">
 
                 <h4 class="header-title m-t-0 m-b-30">مواعيد العميل</h4>
-                @if($company->workDays->count() > 0)
+                <?php if($company->workDays->count() > 0): ?>
                     <table class="table table table-hover m-0">
                         <thead>
                         <tr>
@@ -180,19 +180,19 @@
                         </tr>
                         </thead>
                         <tbody>
-                            @foreach($company->workDays  as $row)
+                            <?php $__currentLoopData = $company->workDays; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
                                     <td>#</td>
                                     
-                                    <td>{{ day($row->day) }}</td>
-                                    <td>{{ $row->from }}</td>
-                                    <td>{{ $row->to }}</td>
+                                    <td><?php echo e(day($row->day)); ?></td>
+                                    <td><?php echo e($row->from); ?></td>
+                                    <td><?php echo e($row->to); ?></td>
                                 </tr>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                        
                         </tbody>
                     </table>
-                @else
+                <?php else: ?>
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="alert alert-danger text-center">
@@ -200,7 +200,7 @@
                             </div>
                         </div>
                     </div>
-                @endif
+                <?php endif; ?>
 
             </div>
         </div>
@@ -216,7 +216,7 @@
 
                         <div class="col-xs-12 m-t-20">
                             <div class="row">
-                                @if($company->comments->count() > 0)
+                                <?php if($company->comments->count() > 0): ?>
                                     <table class="table table table-hover m-0">
                                         <thead>
                                         <tr>
@@ -228,34 +228,34 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($company->comments as $comment)
+                                        <?php $__currentLoopData = $company->comments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $comment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <tr>
                                                 <td>#</td>
-                                                <td>@if($comment->user) {{ $comment->user->name }} @else --- @endif</td>
-                                                <td>{{ $comment->comment }}</td>
-                                                <!-- <td>{{ $comment->created_at }}</td> -->
+                                                <td><?php if($comment->user): ?> <?php echo e($comment->user->name); ?> <?php else: ?> --- <?php endif; ?></td>
+                                                <td><?php echo e($comment->comment); ?></td>
+                                                <!-- <td><?php echo e($comment->created_at); ?></td> -->
                                                 <td>
-                                                    <a id="ban{{$comment->id}}" href="javascript:;" id="commentSuspend{{ $comment->id }}" data-id="{{$comment->id}}" class="suspendElement btn btn-icon btn-trans btn-xs waves-effect waves-light btn-danger m-b-5" data-overlayColor="#36404a"> @if($comment->is_suspend == 0)حظر التعليق @else رفع الحظر @endif
+                                                    <a id="ban<?php echo e($comment->id); ?>" href="javascript:;" id="commentSuspend<?php echo e($comment->id); ?>" data-id="<?php echo e($comment->id); ?>" class="suspendElement btn btn-icon btn-trans btn-xs waves-effect waves-light btn-danger m-b-5" data-overlayColor="#36404a"> <?php if($comment->is_suspend == 0): ?>حظر التعليق <?php else: ?> رفع الحظر <?php endif; ?>
                                                     </a>
                                                 </td>
                                                 <td>
 
-                                                    <a href="javascript:;" id="commentDelete{{ $comment->id }}" data-id="{{$comment->id}}" class="removeElement btn btn-icon btn-trans btn-xs waves-effect waves-light btn-danger m-b-5">
+                                                    <a href="javascript:;" id="commentDelete<?php echo e($comment->id); ?>" data-id="<?php echo e($comment->id); ?>" class="removeElement btn btn-icon btn-trans btn-xs waves-effect waves-light btn-danger m-b-5">
                                                         <i class="fa fa-remove"></i>
                                                     </a>
                                                 </td>
                                             </tr>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </tbody>
                                     </table>
                                 
-                                @else
+                                <?php else: ?>
                                     <div class="col-xs-12">
                                         <div class="alert alert-danger">
                                             لا توجد تعليقات متاحة حالياً للمركز
                                         </div>
                                     </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
 
@@ -277,7 +277,7 @@
 
                         <div class="col-xs-12 m-t-20">
                             <div class="row">
-                                @if($company->rates->count() > 0)
+                                <?php if($company->rates->count() > 0): ?>
                                     <table class="table table table-hover m-0">
                                         <thead>
                                         <tr>
@@ -287,28 +287,29 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($company->rates as $rate)
+                                        <?php $__currentLoopData = $company->rates; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $rate): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <tr>
                                                 <td>#</td>
-                                                <td>@if( $rate->user ){{ $rate->user->name  or $rate->user->username}} @else
-                                                                -- @endif</td>
-                                                <td>{{ $rate->rate }}</td>
+                                                <td><?php if( $rate->user ): ?><?php echo e(isset($rate->user->name) ? $rate->user->name : $rate->user->username); ?> <?php else: ?>
+                                                                -- <?php endif; ?></td>
+                                                <td><?php echo e($rate->rate); ?></td>
                                             </tr>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </tbody>
                                     </table>
                                 <div class="col-xs-12">
                                     <div class="alert alert-success">
-                                        متوسط تقييم المركز : {{$company->rates->avg('rate')}}
+                                        متوسط تقييم المركز : <?php echo e($company->rates->avg('rate')); ?>
+
                                     </div>
                                 </div>
-                                @else
+                                <?php else: ?>
                                     <div class="col-xs-12">
                                         <div class="alert alert-danger">
                                             لا توجود تقييمات حالياً للمركز
                                         </div>
                                     </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
 
@@ -321,10 +322,15 @@
             </div>
         </div>
     </div>
-  
-@endsection
 
-@section('scripts')
+    
+
+    
+<?php $__env->stopSection(); ?>
+
+
+
+<?php $__env->startSection('scripts'); ?>
 
     <script>
         $('body').on('click', '.removeElement', function () {
@@ -345,7 +351,7 @@
                 if (isConfirm) {
                     $.ajax({
                         type: 'POST',
-                        url: '{{ route('companies.deleteComment') }}',
+                        url: '<?php echo e(route('companies.deleteComment')); ?>',
                         data: {id: id},
                         dataType: 'json',
                         success: function (data) {
@@ -416,7 +422,7 @@
                 if (isConfirm) {
                     $.ajax({
                         type: 'POST',
-                        url: '{{ route('companies.suspendComment') }}',
+                        url: '<?php echo e(route('companies.suspendComment')); ?>',
                         data: {id: id},
                         dataType: 'json',
                         success: function (data) {
@@ -481,4 +487,5 @@
     </script>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

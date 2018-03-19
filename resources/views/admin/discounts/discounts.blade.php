@@ -27,7 +27,6 @@
                         <th>عدد المسجلين من خلاله</th>
                         <th>عدد الخصومات المستفيد منها المستخدم</th>
                         <th>الخيارات</th>
-
                     </tr>
                     </thead>
                     <tbody>
@@ -35,7 +34,6 @@
                     @forelse($discounts as $row)
                         <tr id="currentRow{{$row->id}}">
                             <td>#
-
                                 {{--  <div class="checkbox checkbox-primary checkbox-single">
                                     <input type="checkbox" class="checkboxes-items"
                                            value="{{ $row->id }}"
@@ -49,76 +47,14 @@
                             <td id="invite{{$row->id}}">{{ countInvited($row->user_id) }}</td>
                             <td>{{ countLastDiscounts($row->user_id) }}</td>
                             <td>
-                                <!-- <a href="#custom-modal{{ $row->id }}" data-id="{{ $row->id }}" id="currentRow{{ $row->id }}" class="btn btn-success btn-xs btn-trans waves-effect waves-light m-r-5 m-b-10" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="100" data-overlayColor="#36404a"><i class="fa fa-plus-circle"></i>
-                                </a> -->
-        
-                                <!-- <div id="custom-modal{{ $row->id }}" class="modal-demo"
-                                          data-backdrop="static">
-                                        <button type="button" class="close" onclick="Custombox.close();">
-                                             <span>&times;</span><span class="sr-only">Close</span>
-                                        </button>
-                                        <h4 class="custom-modal-title">اضافة خصم</h4>
-                                        <div class="custom-modal-text text-right" style="text-align: right !important;">
-
-                                            <form action="{{ route('user_discounts.addDiscount') }}" method="post" data-id="{{ $row->id }}">
-     
-                                                {{ csrf_field() }}
-                                                <input type="hidden" name="userId" value="{{$row->id}}">
-                                                <input type="hidden" name="invitedCounts" value="{{countInvited($row->id)}}">
-                                                <div class="form-group ">
-                                                        
-                                                    <div>
-                                                        <label for="discount-signup"> الخصم </label>
-                                                        <br>
-                                                        <input type="number" id="discount-signup" value="{{old('discount')}}" name="discount" id="discount" class="form-control">
-                                                    </div>
-
-                                                    <div>
-                                                        <label for="maxOrders"> أقصى عدد للطلبات المحددة للمستخدم للاستفادة من الخصم </label>
-                                                        <br>
-                                                        <input type="number" id="maxOrders" value="{{old('max_orders')}}" name="maxOrders" id="maxOrders" class="form-control">
-                                                    </div>
-                                                                     
-                                                    <div>
-                                                        <label for="from-signup">
-                                                              الخصم سارى من تاريخ : 
-                                                        </label>
-                                                        <br>
-                                                        <input type="date" id="from_date-signup" value="{{old('from_date')}}" name="from_date" id="from_date" class="form-control">
-                                                    </div>
-
-                                                    <div>
-                                                        <label for="to-signup">
-                                                                الخصم سارى إلى : 
-                                                        </label>
-                                                        <br>
-                                                        <input type="date" id="to_date-signup" value="{{old('to_date')}}" name="to_date" id="to_date" class="form-control">
-                                                    </div>
-
-                                                </div>
-        
-                                                <div class="form-group text-right m-t-20">
-                                                    <button class="btn btn-primary waves-effect waves-light m-t-0" type="submit">
-                                                        حفظ البيانات
-                                                    </button>
-                                                    <button onclick="Custombox.close();" type="reset"
-                                                            class="btn btn-default waves-effect waves-light m-l-5 m-t-0">
-                                                        إلغاء
-                                                    </button>
-                                                </div>
-        
-                                                </form>
-                                                                  
-                                        </div>
-                                </div> -->
-
-                                <a href="{{ route('user_discounts.show', $row->id) }}"
+                               
+                                <a href="{{ route('user_discounts.show', $row->user_id) }}"
                                    class="btn btn-icon btn-xs waves-effect btn-info m-b-5">
                                     <i class="fa fa-eye"></i>
                                 </a>
 
                                 <a href="javascript:;" id="elementRow{{ $row->id }}"
-                                   data-id="{{ $row->id }}"
+                                   data-userId="{{ $row->user_id }}" data-id="{{$row->id}}"
                                    class="removeElement btn btn-icon btn-trans btn-xs waves-effect waves-light btn-danger m-b-5">
                                     <i class="fa fa-remove"></i>
                                 </a>
@@ -132,7 +68,7 @@
                 </table>
 
 
-{{--                {{ $companies->links() }}--}}
+{{-- {{ $companies->links() }} --}}
 
             </div>
         </div><!-- end col -->
@@ -141,19 +77,17 @@
     <!-- end row -->
 @endsection
 
-
 @section('scripts')
-
-
 
     <script>
 
         $('body').on('click', '.removeElement', function () {
             var id = $(this).attr('data-id');
+            var userId = $(this).attr('data-userId');
             var $tr = $(this).closest($('#elementRow' + id).parent().parent());
             swal({
                 title: "هل انت متأكد؟",
-                text: "يمكنك استرجاع المحذوفات مرة اخرى لا تقلق.",
+                text: "لا يمكنك استرجاع المحذوفات مرة اخرى.",
                 type: "error",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -166,8 +100,8 @@
                 if (isConfirm) {
                     $.ajax({
                         type: 'POST',
-                        url: '{{ route('orders.delete') }}',
-                        data: {id: id},
+                        url: '{{ route('user_discounts.delete') }}',
+                        data: {user_id: userId , id: id},
                         dataType: 'json',
                         success: function (data) {
 

@@ -24,7 +24,7 @@
                         <th>رقم جوال المستخدم</th>
                         <th>عدد المسجلين من خلاله</th>
                         <th>عدد الخصومات السابقة</th>
-                        <th>الخيارات</th>
+                        <th>إضافة خصم</th>
 
                     </tr>
                     </thead>
@@ -40,7 +40,7 @@
                             <td><?php echo e($row->name); ?></td>
                             <td><?php echo e($row->phone); ?></td>
                             <td id="invite<?php echo e($row->id); ?>"><?php echo e(countInvited($row->id)); ?></td>
-                            <td><?php echo e(countLastDiscounts($row->id)); ?></td>
+                            <td id="discount<?php echo e($row->id); ?>"><?php echo e(countLastDiscounts($row->id)); ?></td>
                             <td>
                                 <a href="#custom-modal<?php echo e($row->id); ?>" data-id="<?php echo e($row->id); ?>" id="currentRow<?php echo e($row->id); ?>" class="btn btn-success btn-xs btn-trans waves-effect waves-light m-r-5 m-b-10" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="100" data-overlayColor="#36404a"><i class="fa fa-plus-circle"></i>
                                 </a>
@@ -109,7 +109,7 @@
             
                                            <!-- Model -->
 
-                                <a href="<?php echo e(route('user_discounts.show', $row->id)); ?>"
+                                <!-- <a href="<?php echo e(route('user_discounts.show', $row->id)); ?>"
                                    class="btn btn-icon btn-xs waves-effect btn-info m-b-5">
                                     <i class="fa fa-eye"></i>
                                 </a>
@@ -118,7 +118,7 @@
                                    data-id="<?php echo e($row->id); ?>"
                                    class="removeElement btn btn-icon btn-trans btn-xs waves-effect waves-light btn-danger m-b-5">
                                     <i class="fa fa-remove"></i>
-                                </a>
+                                </a> -->
 
                             </td>
                         </tr>
@@ -308,7 +308,10 @@
             e.preventDefault();
 
             var id = $(this).attr('data-id');
-
+            console.log(id);
+            var discount_td = $(this).closest($('#discount' + id));
+            discount_td.text('inas');
+            console.log(discount_td);
             var formData = new FormData(this);
             $.ajax({
                 type: 'POST',
@@ -318,11 +321,12 @@
                 contentType: false,
                 processData: false,
                 success: function (data) {
-                    console.log(data);
+                    console.log(data.discount_no);
                     if (data.status == true) {
+                        discount_td.text(data.discount_no);
                         //$("#invite" + data.id).html(0);
                         //$("#currentRow" + data.id + "td:nth-child(2)").text('inas');
-                        $("#currentRow" + data.id).find("#invite" + data.id).html('inas');
+                        //$("#currentRow" + data.id).find("#invite" + data.id).html('inas');
                         //$("#invite" + data.id).html('inas');
                         var shortCutFunction = 'success';
                         var msg = data.message;

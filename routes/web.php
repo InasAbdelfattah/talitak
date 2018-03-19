@@ -58,6 +58,8 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'admin'], function ()
     Route::post('user/delete/group', 'Admin\UsersController@groupDelete')->name('users.group.delete');
     Route::post('user/suspend/group', 'Admin\UsersController@groupSuspend')->name('users.group.suspend');
     Route::post('companies/delete/group', 'Admin\CompaniesController@groupDelete')->name('companies.group.delete');
+    Route::post('companies/suspend-comment', 'Admin\CompaniesController@suspendComment')->name('companies.suspendComment');
+    Route::post('companies/delete-comment', 'Admin\CompaniesController@deleteComment')->name('companies.deleteComment');
 
     Route::post('role/delete', 'Admin\RolesController@delete')->name('role.delete');
 
@@ -138,6 +140,7 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'admin'], function ()
 
     Route::post('user_discounts/add_discount', 'Admin\UserDiscountsController@addDiscount')->name('user_discounts.addDiscount');
     Route::get('user_discounts/all', 'Admin\UserDiscountsController@userDiscounts')->name('user_discounts.all');
+    Route::post('user_discounts/delete', 'Admin\UserDiscountsController@delete')->name('user_discounts.delete');
     
     Route::resource('user_discounts', 'Admin\UserDiscountsController');
     

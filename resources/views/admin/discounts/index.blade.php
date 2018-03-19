@@ -26,7 +26,7 @@
                         <th>رقم جوال المستخدم</th>
                         <th>عدد المسجلين من خلاله</th>
                         <th>عدد الخصومات السابقة</th>
-                        <th>الخيارات</th>
+                        <th>إضافة خصم</th>
 
                     </tr>
                     </thead>
@@ -47,7 +47,7 @@
                             <td>{{ $row->name }}</td>
                             <td>{{ $row->phone }}</td>
                             <td id="invite{{$row->id}}">{{ countInvited($row->id) }}</td>
-                            <td>{{ countLastDiscounts($row->id) }}</td>
+                            <td id="discount{{$row->id}}">{{ countLastDiscounts($row->id) }}</td>
                             <td>
                                 <a href="#custom-modal{{ $row->id }}" data-id="{{ $row->id }}" id="currentRow{{ $row->id }}" class="btn btn-success btn-xs btn-trans waves-effect waves-light m-r-5 m-b-10" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="100" data-overlayColor="#36404a"><i class="fa fa-plus-circle"></i>
                                 </a>
@@ -115,7 +115,7 @@
             
                                            <!-- Model -->
 
-                                <a href="{{ route('user_discounts.show', $row->id) }}"
+                                <!-- <a href="{{ route('user_discounts.show', $row->id) }}"
                                    class="btn btn-icon btn-xs waves-effect btn-info m-b-5">
                                     <i class="fa fa-eye"></i>
                                 </a>
@@ -124,7 +124,7 @@
                                    data-id="{{ $row->id }}"
                                    class="removeElement btn btn-icon btn-trans btn-xs waves-effect waves-light btn-danger m-b-5">
                                     <i class="fa fa-remove"></i>
-                                </a>
+                                </a> -->
 
                             </td>
                         </tr>
@@ -314,7 +314,11 @@
             e.preventDefault();
 
             var id = $(this).attr('data-id');
-
+            console.log(id);
+            //var discount_td = $(this).closest($('#discount' + id));
+            var $discount_td = $(this).closest($('#discount' + id));
+            $discount_td.text('inas');
+            console.log(discount_td);
             var formData = new FormData(this);
             $.ajax({
                 type: 'POST',
@@ -324,11 +328,12 @@
                 contentType: false,
                 processData: false,
                 success: function (data) {
-                    console.log(data);
+                    console.log(data.discount_no);
                     if (data.status == true) {
+                        discount_td.text(data.discount_no);
                         //$("#invite" + data.id).html(0);
                         //$("#currentRow" + data.id + "td:nth-child(2)").text('inas');
-                        $("#currentRow" + data.id).find("#invite" + data.id).html('inas');
+                        //$("#currentRow" + data.id).find("#invite" + data.id).html('inas');
                         //$("#invite" + data.id).html('inas');
                         var shortCutFunction = 'success';
                         var msg = data.message;

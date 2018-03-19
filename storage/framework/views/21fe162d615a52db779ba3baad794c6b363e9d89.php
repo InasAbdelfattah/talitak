@@ -1,8 +1,4 @@
-@extends('admin.layouts.master')
-
-
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
     <!-- Page-Title -->
 
@@ -23,12 +19,12 @@
 
                             <div class="col-lg-3 col-xs-12">
                                 <label>اسم المستخدم :</label>
-                                <p>{{ $user->name }}</p>
+                                <p><?php echo e($user->name); ?></p>
                             </div>
 
                             <div class="col-lg-3 col-xs-12">
                                 <label>رقم الجوال :</label>
-                                <p>{{ $user->phone }}</p>
+                                <p><?php echo e($user->phone); ?></p>
                             </div>
 
                         </div>
@@ -57,18 +53,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($discounts as $row)
+                                        <?php $__empty_1 = true; $__currentLoopData = $discounts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                             <tr>
                                                 <td>#</td>
-                                                <td>{{$row->discount}}</td>
-                                                <td>{{ $row->from_date }}</td>
-                                                <td>{{ $row->to_date }}</td>
+                                                <td><?php echo e($row->discount); ?></td>
+                                                <td><?php echo e($row->from_date); ?></td>
+                                                <td><?php echo e($row->to_date); ?></td>
                                             </tr>
-                                        @empty
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                             <tr>
                                                 <td colspan="2"> لا يوجد </td>
                                             </tr>
-                                        @endforelse
+                                        <?php endif; ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -81,4 +77,6 @@
 
     </div>
    
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

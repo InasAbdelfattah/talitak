@@ -25,7 +25,6 @@
                         <th>عدد المسجلين من خلاله</th>
                         <th>عدد الخصومات المستفيد منها المستخدم</th>
                         <th>الخيارات</th>
-
                     </tr>
                     </thead>
                     <tbody>
@@ -33,7 +32,6 @@
                     <?php $__empty_1 = true; $__currentLoopData = $discounts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <tr id="currentRow<?php echo e($row->id); ?>">
                             <td>#
-
                                 
                             </td>
 
@@ -42,77 +40,14 @@
                             <td id="invite<?php echo e($row->id); ?>"><?php echo e(countInvited($row->user_id)); ?></td>
                             <td><?php echo e(countLastDiscounts($row->user_id)); ?></td>
                             <td>
-                                <!-- <a href="#custom-modal<?php echo e($row->id); ?>" data-id="<?php echo e($row->id); ?>" id="currentRow<?php echo e($row->id); ?>" class="btn btn-success btn-xs btn-trans waves-effect waves-light m-r-5 m-b-10" data-animation="fadein" data-plugin="custommodal" data-overlaySpeed="100" data-overlayColor="#36404a"><i class="fa fa-plus-circle"></i>
-                                </a> -->
-        
-                                <!-- <div id="custom-modal<?php echo e($row->id); ?>" class="modal-demo"
-                                          data-backdrop="static">
-                                        <button type="button" class="close" onclick="Custombox.close();">
-                                             <span>&times;</span><span class="sr-only">Close</span>
-                                        </button>
-                                        <h4 class="custom-modal-title">اضافة خصم</h4>
-                                        <div class="custom-modal-text text-right" style="text-align: right !important;">
-
-                                            <form action="<?php echo e(route('user_discounts.addDiscount')); ?>" method="post" data-id="<?php echo e($row->id); ?>">
-     
-                                                <?php echo e(csrf_field()); ?>
-
-                                                <input type="hidden" name="userId" value="<?php echo e($row->id); ?>">
-                                                <input type="hidden" name="invitedCounts" value="<?php echo e(countInvited($row->id)); ?>">
-                                                <div class="form-group ">
-                                                        
-                                                    <div>
-                                                        <label for="discount-signup"> الخصم </label>
-                                                        <br>
-                                                        <input type="number" id="discount-signup" value="<?php echo e(old('discount')); ?>" name="discount" id="discount" class="form-control">
-                                                    </div>
-
-                                                    <div>
-                                                        <label for="maxOrders"> أقصى عدد للطلبات المحددة للمستخدم للاستفادة من الخصم </label>
-                                                        <br>
-                                                        <input type="number" id="maxOrders" value="<?php echo e(old('max_orders')); ?>" name="maxOrders" id="maxOrders" class="form-control">
-                                                    </div>
-                                                                     
-                                                    <div>
-                                                        <label for="from-signup">
-                                                              الخصم سارى من تاريخ : 
-                                                        </label>
-                                                        <br>
-                                                        <input type="date" id="from_date-signup" value="<?php echo e(old('from_date')); ?>" name="from_date" id="from_date" class="form-control">
-                                                    </div>
-
-                                                    <div>
-                                                        <label for="to-signup">
-                                                                الخصم سارى إلى : 
-                                                        </label>
-                                                        <br>
-                                                        <input type="date" id="to_date-signup" value="<?php echo e(old('to_date')); ?>" name="to_date" id="to_date" class="form-control">
-                                                    </div>
-
-                                                </div>
-        
-                                                <div class="form-group text-right m-t-20">
-                                                    <button class="btn btn-primary waves-effect waves-light m-t-0" type="submit">
-                                                        حفظ البيانات
-                                                    </button>
-                                                    <button onclick="Custombox.close();" type="reset"
-                                                            class="btn btn-default waves-effect waves-light m-l-5 m-t-0">
-                                                        إلغاء
-                                                    </button>
-                                                </div>
-        
-                                                </form>
-                                                                  
-                                        </div>
-                                </div> -->
-
-                                <a href="<?php echo e(route('user_discounts.show', $row->id)); ?>"
+                               
+                                <a href="<?php echo e(route('user_discounts.show', $row->user_id)); ?>"
                                    class="btn btn-icon btn-xs waves-effect btn-info m-b-5">
                                     <i class="fa fa-eye"></i>
                                 </a>
 
                                 <a href="javascript:;" id="elementRow<?php echo e($row->id); ?>"
-                                   data-id="<?php echo e($row->id); ?>"
+                                   data-userId="<?php echo e($row->user_id); ?>" data-id="<?php echo e($row->id); ?>"
                                    class="removeElement btn btn-icon btn-trans btn-xs waves-effect waves-light btn-danger m-b-5">
                                     <i class="fa fa-remove"></i>
                                 </a>
@@ -135,15 +70,13 @@
     <!-- end row -->
 <?php $__env->stopSection(); ?>
 
-
 <?php $__env->startSection('scripts'); ?>
-
-
 
     <script>
 
         $('body').on('click', '.removeElement', function () {
             var id = $(this).attr('data-id');
+            var userId = $(this).attr('data-userId');
             var $tr = $(this).closest($('#elementRow' + id).parent().parent());
             swal({
                 title: "هل انت متأكد؟",
@@ -160,8 +93,8 @@
                 if (isConfirm) {
                     $.ajax({
                         type: 'POST',
-                        url: '<?php echo e(route('orders.delete')); ?>',
-                        data: {id: id},
+                        url: '<?php echo e(route('user_discounts.delete')); ?>',
+                        data: {user_id: userId , id: id},
                         dataType: 'json',
                         success: function (data) {
 

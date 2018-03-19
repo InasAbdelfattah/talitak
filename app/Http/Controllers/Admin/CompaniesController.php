@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Company;
 use App\CompanyWorkDay;
+use App\Comment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DataTables;
@@ -238,5 +239,58 @@ class CompaniesController extends Controller
         ]);
     }
 
+    public function deleteComment(Request $request){
+
+        if (!Gate::allows('companies_manage')) {
+            return abort(401);
+        }
+
+        $comment = Comment::find($request->id);
+        
+        if(! $comment){
+            return response()->json([
+                'status' => false,
+                'message' => 'Fail',
+            ]);
+        }
+
+        $comment->delete() ;
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'id' => $request->id
+            ]
+        ]);
+
+    }
+
+    public function suspendComment(Request $request){
+
+        if (!Gate::allows('companies_manage')) {
+            return abort(401);
+        }
+
+        $comment = Comment::find($request->id);
+
+        if(!$comment){
+            return response()->json([
+                'status' => false,
+                'message' => 'Fail',
+            ]);
+        }
+
+        $comment->is_suspend = $comment->is_suspend == 1 ? 0 : 1;
+        $comment->save();
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'id' => $request->id ,
+                'suspend' => $comment->is_suspend
+            ]
+        ]);
+
+    }
 
 }

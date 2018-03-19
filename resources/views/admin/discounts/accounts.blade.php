@@ -199,6 +199,7 @@
         $('body').on('click', '.removeElement', function () {
             var id = $(this).attr('data-id');
             var $tr = $(this).closest($('#elementRow' + id).parent().parent());
+
             swal({
                 title: "هل انت متأكد؟",
                 text: "يمكنك استرجاع المحذوفات مرة اخرى لا تقلق.",
@@ -259,14 +260,14 @@
         $('form').on('submit', function (e) {
             e.preventDefault();
 
-
             var id = $(this).attr('data-id');
-
+            var $app_ratio_td = $(this).closest($('#app_ratio' + id));
+            var $paid_td = $(this).closest($('#paid' + id));
+            var $remain_td = $(this).closest($('#remain' + id));
 
             // var $tr = $($('#currentRowOn' + id)).closest($('#currentRow' + id).parent().parent());
 
             // console.log($tr);
-
 
             var formData = new FormData(this);
             for (var value of formData.values()) {

@@ -619,33 +619,6 @@ Enjoy responsibly!
 
 <script type="text/javascript">
 
-
-    {{--$(function () {--}}
-    {{--$('body').on('click', 'datatable-fixed-header_paginate .pagination a', function (e) {--}}
-    {{--e.preventDefault();--}}
-
-
-    {{--alert('hassan');--}}
-
-    {{--$('#load a').css('color', '#dfecf6');--}}
-    {{--$('#load').append('<img style="position: absolute; right: 0; top: 0; z-index: 100000;" with: 20%; src="{{ request()->root() }}/assets/admin/custom/images/loader.gif" />');--}}
-
-    {{--var url = $(this).attr('href');--}}
-    {{--getArticles(url);--}}
-    {{--window.history.pushState("", "", url);--}}
-    {{--});--}}
-
-    {{--function getArticles(url) {--}}
-    {{--$.ajax({--}}
-    {{--url: url--}}
-    {{--}).done(function (data) {--}}
-    {{--$('.articles').html(data);--}}
-    {{--}).fail(function () {--}}
-    {{--alert('Articles could not be loaded.');--}}
-    {{--});--}}
-    {{--}--}}
-    {{-- }); --}}
-
     @if(session()->has('success'))
     setTimeout(function () {
         showMessage('{{ session()->get('success') }}' , 'success');

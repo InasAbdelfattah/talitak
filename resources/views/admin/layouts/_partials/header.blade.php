@@ -191,22 +191,6 @@
                         
                     @endcan
 
-                    @can('cities_manage')
-
-                        <li>
-                            <a href="{{ route('cities.index') }}"><i class="zmdi zmdi-view-dashboard"></i>
-                                <span> المدن </span> </a>
-                        </li>
-                    @endcan
-
-                    @can('districts_manage')
-
-                        <li>
-                            <a href="{{ route('districts.index') }}"><i class="zmdi zmdi-view-dashboard"></i>
-                                <span> الأحياء </span> </a>
-                        </li>
-                    @endcan
-
 
                     {{--<li class="has-submenu">--}}
                     {{--<a href="#"><i class="zmdi zmdi-view-list"></i> <span> الحسابات البنكية </span> </a>--}}
@@ -244,8 +228,10 @@
                                         </li> -->
                                         <li><a href="{{ route('settings.terms') }}">بنود الإستخدام</a></li>
                                         <li><a href="{{ route('settings.aboutus') }}">عن التطبيق</a></li>
-                                        <li><a href="{{ route('settings.commission') }}">نسبة التطبيق</a>
-                                        <li><a href="{{ route('settings.socials') }}">روابط وسائل التواصل</a>
+                                        <li><a href="{{ route('settings.commission') }}">نسبة التطبيق</a></li>
+                                        <li><a href="{{ route('settings.socials') }}">روابط وسائل التواصل</a></li>
+                                        <li><a href="{{ route('cities.index') }}">المدن</a></li>
+                                        <li><a href="{{ route('districts.index') }}">الأحياء</a></li>
                                 
                                     </ul>
                                 </li>

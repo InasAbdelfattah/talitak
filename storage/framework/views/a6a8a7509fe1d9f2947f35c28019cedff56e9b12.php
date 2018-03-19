@@ -192,22 +192,6 @@
                         
                     <?php endif; ?>
 
-                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('cities_manage')): ?>
-
-                        <li>
-                            <a href="<?php echo e(route('cities.index')); ?>"><i class="zmdi zmdi-view-dashboard"></i>
-                                <span> المدن </span> </a>
-                        </li>
-                    <?php endif; ?>
-
-                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('districts_manage')): ?>
-
-                        <li>
-                            <a href="<?php echo e(route('districts.index')); ?>"><i class="zmdi zmdi-view-dashboard"></i>
-                                <span> الأحياء </span> </a>
-                        </li>
-                    <?php endif; ?>
-
 
                     
                     
@@ -245,8 +229,10 @@
                                         </li> -->
                                         <li><a href="<?php echo e(route('settings.terms')); ?>">بنود الإستخدام</a></li>
                                         <li><a href="<?php echo e(route('settings.aboutus')); ?>">عن التطبيق</a></li>
-                                        <li><a href="<?php echo e(route('settings.commission')); ?>">نسبة التطبيق</a>
-                                        <li><a href="<?php echo e(route('settings.socials')); ?>">روابط وسائل التواصل</a>
+                                        <li><a href="<?php echo e(route('settings.commission')); ?>">نسبة التطبيق</a></li>
+                                        <li><a href="<?php echo e(route('settings.socials')); ?>">روابط وسائل التواصل</a></li>
+                                        <li><a href="<?php echo e(route('cities.index')); ?>">المدن</a></li>
+                                        <li><a href="<?php echo e(route('districts.index')); ?>">الأحياء</a></li>
                                 
                                     </ul>
                                 </li>

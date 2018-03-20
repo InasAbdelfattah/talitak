@@ -180,6 +180,7 @@ return [
         Silber\Bouncer\BouncerServiceProvider::class,
         Dimsav\Translatable\TranslatableServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
+        LaravelFCM\FCMServiceProvider::class,
 
     ],
 
@@ -233,6 +234,8 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         'UploadImage' => \App\Http\Helpers\Images::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
+        'FCM'      => LaravelFCM\Facades\FCM::class,
+        'FCMGroup' => LaravelFCM\Facades\FCMGroup::class, // Optional
 
     ],
 

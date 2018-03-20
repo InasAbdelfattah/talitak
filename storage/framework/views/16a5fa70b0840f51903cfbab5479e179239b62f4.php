@@ -1,113 +1,77 @@
-@extends('admin.layouts.master')
-
-
-@section('styles')
-    <style>
-
-        .gold {
-            text-align: center;
-            color: #fff;
-            padding: 3px 1em;
-            border-radius: 5px;
-            /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fceabb+0,f8b500+100,fbdf93+100 */
-            background: #fceabb;
-            /* Old browsers */
-            background: -moz-radial-gradient(center, ellipse cover, #fceabb 0%, #f8b500 100%, #fbdf93 100%);
-            /* FF3.6-15 */
-            background: -webkit-radial-gradient(center, ellipse cover, #fceabb 0%, #f8b500 100%, #fbdf93 100%);
-            /* Chrome10-25,Safari5.1-6 */
-            background: radial-gradient(ellipse at center, #fceabb 0%, #f8b500 100%, #fbdf93 100%);
-            /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fceabb', endColorstr='#fbdf93', GradientType=1);
-            /* IE6-9 fallback on horizontal gradient */
-        }
-
-        .silver {
-            text-align: center;
-            color: #fff;
-            padding: 3px 1em;
-            top: 10px;
-            left: 10px;
-            border-radius: 5px;
-            /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e0e0e0+0,b8bac6+100,f5f6f6+100 */
-            background: #e0e0e0;
-            /* Old browsers */
-            background: -moz-radial-gradient(center, ellipse cover, #e0e0e0 0%, #b8bac6 100%, #f5f6f6 100%);
-            /* FF3.6-15 */
-            background: -webkit-radial-gradient(center, ellipse cover, #e0e0e0 0%, #b8bac6 100%, #f5f6f6 100%);
-            /* Chrome10-25,Safari5.1-6 */
-            background: radial-gradient(ellipse at center, #e0e0e0 0%, #b8bac6 100%, #f5f6f6 100%);
-            /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e0e0e0', endColorstr='#f5f6f6', GradientType=1);
-            /* IE6-9 fallback on horizontal gradient */
-        }
-
-        .bronze {
-            text-align: center;
-            color: #fff;
-            padding: 3px 1em;
-            top: 10px;
-            left: 10px;
-            border-radius: 5px;
-            /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f3e2c7+0,b68d4c+100,e9d4b3+100 */
-            background: #f3e2c7;
-            /* Old browsers */
-            background: -moz-radial-gradient(center, ellipse cover, #f3e2c7 0%, #b68d4c 100%, #e9d4b3 100%);
-            /* FF3.6-15 */
-            background: -webkit-radial-gradient(center, ellipse cover, #f3e2c7 0%, #b68d4c 100%, #e9d4b3 100%);
-            /* Chrome10-25,Safari5.1-6 */
-            background: radial-gradient(ellipse at center, #f3e2c7 0%, #b68d4c 100%, #e9d4b3 100%);
-            /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3e2c7', endColorstr='#e9d4b3', GradientType=1);
-            /* IE6-9 fallback on horizontal gradient */
-        }
-
-
-    </style>
-@endsection
-@section('content')
-
+<?php $__env->startSection('title', 'إدارة المستخدمين'); ?>
+<?php $__env->startSection('content'); ?>
 
     <!-- Page-Title -->
-    <div class="row">
+    <div class="row zoomIn">
         <div class="col-sm-12">
             <div class="btn-group pull-right m-t-15">
 
-                <a href="{{ route('membership.create') }}" type="button" class="btn btn-custom waves-effect waves-light"
+                <a href="<?php echo e(route('users.create')); ?>" type="button" class="btn btn-custom waves-effect waves-light"
                    aria-expanded="false"> إضافة
                     <span class="m-l-5">
                         <i class="fa fa-user"></i>
                     </span>
                 </a>
 
-                <ul class="dropdown-menu" role="menu">
+                <!-- <ul class="dropdown-menu" role="menu">
                     <li><a href="#">Action</a></li>
                     <li><a href="#">Another action</a></li>
                     <li><a href="#">Something else here</a></li>
                     <li class="divider"></li>
                     <li><a href="#">Separated link</a></li>
-                </ul>
+                </ul> -->
             </div>
-            <h4 class="page-title">@lang('global.users_management')</h4>
+            <h4 class="page-title"><?php echo app('translator')->getFromJson('global.users_management'); ?></h4>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row zoomIn">
         <div class="col-sm-12">
             <div class="card-box">
 
-                @if(session()->has('success'))
-                    <div class="alert alert-success">
-                        {{ session()->get('success') }}
-                    </div>
-                @endif
                 <div class="row">
-                    <div class="col-sm-12 push-left m-b-10">
-                        <a style="float: left; margin-right: 15px;" class="btn btn-danger btn-sm getSelected">
+                    <div class="col-sm-4 col-xs-8 m-b-30" style="display: inline-flex">
+                        مشاهدة المستخدمين
+                    </div>
+
+                    <div class="col-sm-4 col-sm-offset-4 pull-left">
+                        <a style="float: left; margin-right: 15px;    margin-bottom: 20px;"
+                           class="btn btn-danger btn-sm getSelected">
                             <i class="fa fa-trash" style="margin-left: 5px"></i> حذف المحدد
+                        </a>
+
+                        <a style="float: left;" class="btn btn-info btn-sm getSelectedAndSuspend">
+                            <i class="fa fa-users" style="margin-left: 5px"></i> حظر المستخدمين
                         </a>
                     </div>
                 </div>
+
+                
+                
+                
+                
+
+                
+                
+
+                
+                
+                
+                
+                
+                
+
+                
+                
+
+
+
+                
+                
+                
+                
+                
+
 
                 <table id="datatable-fixed-header" class="table  table-striped">
                     <thead>
@@ -122,90 +86,112 @@
                             </div>
                         </th>
                         <th>الصورة</th>
-                        <th>الاسم</th>
-                        <th>الصور</th>
-                        <th> العروض المتاحة</th>
-                        <th>سماح الفيديوهات</th>
-
-                        <th>اللون</th>
+                        <th>الاسم بالكامل</th>
+                        <th>اسم المستخدم</th>
+                        <th>البريد الإلكتروني</th>
+                        <th>رقم الجوال</th>
+                        <th>الصلاحيات</th>
+                        <th>الحالة</th>
+                        <th>حالة الحذر</th>
                         <th>الخيارات</th>
 
                     </tr>
                     </thead>
                     <tbody>
 
-
-                    @foreach($memberships as $membership)
+                    <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                         <tr>
                             <td>
                                 <div class="checkbox checkbox-primary checkbox-single">
                                     <input type="checkbox" style="margin-bottom: 0px;" class="checkboxes-items"
-                                           value="{{ $membership->id }}"
+                                           value="<?php echo e($user->id); ?>"
                                            aria-label="Single checkbox Two">
                                     <label></label>
                                 </div>
                             </td>
                             <td style="width: 10%;">
                                 <a data-fancybox="gallery"
-                                   href="{{ $helper->getDefaultImage($membership->image, request()->root().'/assets/admin/custom/images/default.png') }}">
+                                   href="<?php echo e($helper->getDefaultImage($user->image, request()->root().'/assets/admin/custom/images/default.png')); ?>">
                                     <img style="width: 50%; border-radius: 50%; height: 49px;"
-                                         src="{{ $helper->getDefaultImage($membership->image, request()->root().'/assets/admin/custom/images/default.png') }}"/>
+                                         src="<?php echo e($helper->getDefaultImage($user->image, request()->root().'/assets/admin/custom/images/default.png')); ?>"/>
                                 </a>
 
                             </td>
 
-                            <td>{{ $membership->name }}</td>
-                            <td>{{ $membership->images  }}</td>
-                            <td>{{ $membership->offers }}</td>
-                            <td>@if($membership->allow_video == 1) <label
-                                        class="label label-success">مسموح</label> @else <label
-                                        class="label label-danger">غير مسموح</label> @endif</td>
-
-
+                            <td><?php echo e($user->name); ?></td>
+                            <td><?php echo e($user->username); ?></td>
+                            <td><?php echo e($user->email); ?></td>
+                            <td><?php echo e($user->phone); ?></td>
                             <td>
-                                <label class="{{ $membership->color }}"
-                                       style="text-transform: capitalize;">{{ $membership->color }}</label>
+                                
+                                <?php $__empty_1 = true; $__currentLoopData = $user->roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                    <ul class="none-style-ul">
+                                        <li style="font-size: 11px;"><?php echo e($role->title); ?></li>
+                                    </ul>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                                    لم يعين صلاحية
+                                <?php endif; ?>
                             </td>
-                            {{--<td>--}}
-                            {{--@if($membership->is_active == 1)--}}
-                            {{--<label class="label label-success label-xs">مفعل</label>--}}
-                            {{--@else--}}
-                            {{--<label class="label label-danger label-xs">غير مفعل</label>--}}
-                            {{--@endif--}}
-                            {{--</td>--}}
 
 
                             <td>
-                                <a href="{{ route('membership.edit',$membership->id) }}"
+                                <?php if($user->is_active == 1): ?>
+                                    <label class="label label-success label-xs">مفعل</label>
+                                <?php else: ?>
+                                    <label class="label label-danger label-xs">غير مفعل</label>
+                                <?php endif; ?>
+                            </td>
+
+                            <td id ="is_suspend<?php echo e($user->id); ?>" data-suspend="<?php echo e($user->is_suspend); ?>">
+                                <?php if($user->is_suspend == 0): ?>
+                                    <label class="label label-success label-xs">غير محذور</label>
+                                <?php else: ?>
+                                    <label class="label label-danger label-xs">محذور</label>
+                                <?php endif; ?>
+                            </td>
+
+                            <td>
+                                <a href="<?php echo e(route('users.edit',$user->id)); ?>"
                                    class="btn btn-icon btn-xs waves-effect btn-default m-b-5">
                                     <i class="fa fa-edit"></i>
                                 </a>
-
-                                <a href="javascript:;" id="elementRow{{ $membership->id }}"
-                                   data-id="{{ $membership->id }}"
-                                   class="removeElement btn btn-icon btn-trans btn-xs waves-effect waves-light btn-danger m-b-5">
+                                <?php if($user->id != 1): ?>
+                                <a href="javascript:;" id="elementRow<?php echo e($user->id); ?>" data-id="<?php echo e($user->id); ?>"
+                                   class="removeElement btn-xs btn-icon btn-trans btn-sm waves-effect waves-light btn-danger m-b-5">
                                     <i class="fa fa-remove"></i>
 
                                 </a>
+                                <?php endif; ?>
                             </td>
                         </tr>
 
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
-
 
             </div>
         </div>
     </div>
     <!-- End row -->
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('scripts'); ?>
 
 
-@section('scripts')
+
 
     <script>
+
+        <?php if(session()->has('success')): ?>
+        setTimeout(function () {
+            showMessage('<?php echo e(session()->get('success')); ?>');
+        }, 3000);
+        <?php endif; ?>
+
+
+
+
         $('body').on('click', '.removeElement', function () {
             var id = $(this).attr('data-id');
             var $tr = $(this).closest($('#elementRow' + id).parent().parent());
@@ -224,40 +210,28 @@
                 if (isConfirm) {
                     $.ajax({
                         type: 'POST',
-                        url: '{{ route('membership.delete') }}',
+                        url: '<?php echo e(route('user.delete')); ?>',
                         data: {id: id},
                         dataType: 'json',
                         success: function (data) {
-
-                            if (data.status == true) {
+                            $('#catTrashed').html(data.trashed);
+                            if (data) {
                                 var shortCutFunction = 'success';
                                 var msg = 'لقد تمت عملية الحذف بنجاح.';
                                 var title = data.title;
                                 toastr.options = {
-                                    positionClass: 'toast-top-left',
-                                    onclick: null
-                                };
-                                var $toast = toastr[shortCutFunction](msg, title); // Wire up an event handler to a button in the toast, if it exists
-                                $toastlast = $toast;
-
-                                $tr.find('td').fadeOut(1000, function () {
-                                    $tr.remove();
-                                });
-                            }
-
-                            if (data.status == false) {
-                                var shortCutFunction = 'error';
-                                var msg = 'عفواً, لا يمكنك حذف العضوية الان نظراً لوجود 3 شركات مسجلين بها.';
-                                var title = data.title;
-                                toastr.options = {
-                                    positionClass: 'toast-top-left',
-                                    onclick: null
+                                    positionClass: 'toast-top-center',
+                                    onclick: null,
+                                    showMethod: 'slideDown',
+                                    hideMethod: "slideUp",
                                 };
                                 var $toast = toastr[shortCutFunction](msg, title); // Wire up an event handler to a button in the toast, if it exists
                                 $toastlast = $toast;
                             }
 
-
+                            $tr.find('td').fadeOut(1000, function () {
+                                $tr.remove();
+                            });
                         }
                     });
                 } else {
@@ -287,9 +261,6 @@
                     sum.push(Number($(this).val()));
                 }
 
-                var $tr = $(this).closest($('#elementRow' + $(this).val()).parent().parent());
-
-
             });
 
             if (sum.length > 0) {
@@ -309,7 +280,7 @@
                     if (isConfirm) {
                         $.ajax({
                             type: 'POST',
-                            url: '{{ route('memberships.group.delete') }}',
+                            url: '<?php echo e(route('users.group.delete')); ?>',
                             data: {ids: sum},
                             dataType: 'json',
                             success: function (data) {
@@ -328,10 +299,12 @@
 
                                 $('.checkboxes-items').each(function () {
                                     if ($(this).prop('checked') == true) {
-                                        $(this).parent().parent().parent().remove();
+                                        $(this).parent('tr').remove();
                                     }
                                 });
-
+//                        $tr.find('td').fadeOut(1000, function () {
+//                            $tr.remove();
+//                        });
                             }
                         });
                     } else {
@@ -392,7 +365,7 @@
                     if (isConfirm) {
                         $.ajax({
                             type: 'POST',
-                            url: '{{ route('users.group.suspend') }}',
+                            url: '<?php echo e(route('users.group.suspend')); ?>',
                             data: {ids: sum},
                             dataType: 'json',
                             success: function (data) {
@@ -411,7 +384,14 @@
 
                                 $('.checkboxes-items').each(function () {
                                     if ($(this).prop('checked') == true) {
-                                        $(this).parent('tr').remove();
+                                        var user_id = Number($(this).val()) ;
+                                        //$(this).parent().parent().parent().remove();
+                                        var is_suspend = $(this).closest($('#is_suspend' + user_id)).data('suspend');
+                                        console.log('suspend',is_suspend);
+                                        $(this).closest($('#is_suspend' + user_id).text('inas'));
+                                        $(this).closest($('#is_suspend' + user_id)).data('suspend', 1);
+                                        
+                                        //$('#is_suspend').text('inas');
                                     }
                                 });
 //                        $tr.find('td').fadeOut(1000, function () {
@@ -448,13 +428,27 @@
                 });
             }
 
-
         });
+
+        function showMessage(message) {
+
+            var shortCutFunction = 'success';
+            var msg = message;
+            var title = 'نجاح!';
+            toastr.options = {
+                positionClass: 'toast-top-center',
+                onclick: null,
+                showMethod: 'slideDown',
+                hideMethod: "slideUp",
+            };
+            var $toast = toastr[shortCutFunction](msg, title);
+            // Wire up an event handler to a button in the toast, if it exists
+            $toastlast = $toast;
+
+
+        }
 
     </script>
 
-
-@endsection
-
-
-
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

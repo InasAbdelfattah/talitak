@@ -51,6 +51,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
+                                            <th>عدد المسجلين من خلاله</th>
                                             <th>الخصم</th>
                                             <th> الفترة من : </th>
                                             <th> الفترة إلى : </th>
@@ -60,6 +61,7 @@
                                         @forelse($discounts as $row)
                                             <tr>
                                                 <td>#</td>
+                                                <td>{{ $row->registered_users_no }}</td>
                                                 <td>{{$row->discount}}</td>
                                                 <td>{{ $row->from_date }}</td>
                                                 <td>{{ $row->to_date }}</td>

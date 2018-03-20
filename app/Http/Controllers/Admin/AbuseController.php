@@ -5,92 +5,55 @@ namespace App\Http\Controllers\Admin;
 use App\Abuse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
+
 
 class AbuseController extends Controller
 {
     public function index()
     {
-        $supports = Support::whereParentId(0)->get();
-        return view('admin.supports.index')->with(compact('supports'));
+        $abuses = Abuse::join('users','abuses.user_id','users.id')->join('companies','abuses.company_id','companies.id')->select('abuses.*','users.id as user_id' , 'users.name as username' , 'users.phone as user_phone' , 'companies.id as company_id' , 'companies.name as company_name')->get();
+
+        return view('admin.abuses.index',compact('abuses'));
+        
     }
 
-    public function show($id)
+        /**
+     * Remove User from storage.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function groupDelete(Request $request)
     {
 
-        //$message = Support::with('user')->whereId($id)->first();
-        $message = Support::whereId($id)->first();
-        $message->is_read = 1;
-        $message->save();
+        if (!Gate::allows('abuses_manage')) {
+            return abort(401);
+        }
 
-        return view('admin.supports.show')->with(compact('message'));
+        $ids = $request->ids;
+        foreach ($ids as $id) {
+            $model = Abuse::findOrFail($id);
+            $model->delete();
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'id' => $request->id
+            ]
+        ]);
     }
 
-    public function reply(Request $request, $id)
-    {
-        if ($request->message == '' && $request->reply_type == '') {
-            return response()->json([
-                'status' => false,
-                'message' => 'من فضلك ادخل بيانات الرسالة ثم اعد الإرسال'
-            ]);
-        }
-
-
-        if ($request->message == '') {
-            return response()->json([
-                'status' => false,
-                'message' => 'من فضلك ادخل نص الرد '
-            ]);
-        }
-
-
-        if ($request->reply_type == '') {
-            return response()->json([
-                'status' => false,
-                'message' => 'من فضلك اختار وسيلة الرد '
-
-            ]);
-        }
-
-
-        $support = new Support;
-        $support->message = $request->message;
-        $support->phone = $request->phone ? $request->phone : '';
-        $support->name = $request->name ? $request->name : '';
-        $support->email = $request->email ? $request->email : '';
-        $support->user_id = auth()->id();
-        $support->type = -1;
-
-        $support->reply_type = $request->reply_type;
-
-        $support->parent_id = $id ;
-        $support->is_read = 0;
-
-        if ($support->save()) {
-            $support->created = $support->created_at->format(' Y/m/d  ||  H:i:s ');
-            return response()->json([
-                'status' => true,
-                'message' => 'لقد تم إرسال الرد بنجاح',
-                'data' => $support
-
-            ], 200);
-        } else {
-            return response()->json([
-                'status' => false,
-            ]);
-        }
-    }
-
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
     public function delete(Request $request)
     {
-        $model = Support::findOrFail($request->id);
-
-
-        if ($model->children->count() > 0) {
-            
-            foreach($model->children as $child){
-                $child->delete();
-            }
-        }
+        $model = Abuse::findOrFail($request->id);
 
         if ($model->delete()) {
             return response()->json([
@@ -99,4 +62,32 @@ class AbuseController extends Controller
             ]);
         }
     }
+
+    public function adoptAbuse(Request $request)
+    {
+         if (!Gate::allows('abuses_manage')) {
+            return abort(401);
+        }
+
+        $model = Abuse::find($request->id);
+
+        if(!$model){
+            return response()->json([
+                'status' => false,
+                'message' => 'Fail',
+            ]);
+        }
+
+        $model->is_adopt = $model->is_adopt == 1 ? 0 : 1;
+        $model->save();
+
+        return response()->json([
+            'status' => true,
+            'adopt' => $model->is_adopt,
+            'data' => [
+                'id' => $request->id ,
+            ]
+        ]);
+    }
+
 }

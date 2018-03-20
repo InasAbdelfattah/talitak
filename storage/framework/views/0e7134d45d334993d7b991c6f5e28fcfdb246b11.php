@@ -1,7 +1,5 @@
 <?php $__env->startSection('content'); ?>
 
-    <!-- Page-Title -->
-
     <div class="row">
         <div class="col-xs-6 col-md-4 col-sm-4">
             <h3 class="page-title">بيانات المركز</h3>
@@ -217,7 +215,8 @@
                         <div class="col-xs-12 m-t-20">
                             <div class="row">
                                 <?php if($company->comments->count() > 0): ?>
-                                    <table class="table table table-hover m-0">
+                                <!-- <table class="table m-0  table-striped table-hover table-condensed" > -->
+                                    <table class="table table table-hover m-0" id="datatable-fixed-header">
                                         <thead>
                                         <tr>
                                             <th>#</th>
@@ -322,13 +321,8 @@
             </div>
         </div>
     </div>
-
-    
-
-    
+  
 <?php $__env->stopSection(); ?>
-
-
 
 <?php $__env->startSection('scripts'); ?>
 

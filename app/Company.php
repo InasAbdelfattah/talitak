@@ -111,11 +111,6 @@ class Company extends Model
 
     }
 
-    public function likes()
-    {
-        return $this->morphMany('App\Like', 'likeable');
-
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -134,15 +129,7 @@ class Company extends Model
         return $this->hasMany(Service::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-
-    public function offers()
-    {
-        return $this->hasMany(Offer::class);
-    }
-
+    
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

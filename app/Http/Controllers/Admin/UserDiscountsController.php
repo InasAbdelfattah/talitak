@@ -86,6 +86,13 @@ class UserDiscountsController extends Controller
             ]);
         }
 
+        if ($request->to_date < $request->from_date) {
+            return response()->json([
+                'status' => false,
+                'message' => 'يرجى كتابة فترة زمنية صحيحة',
+            ]);
+        }
+
         if ($user) {
 
             $model = new UserDiscount();

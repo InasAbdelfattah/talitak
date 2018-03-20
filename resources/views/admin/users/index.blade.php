@@ -14,13 +14,13 @@
                     </span>
                 </a>
 
-                <ul class="dropdown-menu" role="menu">
+                <!-- <ul class="dropdown-menu" role="menu">
                     <li><a href="#">Action</a></li>
                     <li><a href="#">Another action</a></li>
                     <li><a href="#">Something else here</a></li>
                     <li class="divider"></li>
                     <li><a href="#">Separated link</a></li>
-                </ul>
+                </ul> -->
             </div>
             <h4 class="page-title">@lang('global.users_management')</h4>
         </div>
@@ -144,14 +144,13 @@
                                 @endif
                             </td>
 
-                            <td>
+                            <td id ="is_suspend{{$user->id}}" data-suspend="{{$user->is_suspend}}">
                                 @if($user->is_suspend == 0)
                                     <label class="label label-success label-xs">غير محذور</label>
                                 @else
-                                    <label class="label label-danger label-xs"> محذور</label>
+                                    <label class="label label-danger label-xs">محذور</label>
                                 @endif
                             </td>
-
 
                             <td>
                                 <a href="{{ route('users.edit',$user->id) }}"
@@ -386,7 +385,14 @@
 
                                 $('.checkboxes-items').each(function () {
                                     if ($(this).prop('checked') == true) {
-                                        $(this).parent().parent().parent().remove();
+                                        var user_id = Number($(this).val()) ;
+                                        //$(this).parent().parent().parent().remove();
+                                        var is_suspend = $(this).closest($('#is_suspend' + user_id)).data('suspend');
+                                        console.log('suspend',is_suspend);
+                                        $(this).closest($('#is_suspend' + user_id).text('inas'));
+                                        $(this).closest($('#is_suspend' + user_id)).data('suspend', 1);
+                                        
+                                        //$('#is_suspend').text('inas');
                                     }
                                 });
 //                        $tr.find('td').fadeOut(1000, function () {

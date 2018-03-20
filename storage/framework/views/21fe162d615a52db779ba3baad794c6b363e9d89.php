@@ -47,6 +47,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
+                                            <th>عدد المسجلين من خلاله</th>
                                             <th>الخصم</th>
                                             <th> الفترة من : </th>
                                             <th> الفترة إلى : </th>
@@ -56,6 +57,7 @@
                                         <?php $__empty_1 = true; $__currentLoopData = $discounts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                             <tr>
                                                 <td>#</td>
+                                                <td><?php echo e($row->registered_users_no); ?></td>
                                                 <td><?php echo e($row->discount); ?></td>
                                                 <td><?php echo e($row->from_date); ?></td>
                                                 <td><?php echo e($row->to_date); ?></td>

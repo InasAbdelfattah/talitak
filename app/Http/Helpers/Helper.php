@@ -21,7 +21,10 @@
     }
 
     function countInvited($user_id){
-        return App\UserInvitation::where('invited_by',$user_id)->count();
+        $invitations =  App\UserInvitation::where('invited_by',$user_id)->count();
+        $last_invitations = App\UserDiscount::where('user_id',$user_id)->sum('registered_users_no');
+        $net = $invitations - $last_invitations ;
+        return $net ;
     }
 
     function countLastDiscounts($user_id){

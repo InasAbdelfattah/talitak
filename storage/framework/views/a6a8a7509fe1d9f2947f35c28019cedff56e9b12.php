@@ -121,6 +121,14 @@
                                     </ul>
                                 </li>
 
+                                <li>
+                                    <ul>
+                                        <strong><h5 style="font-weight: 600;">الخصومات</h5></strong>
+                                        <li><a href="<?php echo e(route('user_discounts.index')); ?>">مشاهدة الخصومات</a></li>
+                                        <li><a href="<?php echo e(route('user_discounts.all')); ?>">تقارير الخصومات </a></li>
+                                    </ul>
+                                </li>
+
 
                                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('roles_manage')): ?>
                                     <li>
@@ -175,8 +183,7 @@
                         </li>
                     <?php endif; ?>
 
-                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('discounts_manage')): ?>
-
+                    <!-- <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('discounts_manage')): ?>
                         <li class="has-submenu">
                             <a href="#"><i class="zmdi zmdi-view-dashboard"></i>
                                 <span> الخصومات </span> </a>
@@ -187,10 +194,8 @@
                                 <li style="padding:  0 25px"><a href="<?php echo e(route('user_discounts.all')); ?>">تقارير الخصومات </a></li>
 
                             </ul>
-                        </li>
-
-                        
-                    <?php endif; ?>
+                        </li>     
+                    <?php endif; ?> -->
 
 
                     
@@ -233,6 +238,7 @@
                                         <li><a href="<?php echo e(route('settings.socials')); ?>">روابط وسائل التواصل</a></li>
                                         <li><a href="<?php echo e(route('cities.index')); ?>">المدن</a></li>
                                         <li><a href="<?php echo e(route('districts.index')); ?>">الأحياء</a></li>
+                                        <li><a href="<?php echo e(route('new-notif')); ?>">ارسال اشعار</a></li>
                                 
                                     </ul>
                                 </li>
@@ -259,6 +265,13 @@
                         <li>
                             <a href="<?php echo e(route('support.index')); ?>"><i class="zmdi zmdi-email-open zmdi-hc-fw"></i>
                                 <span> اتصل بنا </span> </a>
+                        </li>
+                    <?php endif; ?>
+
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('contactus_manage')): ?>
+                        <li>
+                            <a href="<?php echo e(route('abuses.index')); ?>"><i class="zmdi zmdi-email-open zmdi-hc-fw"></i>
+                                <span>بلاغات الإساءة</span> </a>
                         </li>
                     <?php endif; ?>
 

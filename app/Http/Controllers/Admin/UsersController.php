@@ -380,7 +380,7 @@ class UsersController extends Controller
         foreach ($ids as $id) {
             $user = User::findOrFail($id);
 
-            $user->is_suspend = 1;
+            $user->is_suspend ==0 ? 1 : 0;
 
             $user->save();
         }

@@ -67,12 +67,6 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'admin'], function ()
     /**
      * @@ Manage Categories Routes.
      */
-    Route::post('membership/delete', 'Admin\MembershipController@delete')->name('membership.delete');
-
-    Route::resource('membership', 'Admin\MembershipController');
-    Route::post('membership/delete/group', 'Admin\MembershipController@groupDelete')->name('memberships.group.delete');
-
-
     Route::post('category/delete', 'Admin\CategoriesController@delete')->name('category.delete');
     Route::post('category/delete/group', 'Admin\CategoriesController@groupDelete')->name('categories.group.delete');
     Route::resource('categories', 'Admin\CategoriesController');
@@ -98,13 +92,12 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'admin'], function ()
 
 
     /**
-     * Offers Routes
+     * Abuse Routes
      */
-
-
-    Route::resource('offers', 'Admin\OffersController');
-    Route::post('offers/delete', 'Admin\OffersController@delete')->name('offer.delete');
-
+    Route::post('abuses/delete', 'Admin\AbuseController@delete')->name('abuse.delete');
+    Route::post('abuses/delete/group', 'Admin\AbuseController@groupDelete')->name('abuse.group.delete');
+    Route::post('abuses/adopt-abuse', 'Admin\AbuseController@adoptAbuse')->name('abuse.adoptAbuse');
+    Route::resource('abuses', 'Admin\AbuseController');
 
     //Products Routes
     Route::post('products/delete', 'Admin\ProductsController@delete')->name('product.delete');
@@ -126,7 +119,9 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'admin'], function ()
     Route::post('districts/delete', 'Admin\DistrictsController@delete')->name('district.delete');
     Route::resource('districts', 'Admin\DistrictsController');
     
-    
+    /**
+     * @ orders Routes
+     */
     Route::post('orders/delete/group', 'Admin\OrdersController@groupDelete')->name('orders.group.delete');
     Route::post('orders/delete', 'Admin\OrdersController@delete')->name('orders.delete');
     Route::post('orders/search', 'Admin\OrdersController@search')->name('orders.search');
@@ -138,17 +133,14 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'admin'], function ()
     Route::post('orders/confirm-payment', 'Admin\OrdersController@confirmPayment')->name('account.confirmPayment');    
     Route::resource('orders', 'Admin\OrdersController');
 
+    /**
+     * @ user_discounts Routes
+     */
     Route::post('user_discounts/add_discount', 'Admin\UserDiscountsController@addDiscount')->name('user_discounts.addDiscount');
     Route::get('user_discounts/all', 'Admin\UserDiscountsController@userDiscounts')->name('user_discounts.all');
     Route::post('user_discounts/delete', 'Admin\UserDiscountsController@delete')->name('user_discounts.delete');
-    
     Route::resource('user_discounts', 'Admin\UserDiscountsController');
     
-
-    Route::post('sponsor/delete/group', 'Admin\SponsorsController@groupDelete')->name('sponsors.group.delete');
-    Route::post('sponsors/delete', 'Admin\SponsorsController@delete')->name('sponsor.delete');
-    Route::resource('sponsors', 'Admin\SponsorsController');
-
     /**
      * @ Setting Routes
      */
@@ -161,11 +153,29 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'admin'], function ()
     Route::get('/settings/aboutus', 'Admin\SettingsController@aboutus')->name('settings.aboutus');
     Route::get('/settings/terms', 'Admin\SettingsController@terms')->name('settings.terms');
 
-
-    Route::get('/settings/socials/links', 'Admin\SettingsController@socialLinks')->name('settings.socials');
-
-//    Route::get('/settings/prohibitedgoods', 'Admin\SettingsController@prohibitedgoods')->name('settings.prohibitedgoods');
+    Route::get('/settings/socials/links','Admin\SettingsController@socialLinks')->name('settings.socials');
     Route::post('/settings', 'Admin\SettingsController@store')->name('administrator.settings.store');
+
+    // notifications
+    Route::group(['prefix' => 'notifications'], function () {
+
+        // show all notifications
+        Route::get('/', [
+            'uses' => 'Admin\NotificationController@getIndex',
+            'as' => 'notifs'
+        ]);
+
+        Route::get('/new', [
+            'uses' => 'Admin\NotificationController@getNotif',
+            'as' => 'new-notif'
+        ]);
+
+        Route::post('/send', [
+            'uses' => 'Admin\NotificationController@send',
+            'as' => 'notif-send'
+        ]);
+
+    });
 
     Route::post('/logout', 'Admin\LoginController@logout')->name('administrator.logout');
 

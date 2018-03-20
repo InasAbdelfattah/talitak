@@ -27,7 +27,6 @@ class ProductsController extends Controller
             ]);
         }
 
-
     }
 
     public function update(Request $request)
@@ -40,9 +39,5 @@ class ProductsController extends Controller
                 'message' => 'عفواً, هذه الخدمة غير موجود او ربما تم حذفها'
             ]);
         }
-
-        
-
-
     }
 }

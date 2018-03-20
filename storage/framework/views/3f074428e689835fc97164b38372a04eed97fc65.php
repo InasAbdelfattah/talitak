@@ -80,7 +80,7 @@
             var $tr = $(this).closest($('#elementRow' + id).parent().parent());
             swal({
                 title: "هل انت متأكد؟",
-                text: "يمكنك استرجاع المحذوفات مرة اخرى لا تقلق.",
+                text: "لا يمكنك استرجاع المحذوفات مرة اخرى.",
                 type: "error",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",

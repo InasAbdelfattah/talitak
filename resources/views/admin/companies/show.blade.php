@@ -217,7 +217,8 @@
                         <div class="col-xs-12 m-t-20">
                             <div class="row">
                                 @if($company->comments->count() > 0)
-                                    <table class="table table table-hover m-0">
+                                <!-- <table class="table m-0  table-striped table-hover table-condensed" > -->
+                                    <table class="table table table-hover m-0" id="datatable-fixed-header">
                                         <thead>
                                         <tr>
                                             <th>#</th>

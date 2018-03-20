@@ -361,8 +361,9 @@
                             success: function (data) {
                                 $('#catTrashed').html(data.trashed);
                                 if (data) {
+
                                     var shortCutFunction = 'success';
-                                    var msg = 'لقد تمت عملية الحذف بنجاح.';
+                                    var msg = 'لقد تمت عملية الحظر بنجاح.';
                                     var title = data.title;
                                     toastr.options = {
                                         positionClass: 'toast-top-left',
@@ -370,11 +371,13 @@
                                     };
                                     var $toast = toastr[shortCutFunction](msg, title); // Wire up an event handler to a button in the toast, if it exists
                                     $toastlast = $toast;
+
+                                    location.reload();
                                 }
 
                                 $('.checkboxes-items').each(function () {
                                     if ($(this).prop('checked') == true) {
-                                        $(this).parent().parent().parent().remove();
+                                        //$(this).parent().parent().parent().remove();
                                     }
                                 });
 //                        $tr.find('td').fadeOut(1000, function () {

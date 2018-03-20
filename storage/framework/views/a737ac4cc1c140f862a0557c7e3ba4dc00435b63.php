@@ -1,13 +1,12 @@
-@extends('admin.layouts.master')
-@section('title', 'إدارة المستخدمين')
-@section('content')
+<?php $__env->startSection('title', 'إدارة المستخدمين'); ?>
+<?php $__env->startSection('content'); ?>
 
     <!-- Page-Title -->
     <div class="row zoomIn">
         <div class="col-sm-12">
             <div class="btn-group pull-right m-t-15">
 
-                <a href="{{ route('users.create') }}" type="button" class="btn btn-custom waves-effect waves-light"
+                <a href="<?php echo e(route('users.create')); ?>" type="button" class="btn btn-custom waves-effect waves-light"
                    aria-expanded="false"> إضافة
                     <span class="m-l-5">
                         <i class="fa fa-user"></i>
@@ -22,7 +21,7 @@
                     <li><a href="#">Separated link</a></li>
                 </ul>
             </div>
-            <h4 class="page-title">@lang('global.users_management')</h4>
+            <h4 class="page-title"><?php echo app('translator')->getFromJson('global.users_management'); ?></h4>
         </div>
     </div>
 
@@ -32,7 +31,7 @@
 
                 <div class="row">
                     <div class="col-sm-4 col-xs-8 m-b-30" style="display: inline-flex">
-                        مشاهدة مزودى الخدمة
+                        مشاهدة المستخدمين
                     </div>
 
                     <div class="col-sm-4 col-sm-offset-4 pull-left">
@@ -47,31 +46,31 @@
                     </div>
                 </div>
 
-                {{--<div class="col-sm-4 col-xs-8 m-b-30" style="display: inline-flex">--}}
-                {{--<input type="text" name="filter" class="filteriTems form-control" placeholder="بحث..."--}}
-                {{--id="filterItems"--}}
-                {{--data-url="{{ route('users.filter') }}"/>--}}
+                
+                
+                
+                
 
-                {{--<select id="recordNumber" class="filteriTems form-control"--}}
-                {{--data-url="{{ route('users.filter') }}" style="width: 80px;margin-right: 10px">--}}
+                
+                
 
-                {{--<option value="10">10</option>--}}
-                {{--<option value="15">15</option>--}}
-                {{--<option value="20">20</option>--}}
-                {{--<option value="25">25</option>--}}
-                {{--<option value="50">50</option>--}}
-                {{--<option value="100">100</option>--}}
+                
+                
+                
+                
+                
+                
 
-                {{--</select>--}}
-                {{--</div>--}}
+                
+                
 
 
 
-                {{--<div class="table-rep-plugin">--}}
-                {{--<div class="articles">--}}
-                {{--@include('admin.users.load')--}}
-                {{--</div>--}}
-                {{--</div>--}}
+                
+                
+                
+                
+                
 
 
                 <table id="datatable-fixed-header" class="table  table-striped">
@@ -87,10 +86,11 @@
                             </div>
                         </th>
                         <th>الصورة</th>
-                        <th>الاسم </th>
-                        <th>اسم المركز</th>
+                        <th>الاسم بالكامل</th>
+                        <th>اسم المستخدم</th>
                         <th>البريد الإلكتروني</th>
                         <th>رقم الجوال</th>
+                        <th>العنوان</th>
                         <th>النوع</th>
                         <th>الحالة</th>
                         <th>حالة الحذر</th>
@@ -100,65 +100,67 @@
                     </thead>
                     <tbody>
 
-                    @foreach($users as $user)
+                    <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                         <tr>
                             <td>
                                 <div class="checkbox checkbox-primary checkbox-single">
                                     <input type="checkbox" style="margin-bottom: 0px;" class="checkboxes-items"
-                                           value="{{ $user->id }}"
+                                           value="<?php echo e($user->id); ?>"
                                            aria-label="Single checkbox Two">
                                     <label></label>
                                 </div>
                             </td>
                             <td style="width: 10%;">
                                 <a data-fancybox="gallery"
-                                   href="{{ $helper->getDefaultImage($user->image, request()->root().'/assets/admin/custom/images/default.png') }}">
+                                   href="<?php echo e($helper->getDefaultImage($user->image, request()->root().'/assets/admin/custom/images/default.png')); ?>">
                                     <img style="width: 50%; border-radius: 50%; height: 49px;"
-                                         src="{{ $helper->getDefaultImage($user->image, request()->root().'/assets/admin/custom/images/default.png') }}"/>
+                                         src="<?php echo e($helper->getDefaultImage($user->image, request()->root().'/assets/admin/custom/images/default.png')); ?>"/>
                                 </a>
 
                             </td>
 
-                            <td>{{ $user->name }}</td>
-                            <td><a target="_blank" href="{{ route('companies.show', $user->company_id) }}">{{ $user->company_name }}</a></td>
-                            <td>{{ $user->email }}</td>
-                            <td>{{ $user->phone }}</td>
-                            <td> {{$user->gender == 'male' ? 'رجال' : 'نساء'}} </td>
+                            <td><?php echo e($user->name); ?></td>
+                            <td><?php echo e($user->username); ?></td>
+                            <td><?php echo e($user->email); ?></td>
+                            <td><?php echo e($user->phone); ?></td>
+                            <td><?php echo e($user->address); ?></td>
+                            <td> <?php echo e($user->gender == 'male' ? 'رجال' : 'نساء'); ?> </td>
+
 
                             <td>
-                                @if($user->is_active == 1)
+                                <?php if($user->is_active == 1): ?>
                                     <label class="label label-success label-xs">مفعل</label>
-                                @else
+                                <?php else: ?>
                                     <label class="label label-danger label-xs">غير مفعل</label>
-                                @endif
+                                <?php endif; ?>
                             </td>
 
                             <td>
-                                @if($user->is_suspend == 0)
+                                <?php if($user->is_suspend == 0): ?>
                                     <label class="label label-success label-xs">غير محذور</label>
-                                @else
+                                <?php else: ?>
                                     <label class="label label-danger label-xs"> محذور</label>
-                                @endif
+                                <?php endif; ?>
                             </td>
 
 
                             <td>
-                                <a href="{{ route('users.edit',$user->id) }}"
+                                <a href="<?php echo e(route('users.edit',$user->id)); ?>"
                                    class="btn btn-icon btn-xs waves-effect btn-default m-b-5">
                                     <i class="fa fa-edit"></i>
                                 </a>
-                                @if($user->id != 1)
-                                <a href="javascript:;" id="elementRow{{ $user->id }}" data-id="{{ $user->id }}"
+                                <?php if($user->id != 1): ?>
+                                <a href="javascript:;" id="elementRow<?php echo e($user->id); ?>" data-id="<?php echo e($user->id); ?>"
                                    class="removeElement btn-xs btn-icon btn-trans btn-sm waves-effect waves-light btn-danger m-b-5">
                                     <i class="fa fa-remove"></i>
 
                                 </a>
-                                @endif
+                                <?php endif; ?>
                             </td>
                         </tr>
 
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </tbody>
                 </table>
 
@@ -166,17 +168,18 @@
         </div>
     </div>
     <!-- End row -->
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('scripts')
+<?php $__env->startSection('scripts'); ?>
 
     <script>
 
-        @if(session()->has('success'))
+        <?php if(session()->has('success')): ?>
         setTimeout(function () {
-            showMessage('{{ session()->get('success') }}');
+            //showMessage('<?php echo e(session()->get('success')); ?>');
+            showMessage('<?php echo e(session('success')); ?>');
         }, 3000);
-        @endif
+        <?php endif; ?>
 
         $('body').on('click', '.removeElement', function () {
             var id = $(this).attr('data-id');
@@ -196,7 +199,7 @@
                 if (isConfirm) {
                     $.ajax({
                         type: 'POST',
-                        url: '{{ route('user.delete') }}',
+                        url: '<?php echo e(route('user.delete')); ?>',
                         data: {id: id},
                         dataType: 'json',
                         success: function (data) {
@@ -266,7 +269,7 @@
                     if (isConfirm) {
                         $.ajax({
                             type: 'POST',
-                            url: '{{ route('users.group.delete') }}',
+                            url: '<?php echo e(route('users.group.delete')); ?>',
                             data: {ids: sum},
                             dataType: 'json',
                             success: function (data) {
@@ -351,12 +354,13 @@
                     if (isConfirm) {
                         $.ajax({
                             type: 'POST',
-                            url: '{{ route('users.group.suspend') }}',
+                            url: '<?php echo e(route('users.group.suspend')); ?>',
                             data: {ids: sum},
                             dataType: 'json',
                             success: function (data) {
                                 $('#catTrashed').html(data.trashed);
                                 if (data) {
+
                                     var shortCutFunction = 'success';
                                     var msg = 'لقد تمت عملية الحظر بنجاح.';
                                     var title = data.title;
@@ -372,7 +376,7 @@
 
                                 $('.checkboxes-items').each(function () {
                                     if ($(this).prop('checked') == true) {
-                                       // $(this).parent().parent().parent().remove();
+                                        //$(this).parent().parent().parent().remove();
                                     }
                                 });
 //                        $tr.find('td').fadeOut(1000, function () {
@@ -431,4 +435,5 @@
 
     </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

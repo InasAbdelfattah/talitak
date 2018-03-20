@@ -371,8 +371,9 @@
                             success: function (data) {
                                 $('#catTrashed').html(data.trashed);
                                 if (data) {
+                                    location.reload();
                                     var shortCutFunction = 'success';
-                                    var msg = 'لقد تمت عملية الحذف بنجاح.';
+                                    var msg = 'لقد تمت عملية الحظر بنجاح.';
                                     var title = data.title;
                                     toastr.options = {
                                         positionClass: 'toast-top-left',
@@ -388,9 +389,8 @@
                                         //$(this).parent().parent().parent().remove();
                                         var is_suspend = $(this).closest($('#is_suspend' + user_id)).data('suspend');
                                         console.log('suspend',is_suspend);
-                                        $(this).closest($('#is_suspend' + user_id).text('inas'));
-                                        $(this).closest($('#is_suspend' + user_id)).data('suspend', 1);
-                                        
+                                        // $(this).closest($('#is_suspend' + user_id).text('inas'));
+                                        // $(this).closest($('#is_suspend' + user_id)).data('suspend', 1);      
                                         //$('#is_suspend').text('inas');
                                     }
                                 });

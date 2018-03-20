@@ -66,7 +66,7 @@ class UsersController extends Controller
 //        }
 
 
-        $users = User::with('roles')->get();
+        $users = User::with('roles')->where('is_user',0)->get();
         //dd($users);
         ## SHOW CATEGORIES LIST VIEW WITH SEND CATEGORIES DATA.
         return view('admin.users.index', compact('users'));
@@ -157,7 +157,6 @@ class UsersController extends Controller
             $code = $user->userCode($code);
             $user->code = $code;
             $user->action_code = '';
-
 
             $user->save();
 
@@ -377,13 +376,28 @@ class UsersController extends Controller
 
 
         $ids = $request->ids;
+        $suspended_users = [];
         foreach ($ids as $id) {
             $user = User::findOrFail($id);
 
-            $user->is_suspend ==0 ? 1 : 0;
+            if($user->is_suspend ==1){
+
+                array_push($suspended_users, $user->id);
+            }
+
+            $user->is_suspend = 1 ;
 
             $user->save();
         }
+
+        if(count($suspended_users) > 0){
+
+            return response()->json([
+                'status' => false,
+                'message' => 'يوجد مستخدمين محظورين من قبل',
+            ]);
+        }
+        
 
         return response()->json([
             'status' => true,

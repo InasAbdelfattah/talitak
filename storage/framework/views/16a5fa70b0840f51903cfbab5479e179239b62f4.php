@@ -103,18 +103,22 @@
 
                         <tr>
                             <td>
+                                <?php if($user->id != 1): ?>
                                 <div class="checkbox checkbox-primary checkbox-single">
                                     <input type="checkbox" style="margin-bottom: 0px;" class="checkboxes-items"
                                            value="<?php echo e($user->id); ?>"
                                            aria-label="Single checkbox Two">
                                     <label></label>
                                 </div>
+                                <?php else: ?>
+                                #
+                                <?php endif; ?>
                             </td>
                             <td style="width: 10%;">
                                 <a data-fancybox="gallery"
-                                   href="<?php echo e($helper->getDefaultImage($user->image, request()->root().'/assets/admin/custom/images/default.png')); ?>">
+                                   href="<?php echo e($helper->getDefaultImage(request()->root().'/files/users/'.$user->image, request()->root().'/assets/admin/custom/images/default.png')); ?>">
                                     <img style="width: 50%; border-radius: 50%; height: 49px;"
-                                         src="<?php echo e($helper->getDefaultImage($user->image, request()->root().'/assets/admin/custom/images/default.png')); ?>"/>
+                                         src="<?php echo e($helper->getDefaultImage(request()->root().'/files/users/'.$user->image, request()->root().'/assets/admin/custom/images/default.png')); ?>"/>
                                 </a>
 
                             </td>
@@ -183,11 +187,11 @@
 
     <script>
 
-        <?php if(session()->has('success')): ?>
-        setTimeout(function () {
-            showMessage('<?php echo e(session()->get('success')); ?>');
-        }, 3000);
-        <?php endif; ?>
+        // <?php if(session()->has('success')): ?>
+        // setTimeout(function () {
+        //     showMessage('<?php echo e(session()->get('success')); ?>');
+        // }, 3000);
+        // <?php endif; ?>
 
 
 

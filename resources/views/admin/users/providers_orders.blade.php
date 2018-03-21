@@ -6,12 +6,7 @@
     <!-- Page-Title -->
     <div class="row">
         <div class="col-sm-12">
-            <div class="btn-group pull-right m-t-15">
-                <button type="button" class="btn btn-custom dropdown-toggle waves-effect waves-light"
-                        data-toggle="dropdown" aria-expanded="false">Settings <span class="m-l-5"><i
-                                class="fa fa-cog"></i></span></button>
-
-            </div>
+            
             <h4 class="page-title">طلبات مزودى الخدمات</h4>
         </div>
     </div>
@@ -20,48 +15,8 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card-box">
-                <div class="dropdown pull-right">
-                    {{--<a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">--}}
-                    {{--<i class="zmdi zmdi-more-vert"></i>--}}
-                    {{--</a>--}}
-                    {{--<ul class="dropdown-menu" role="menu">--}}
-                    {{--<li><a href="#">Action</a></li>--}}
-                    {{--<li><a href="#">Another action</a></li>--}}
-                    {{--<li><a href="#">Something else here</a></li>--}}
-                    {{--<li class="divider"></li>--}}
-                    {{--<li><a href="#">Separated link</a></li>--}}
-                    {{--</ul>--}}
-
-                    <!-- <a style="float: left; margin-right: 15px;" class="btn btn-danger btn-sm getSelected">
-                        <i class="fa fa-trash" style="margin-left: 5px"></i> حذف المحدد
-                    </a> -->
-                </div>
-
-                {{--<input type="text" name="filter" class="filteriTems" id="filterItems"/>--}}
-
-                {{--<select id="recordNumber" class="filteriTems">--}}
-
-                {{--<option value="5">5</option>--}}
-                {{--<option value="10">10</option>--}}
-                {{--<option value="15">15</option>--}}
-                {{--<option value="20">20</option>--}}
-                {{--<option value="25">25</option>--}}
-                {{--<option value="50">50</option>--}}
-                {{--<option value="100">100</option>--}}
-
-                {{--</select>--}}
-
+                
                 <h4 class="header-title m-t-0 m-b-30">طلبات مزودى الخدمات</h4>
-
-                {{--<div class="articles">--}}
-
-                {{--                    @include('admin.categories.load')--}}
-
-                {{--</div>--}}
-
-
-                {{--<table id="users" class="table table-striped table-hover table-condensed" style="width:100%"--}}
-
 
                 <table id="datatable-fixed-header" class="table table-striped table-hover table-condensed"
                        style="width:100%">
@@ -142,10 +97,7 @@
                                                          سبب الرفض
                                                     </label>
                                                     <br>
-                                                    <textarea id="reason-signup" value="{{old('reason')}}" required
-                                                           required data-parsley-trigger="keyup"
-                                                           data-parsley-required-message="لابد من كتابة سبب الرفض اولاً"
-                                                           name="reason" id="reason" class="form-control"></textarea>
+                                                    <textarea id="reason-signup" value="{{old('reason')}}" name="reason" id="reason" class="form-control"></textarea>
                                                 </div>
                                             </div>
 

@@ -120,7 +120,6 @@ class Images
             // Custom file name with adding Timestamp
             $filename = time() . '.' . str_random(20) . $image->getClientOriginalName();
 
-
             // Directory Path Save Images
             $path = public_path($path . $filename);
 

@@ -508,7 +508,19 @@ Enjoy responsibly!
 </div>
 @include('admin.layouts._partials.header')
 
+<!-- validation errors message -->
 
+<!-- @if ($errors->any())
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif -->
+<!-- end validation errors message -->
 
 @yield('content')
 

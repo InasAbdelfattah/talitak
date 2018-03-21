@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUsersRequest;
 use App\Http\Requests\Admin\UpdateUsersRequest;
-use UploadImage;
+//use UploadImage;
+use Image;
 use Validator;
 
 class UsersController extends Controller
@@ -30,45 +31,8 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-//        if (! Gate::allows('users_manage')) {
-//        return abort(401);
-//    }
-//
-//        $users = User::with('roles')->get();
-//
-//        return view('admin.users.index', compact('users'));
-
-//        $page = request('pageSize');
-//        $name = request('name');
-//
-//        ## GET ALL CATEGORIES PARENTS
-//        $query = User::with('roles')->select();
-////        $categories = Category::paginate($pageSize);
-//
-//
-//        if ($name != '') {
-//            $query->where('name', 'like', "%$name%");
-//        }
-//
-//        $query->orderBy('created_at', 'DESC');
-//        $users = $query->paginate(($page) ?: 10);
-//
-//
-//        if ($name != '') {
-//            $users->setPath('users?name=' . $name);
-//        } else {
-//            $users->setPath('users');
-//        }
-//
-//
-//        if ($request->ajax()) {
-//            return view('admin.users.load', ['users' => $users])->render();
-//        }
-
-
         $users = User::with('roles')->where('is_user',0)->get();
-        //dd($users);
-        ## SHOW CATEGORIES LIST VIEW WITH SEND CATEGORIES DATA.
+        
         return view('admin.users.index', compact('users'));
     }
 
@@ -97,33 +61,15 @@ class UsersController extends Controller
     /**
      * Store a newly created User in storage.
      *
-     * @param  \App\Http\Requests\StoreUsersRequest $request
+     * @param  StoreUsersRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUsersRequest $request)
     {
         
         if (!Gate::allows('users_manage')) {
             return abort(401);
         }
-
-
-        // Get Input
-        $postData = $this->postData($request);
-
-        // Declare Validation Rules.
-        //$valRules = $this->valRules();
-
-        // Declare Validation Messages
-        $valMessages = $this->valMessages();
-
-        // Validate Input
-        //$valResult = Validator::make($postData, $valRules, $valMessages);
-        $valResult = Validator::make($postData, $valMessages);
-
-        // Check Validate
-        if ($valResult->passes()) {
-
 
             $user = new User;
            
@@ -133,7 +79,7 @@ class UsersController extends Controller
             $user->phone = $request->phone;
             $user->api_token = str_random(60);
             $user->remember_token = csrf_token();
-            $user->password = $request->password;
+            $user->password = bcrypt(trim($request->password));
 
             $user->gender = 'male';
             $user->is_invited = 0;
@@ -149,7 +95,8 @@ class UsersController extends Controller
              */
 
             if ($request->hasFile('image')):
-                $user->image = $request->root() . '/' . $this->public_path . UploadImage::uploadImage($request, 'image', $this->public_path, 1280, 583);
+                $user->image = uploadImage($request, 'image', $this->public_path, 1280, 583);
+
             endif;
 
 
@@ -167,26 +114,9 @@ class UsersController extends Controller
             }
 
 
-            session()->flash('success', 'لقد تم إضافة المستخدم بنجاح.');
+          //  session()->flash('success', 'لقد تم إضافة المستخدم بنجاح.');
 
-            return redirect()->route('users.index');
-
-
-        } else {
-            // Grab Messages From Validator
-            $valErrors = $valResult->messages();
-
-            // Error, Redirect To User Edit
-            return redirect()->back()->withInput()
-                ->withErrors($valErrors);
-
-//            return response()->json([
-//                'status' => false,
-//                'data' => $valErrors,
-//
-//            ]);
-        }
-
+            return redirect()->route('users.index')->with('success', 'لقد تم إضافة المستخدم بنجاح.');
 
     }
 
@@ -237,7 +167,7 @@ class UsersController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUsersRequest $request, $id)
+    public function update(StoreUsersRequest $request, $id)
     {
         if (!Gate::allows('users_manage')) {
             return abort(401);
@@ -266,7 +196,7 @@ class UsersController extends Controller
 
         if ($request->hasFile('image')):
 
-            $user->image = $request->root() . '/' . $this->public_path . UploadImage::uploadImage($request, 'image', $this->public_path, 1280, 583);
+            $user->image = uploadImage($request, 'image', $this->public_path, 1280, 583);
 
             if (isset($request->oldImage) && $request->oldImage != '') {
                 $regularPath = str_replace($request->root() . '/', '', $request->oldImage);
@@ -380,9 +310,13 @@ class UsersController extends Controller
         foreach ($ids as $id) {
             $user = User::findOrFail($id);
 
-            if($user->is_suspend ==1){
+            if($user->is_suspend == 1){
 
-                array_push($suspended_users, $user->id);
+                //array_push($suspended_users, $user->id);
+                return response()->json([
+                'status' => false,
+                'message' => 'يوجد مستخدمين محظورين من قبل',
+            ]);
             }
 
             $user->is_suspend = 1 ;
@@ -464,69 +398,21 @@ class UsersController extends Controller
             ->with(compact('users'));
     }
 
-
-    /**
-     * @param $request
-     * @return array
-     */
-    private function postData($request)
-    {
-        return [
-            'username' => $request->username,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'password' => $request->password,
-            'password_confirmation' => $request->password_confirmation
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function valRules()
-    {
-        return [
-            'username' => 'required|unique:users,username',
-            'email' => 'required|email|unique:users,email',
-            'phone' => 'required|unique:users,phone',
-            'password' => 'required',
-            'password_confirmation' => 'required|same:password'
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function valMessages()
-    {
-        return [
-            'username.required' => trans('global.field_required'),
-            'username.unique' => trans('global.unique_username'),
-            'email.required' => trans('global.field_required'),
-            'email.unique' => trans('global.unique_email'),
-            'phone.required' => trans('global.field_required'),
-            'phone.unique' => trans('global.unique_phone'),
-            'password.required' => trans('global.field_required'),
-            'password_confirmation.required' => trans('global.field_required'),
-            'password_confirmation.same' => trans('global.password_not_confirmed'),
-        ];
-    }
-
      /**
-     * Display a listing of providers.
+     * Display a list of providers.
      *
      * @return \Illuminate\Http\Response
      */
     public function getNewProvidersRequests()
     {
-//is_approved = [0 => new , 1 => approved , 2 => rejected]
+        //is_approved = [0 => new , 1 => approved , 2 => rejected]
         $providers = User::join('companies','users.id','companies.user_id')->where('users.is_user',1)->where('users.is_provider',1)->where('users.is_approved',0)->select('users.*','companies.id as company_id' , 'companies.name as company_name')->get();
         
         return view('admin.users.providers_orders', compact('providers'));
     }
 
     /**
-     * Display a listing of providers.
+     * Display a list of providers.
      *
      * @return \Illuminate\Http\Response
      */

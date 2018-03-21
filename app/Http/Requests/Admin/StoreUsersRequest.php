@@ -20,13 +20,42 @@ class StoreUsersRequest extends FormRequest
      *
      * @return array
      */
+
     public function rules()
     {
-        return [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required',
-            'roles' => 'required'
-        ];
+
+        switch($this->method())
+        {
+            case 'GET':
+            case 'DELETE':
+            {
+                return [];
+            }
+            case 'POST':
+            {
+                return [
+                    'name' => 'required|min:2',
+                    'phone' => 'required|regex:/(05)[0-9]{8}/|unique:users,phone',
+                    'email' => 'required|email|unique:users,email',
+                    'password' => 'required|min:3',
+                    'password_confirmation' => 'required|min:3|same:password',
+                    'roles' => 'required',
+                    'image' =>'mimes:png,jpg,jpeg'
+                ];
+            }
+            case 'PUT':
+            case 'PATCH':
+            {
+                $user_id = intval($this->user_id) ;
+                return [
+                    'name' => 'required|min:2',
+                    'phone' => 'required|regex:/(05)[0-9]{8}/|unique:users,phone,'.$user_id,
+                    'email' => 'required|email|unique:users,email,'.$user_id,
+                    'password' => 'confirmed',
+                    'image' =>'mimes:png,jpg,jpeg'
+                ];
+            }
+            default:break;
+        }
     }
 }

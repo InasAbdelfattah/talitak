@@ -3,12 +3,11 @@
     <!-- Page-Title -->
     <div class="row">
         <div class="col-sm-12">
-            <div class="btn-group pull-right m-t-15">
-                <button type="button" class="btn btn-custom dropdown-toggle waves-effect waves-light"
-                        data-toggle="dropdown" aria-expanded="false">Settings <span class="m-l-5"><i
+            <!-- <div class="btn-group pull-right m-t-15">
+                <button type="button" class="btn btn-custom dropdown-toggle waves-effect waves-light" data-toggle="dropdown" aria-expanded="false">Settings <span class="m-l-5"><i
                                 class="fa fa-cog"></i></span></button>
 
-            </div>
+            </div> -->
             <h4 class="page-title">طلبات إلتحاق بالمراكز</h4>
         </div>
     </div>
@@ -116,7 +115,7 @@
                                 <?php endif; ?>
 
                             </td>
-                            <td><?php echo e($row->name); ?></td>
+                            <td><?php echo e($row->{'name:ar'}); ?></td>
                             <td><?php echo e($row->email); ?></td>
                             <td><?php if($row->user): ?><?php echo e($row->user->phone); ?><?php endif; ?></td>
                             <td><?php echo e($row->type == 0 ? 'فرد' : 'منشأة'); ?></td>

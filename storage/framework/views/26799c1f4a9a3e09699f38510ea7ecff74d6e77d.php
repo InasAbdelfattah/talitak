@@ -508,7 +508,19 @@ Enjoy responsibly!
 </div>
 <?php echo $__env->make('admin.layouts._partials.header', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 
+<!-- validation errors message -->
 
+<!-- <?php if($errors->any()): ?>
+    <div class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert"><span>&times;</span><span class="sr-only">Close</span></button>
+        <ul>
+            <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <li><?php echo e($error); ?></li>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </ul>
+    </div>
+<?php endif; ?> -->
+<!-- end validation errors message -->
 
 <?php echo $__env->yieldContent('content'); ?>
 

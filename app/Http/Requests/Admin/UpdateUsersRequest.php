@@ -22,11 +22,12 @@ class UpdateUsersRequest extends FormRequest
      */
     public function rules()
     {
-        $user = \App\User::find($this->user_id);
+        
         return [
             'name' => 'required',
            // 'email' => 'required|email|unique:users,email,'.$this->route('user'),
-            'email' => 'required|email|unique:users,email,'.$user->id,
+            'email' => 'required|email|unique:users,email,'.intval($this->user_id),
+            //'email' => 'required|email|unique:users,email,'.$user->id,
             //'roles' => 'required',
         ];
     }

@@ -46,8 +46,64 @@
        return $error_arr;
     }
 
-    function netCount($user_id){
-        $invited_count = App\UserInvitation::where('invited_by',$user_id)->count();
-        $dicount_count = App\UserDiscount::where('user_id',$user_id)->count();
+    function uploadImage($request, $name, $path = null, $width = null, $height = null)
+    {
+        if ($request->hasFile($name)):
+            // Get File name from POST Form
+            $image = $request->file($name);
+
+            // Custom file name with adding Timestamp
+            $filename = time() . '.' . str_random(20) . $image->getClientOriginalName();
+
+            // Directory Path Save Images
+            $path = public_path($path . $filename);
+
+            // Upload images to Target folder By INTERVENTION/IMAGE
+            $img = Image::make($image);
+
+            // RESIZE IMAGE TO CREATE THUMBNAILS
+            if (isset($width) || isset($height))
+                $img->resize($width, $height, function ($ratio) {
+                    $ratio->aspectRatio();
+                });
+            $img->save($path);
+
+            // RETURN path to save in images tables DATABASE
+            return $filename;
+        endif;
     }
+
+
+    function uploading($inputRequest, $folderNam, $resize = []) {
+
+        $imageName = time().'.'.$inputRequest->getClientOriginalExtension();
+
+        if(! empty($resize)) {
+
+            foreach($resize as $dimensions) {
+
+                $destinationPath = public_path( $folderNam . '_' . $dimensions);
+
+                $img = Image::make($inputRequest->getRealPath());
+
+                $dimension = explode('x', $dimensions);
+
+                $img->resize($dimension[0], $dimension[1], function ($constraint) {
+                    $constraint->aspectRatio();
+
+                });
+
+                //$img->insert('public/web/images/logo-sm.png', 'bottom-right');
+
+                $img->save($destinationPath. DIRECTORY_SEPARATOR .$imageName);
+            }
+        }
+
+        $destinationPath = public_path('/' . $folderNam);
+        $inputRequest->move($destinationPath, $imageName);
+
+        return $imageName ? $imageName : FALSE ;
+
+    }
+
 ?>

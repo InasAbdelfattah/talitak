@@ -1,9 +1,8 @@
-@extends('admin.layouts.master')
-
-@section('content')
-    <form method="POST" action="{{ route('users.store') }}" enctype="multipart/form-data" data-parsley-validate
+<?php $__env->startSection('content'); ?>
+    <form method="POST" action="<?php echo e(route('users.store')); ?>" enctype="multipart/form-data" data-parsley-validate
           novalidate>
-    {{ csrf_field() }}
+    <?php echo e(csrf_field()); ?>
+
 
     <!-- Page-Title -->
         <div class="row">
@@ -49,87 +48,90 @@
                     <div class="col-xs-6">
                         <div class="form-group">
                             <label for="userName">الاسم الكامل*</label>
-                            <input type="text" name="name" value="{{ old('name') }}" class="form-control" required
+                            <input type="text" name="name" value="<?php echo e(old('name')); ?>" class="form-control" required
                                    placeholder="اسم المستخدم بالكامل..."/>
                             <p class="help-block" id="error_userName"></p>
-                            @if($errors->has('name'))
+                            <?php if($errors->has('name')): ?>
                                 <p class="help-block">
-                                    {{ $errors->first('name') }}
+                                    <?php echo e($errors->first('name')); ?>
+
                                 </p>
-                            @endif
+                            <?php endif; ?>
                         </div>
 
                     </div>
 
                     <div class="col-xs-6">
-                        <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
+                        <div class="form-group<?php echo e($errors->has('username') ? ' has-error' : ''); ?>">
                             <label for="usernames">اسم المستخدم*</label>
-                            <input type="text" name="username" value="{{ old('username') }}" class="form-control"
+                            <input type="text" name="username" value="<?php echo e(old('username')); ?>" class="form-control"
                                    required placeholder="اسم المستخدم..."/>
-                            @if($errors->has('username'))
+                            <?php if($errors->has('username')): ?>
                                 <p class="help-block">
-                                    {{ $errors->first('username') }}
+                                    <?php echo e($errors->first('username')); ?>
+
                                 </p>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
 
 
                     <div class="col-xs-6">
-                        <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
+                        <div class="form-group<?php echo e($errors->has('phone') ? ' has-error' : ''); ?>">
                             <label for="userPhone">رقم الجوال*</label>
-                            <input type="text" name="phone" value="{{ old('phone') }}" class="form-control" required
+                            <input type="text" name="phone" value="<?php echo e(old('phone')); ?>" class="form-control" required
                                    placeholder="رقم الجوال..."/>
-                            @if($errors->has('phone'))
+                            <?php if($errors->has('phone')): ?>
                                 <p class="help-block">
-                                    {{ $errors->first('phone') }}
+                                    <?php echo e($errors->first('phone')); ?>
+
                                 </p>
-                            @endif
+                            <?php endif; ?>
                         </div>
                     </div>
 
 
                     <div class="col-xs-6">
-                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                        <div class="form-group<?php echo e($errors->has('email') ? ' has-error' : ''); ?>">
                             <label for="emailAddress">البريد الإلكتروني*</label>
 
-                            <input type="email" name="email" parsley-trigger="change" value="{{ old('email') }}"
+                            <input type="email" name="email" parsley-trigger="change" value="<?php echo e(old('email')); ?>"
                                    class="form-control"
                                    placeholder="البريد الإلكتروني..." required/>
-                            @if($errors->has('email'))
-                                <p class="help-block">{{ $errors->first('email') }}</p>
-                            @endif
+                            <?php if($errors->has('email')): ?>
+                                <p class="help-block"><?php echo e($errors->first('email')); ?></p>
+                            <?php endif; ?>
 
                         </div>
 
                     </div>
 
                     <div class="col-xs-6">
-                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                        <div class="form-group<?php echo e($errors->has('password') ? ' has-error' : ''); ?>">
                             <label for="pass1">كلمة المرور*</label>
 
 
-                            <input type="password" name="password" id="pass1" value="{{ old('password') }}"
+                            <input type="password" name="password" id="pass1" value="<?php echo e(old('password')); ?>"
                                    class="form-control"
                                    placeholder="كلمة المرور..."
                                    required/>
 
-                            @if($errors->has('password'))
-                                <p class="help-block">{{ $errors->first('password') }}</p>
-                            @endif
+                            <?php if($errors->has('password')): ?>
+                                <p class="help-block"><?php echo e($errors->first('password')); ?></p>
+                            <?php endif; ?>
 
                         </div>
                     </div>
 
 
                     <div class="col-xs-6">
-                        <div class="form-group{{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+                        <div class="form-group<?php echo e($errors->has('password_confirmation') ? ' has-error' : ''); ?>">
                             <label for="passWord2">تأكيد كلمة المرور*</label>
                             <input data-parsley-equalto="#pass1" name="password_confirmation" type="password" required
                                    placeholder="تأكيد كلمة المرور..." class="form-control" id="passWord2">
-                            @if($errors->has('password_confirmation'))
-                                <p class="help-block">{{ $errors->first('password_confirmation') }}</p>
-                            @endif
+                            <?php if($errors->has('password_confirmation')): ?>
+                                <p class="help-block"><?php echo e($errors->first('password_confirmation')); ?></p>
+                            <?php endif; ?>
 
 
                         </div>
@@ -138,25 +140,25 @@
 
                     <div class="form-group">
                         <label for="passWord2">العنوان*</label>
-                        <input name="address" value="{{ old('address') }}" type="text" required placeholder="العنوان..."
+                        <input name="address" value="<?php echo e(old('address')); ?>" type="text" required placeholder="العنوان..."
                                class="form-control">
 
                     </div>
 
-                    <div class="form-group{{ $errors->has('roles') ? ' has-error' : '' }}">
+                    <div class="form-group<?php echo e($errors->has('roles') ? ' has-error' : ''); ?>">
                         <label for="passWord2">الصلاحيات *</label>
                         <select multiple="multiple" class="multi-select" id="my_multi_select1" name="roles[]"
                                 data-plugin="multiselect">
-                            @foreach($roles as  $value)
+                            <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $value): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-                                <option value="{{ $value->name }}" {{ (collect(old('roles'))->contains($value->name)) ? 'selected':'' }}>{{ $value->title }}</option>
-                            @endforeach
+                                <option value="<?php echo e($value->name); ?>" <?php echo e((collect(old('roles'))->contains($value->name)) ? 'selected':''); ?>><?php echo e($value->title); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                         </select>
 
-                        @if($errors->has('roles'))
-                            <p class="help-block"> {{ $errors->first('roles') }}</p>
-                        @endif
+                        <?php if($errors->has('roles')): ?>
+                            <p class="help-block"> <?php echo e($errors->first('roles')); ?></p>
+                        <?php endif; ?>
 
                     </div>
 
@@ -196,4 +198,6 @@
         </div>
         <!-- end row -->
     </form>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin.layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -27,10 +27,12 @@ class CompaniesController extends Controller
             ->get();
         $companies->map(function ($q) {
             $q->avgRate = $q->rates()->avg('rate');
+            $q->name = $q->{'name:ar'};
             // $q->likesCount = $q->likes()->where('like', 1)->count();
             // $q->dislikesCount = $q->likes()->where('like', 0)->count();
             return $q;
         });
+
         return view('admin.companies.index')->with(compact('companies'));
     }
 

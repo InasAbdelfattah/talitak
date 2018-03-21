@@ -104,18 +104,22 @@
 
                         <tr>
                             <td>
+                                @if($user->id != 1)
                                 <div class="checkbox checkbox-primary checkbox-single">
                                     <input type="checkbox" style="margin-bottom: 0px;" class="checkboxes-items"
                                            value="{{ $user->id }}"
                                            aria-label="Single checkbox Two">
                                     <label></label>
                                 </div>
+                                @else
+                                #
+                                @endif
                             </td>
                             <td style="width: 10%;">
                                 <a data-fancybox="gallery"
-                                   href="{{ $helper->getDefaultImage($user->image, request()->root().'/assets/admin/custom/images/default.png') }}">
+                                   href="{{ $helper->getDefaultImage(request()->root().'/files/users/'.$user->image, request()->root().'/assets/admin/custom/images/default.png') }}">
                                     <img style="width: 50%; border-radius: 50%; height: 49px;"
-                                         src="{{ $helper->getDefaultImage($user->image, request()->root().'/assets/admin/custom/images/default.png') }}"/>
+                                         src="{{ $helper->getDefaultImage(request()->root().'/files/users/'.$user->image, request()->root().'/assets/admin/custom/images/default.png') }}"/>
                                 </a>
 
                             </td>
@@ -184,11 +188,11 @@
 
     <script>
 
-        @if(session()->has('success'))
-        setTimeout(function () {
-            showMessage('{{ session()->get('success') }}');
-        }, 3000);
-        @endif
+        // @if(session()->has('success'))
+        // setTimeout(function () {
+        //     showMessage('{{ session()->get('success') }}');
+        // }, 3000);
+        // @endif
 
 
 

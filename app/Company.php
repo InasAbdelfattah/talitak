@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Dimsav\Translatable\Translatable;
 
 //use willvincent\Rateable\Rateable;
 
@@ -10,6 +11,9 @@ class Company extends Model
 {
 
     //use  Rateable;
+    use Translatable;
+
+    public $translatedAttributes = ['name'];
 
     protected $fillable = [
         'category_id'
@@ -138,6 +142,11 @@ class Company extends Model
     public function city()
     {
         return $this->belongsTo(City::class);
+    }
+
+    public function languages()
+    {
+        return $this->hasMany(CompanyTranslation::class ,'company_id');
     }
 
 

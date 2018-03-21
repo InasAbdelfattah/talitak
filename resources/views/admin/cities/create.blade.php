@@ -52,8 +52,8 @@
 
                         @if ($errors->has('name_en'))
                             <span class="help-block">
-                                        <strong>{{ $errors->first('name_en') }}</strong>
-                                    </span>
+                                <strong>{{ $errors->first('name_en') }}</strong>
+                            </span>
                         @endif
 
                     </div>
@@ -116,7 +116,4 @@
 
 {{--</script>--}}
 {{--@endsection--}}
-
-
-
 

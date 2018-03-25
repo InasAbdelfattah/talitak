@@ -19,6 +19,10 @@ class CitiesController extends Controller
      */
     public function index()
     {
+        if (!Gate::allows('cities_manage')) {
+            return abort(401);
+        }
+
         $cities = City::get();
 
         return view('admin.cities.index')->with(compact('cities'));
@@ -31,6 +35,10 @@ class CitiesController extends Controller
      */
     public function create()
     {
+        if (!Gate::allows('cities_manage')) {
+            return abort(401);
+        }
+
         return view('admin.cities.create');
     }
 
@@ -42,7 +50,7 @@ class CitiesController extends Controller
      */
     public function store(Request $request)
     {
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('cities_manage')) {
             return abort(401);
         }
 
@@ -111,6 +119,10 @@ class CitiesController extends Controller
      */
     public function edit($id)
     {
+        if (!Gate::allows('cities_manage')) {
+            return abort(401);
+        }
+
         $city = City::findOrFail($id);
 
         return view('admin.cities.edit')->with(compact('city'));
@@ -126,7 +138,7 @@ class CitiesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('cities_manage')) {
             return abort(401);
         }
 
@@ -197,7 +209,7 @@ class CitiesController extends Controller
     public function groupDelete(Request $request)
     {
 
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('cities_manage')) {
             return abort(401);
         }
 
@@ -232,6 +244,10 @@ class CitiesController extends Controller
      */
     public function delete(Request $request)
     {
+        if (!Gate::allows('cities_manage')) {
+            return abort(401);
+        }
+        
         $model = City::findOrFail($request->id);
 
         if ($model->centers->count() > 0) {

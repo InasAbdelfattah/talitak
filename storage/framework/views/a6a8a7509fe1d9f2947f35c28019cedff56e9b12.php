@@ -91,7 +91,7 @@
         <div class="container">
             <div id="navigation">
                 <!-- Navigation Menu-->
-                <ul class="navigation-menu" style="    font-size: 14px;">
+                <ul class="navigation-menu" style="font-size: 14px;">
 
 
                     <li>
@@ -121,6 +121,7 @@
                                     </ul>
                                 </li>
 
+                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('userDiscount_manage')): ?>
                                 <li>
                                     <ul>
                                         <strong><h5 style="font-weight: 600;">الخصومات</h5></strong>
@@ -128,15 +129,19 @@
                                         <li><a href="<?php echo e(route('user_discounts.all')); ?>">تقارير الخصومات </a></li>
                                     </ul>
                                 </li>
+                                <?php endif; ?>
 
 
                                 <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('roles_manage')): ?>
                                     <li>
                                         <ul>
                                             <strong><h5 style="font-weight: 600;">الادوار والصلاحيات</h5></strong>
-                                            <li><a href="ui-dripicons.html">مشاهدة الادوار</a></li>
+                                            <li><a href="<?php echo e(route('roles.index')); ?>">مشاهدة الادوار</a></li>
+                                            <li><a href="<?php echo e(route('roles.create')); ?>">إضافة دور</a></li>
+                                            <!-- <li><a href="<?php echo e(route('abilities.index')); ?>">مشاهدة الصلاحيات</a></li> -->
+                                            <!-- <li><a href="ui-dripicons.html">مشاهدة الادوار</a></li>
                                             <li><a href="ui-modals.html">إضافة دور</a></li>
-                                            <li><a href="ui-modals.html">مشاهدة الصلاحيات</a></li>
+                                            <li><a href="ui-modals.html">مشاهدة الصلاحيات</a></li> -->
                                         </ul>
                                     </li>
                                 <?php endif; ?>
@@ -145,14 +150,6 @@
                             </ul>
                         </li>
                     <?php endif; ?>
-
-
-                    
-                    
-                    
-                    
-
-
 
                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('companies_manage')): ?>
                         <li class="has-submenu">
@@ -183,7 +180,7 @@
                         </li>
                     <?php endif; ?>
 
-                    <!-- <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('discounts_manage')): ?>
+                    <!-- <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('userDiscount_manage')): ?>
                         <li class="has-submenu">
                             <a href="#"><i class="zmdi zmdi-view-dashboard"></i>
                                 <span> الخصومات </span> </a>
@@ -197,17 +194,6 @@
                         </li>     
                     <?php endif; ?> -->
 
-
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
                     <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('categories_manage')): ?>
                         <li class="has-submenu">
                             <a href="<?php echo e(route('categories.index')); ?>"><i class="zmdi zmdi-view-list"></i> <span> أنواع الخدمات </span>
@@ -221,9 +207,7 @@
                         </li>
                     <?php endif; ?>
 
-
-
-                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('settings_manage')): ?>
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('setting_manage')): ?>
                         <li class="has-submenu">
                             <a href="#"><i class="zmdi zmdi-settings"></i><span>  الضبط </span> </a>
                             <ul class="submenu megamenu">
@@ -237,7 +221,7 @@
                                         <li><a href="<?php echo e(route('settings.commission')); ?>">نسبة التطبيق</a></li>
                                         <li><a href="<?php echo e(route('settings.socials')); ?>">روابط وسائل التواصل</a></li>
                                         <li><a href="<?php echo e(route('cities.index')); ?>">المدن</a></li>
-                                        <li><a href="<?php echo e(route('districts.index')); ?>">الأحياء</a></li>
+                                        <!-- <li><a href="<?php echo e(route('districts.index')); ?>">الأحياء</a></li> -->
                                         <li><a href="<?php echo e(route('new-notif')); ?>">ارسال اشعار</a></li>
                                 
                                     </ul>
@@ -246,66 +230,19 @@
                         </li>
                     <?php endif; ?>
 
-                    
-                        <!-- <li class="has-submenu">
-                            <a href="#"><i class="zmdi zmdi-settings"></i><span>  الإعلانات الممولة </span> </a>
-                            <ul class="submenu megamenu">
-                                <li>
-                                    <ul> -->
-                                    
-                                        
-
-                                    <!-- </ul>
-                                </li>
-                            </ul>
-                        </li> -->
-                
-
-                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('contactus_manage')): ?>
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('support_manage')): ?>
                         <li>
                             <a href="<?php echo e(route('support.index')); ?>"><i class="zmdi zmdi-email-open zmdi-hc-fw"></i>
                                 <span> اتصل بنا </span> </a>
                         </li>
                     <?php endif; ?>
 
-                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('contactus_manage')): ?>
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('abuses_manage')): ?>
                         <li>
                             <a href="<?php echo e(route('abuses.index')); ?>"><i class="zmdi zmdi-email-open zmdi-hc-fw"></i>
                                 <span>بلاغات الإساءة</span> </a>
                         </li>
                     <?php endif; ?>
-
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-
 
                 </ul>
                 <!-- End navigation menu  -->

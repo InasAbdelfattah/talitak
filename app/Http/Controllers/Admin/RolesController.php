@@ -20,9 +20,9 @@ class RolesController extends Controller
      */
     public function index(Request $request)
     {
-//        if (!Gate::allows('users_manage')) {
-//            return abort(401);
-//        }
+        if (!Gate::allows('roles_manage')) {
+            return abort(401);
+        }
 
 //        $roles = Role::paginate(5);
 //
@@ -69,9 +69,10 @@ class RolesController extends Controller
      */
     public function create()
     {
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('roles_manage')) {
             return abort(401);
         }
+
         $abilities = Ability::get();
 //        $abilities = Ability::get()->pluck('name', 'name');
 
@@ -94,6 +95,10 @@ class RolesController extends Controller
      */
     public function store(StoreRolesRequest $request)
     {
+
+        if (!Gate::allows('roles_manage')) {
+            return abort(401);
+        }
 
         $collection = collect($request->input('abilities'));
 
@@ -141,9 +146,10 @@ class RolesController extends Controller
      */
     public function edit($id)
     {
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('roles_manage')) {
             return abort(401);
         }
+
         $abilities = Ability::get();
 //        $abilities = Ability::get()->pluck('id', 'name');
 
@@ -166,7 +172,8 @@ class RolesController extends Controller
      */
     public function update(UpdateRolesRequest $request, $id)
     {
-        if (!Gate::allows('users_manage')) {
+        
+        if (!Gate::allows('roles_manage')) {
             return abort(401);
         }
         $role = Role::findOrFail($id);
@@ -194,9 +201,10 @@ class RolesController extends Controller
      */
     public function destroy($id)
     {
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('roles_manage')) {
             return abort(401);
         }
+
         $role = Role::findOrFail($id);
         $role->delete();
 
@@ -212,9 +220,10 @@ class RolesController extends Controller
      */
     public function delete(Request $request)
     {
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('roles_manage')) {
             return abort(401);
         }
+
         $role = Role::findOrFail($request->id);
         $role->delete();
 
@@ -271,7 +280,7 @@ class RolesController extends Controller
     public function groupDelete(Request $request)
     {
 
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('roles_manage')) {
             return abort(401);
         }
 
@@ -298,9 +307,10 @@ class RolesController extends Controller
      */
     public function massDestroy(Request $request)
     {
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('roles_manage')) {
             return abort(401);
         }
+        
         if ($request->input('ids')) {
             $entries = Role::whereIn('id', $request->input('ids'))->get();
 

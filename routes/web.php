@@ -39,11 +39,11 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'admin'], function ()
     Route::get('/', 'Admin\HomeController@index')->name('home');
     Route::get('/home', 'Admin\HomeController@index')->name('admin.home');
 
-
     Route::resource('abilities', 'Admin\AbilitiesController');
     Route::post('abilities_mass_destroy', ['uses' => 'Admin\AbilitiesController@massDestroy', 'as' => 'abilities.mass_destroy']);
     Route::resource('roles', 'Admin\RolesController');
     Route::post('roles_mass_destroy', ['uses' => 'Admin\RolesController@massDestroy', 'as' => 'roles.mass_destroy']);
+
     Route::resource('users', 'Admin\UsersController');
     Route::post('users_mass_destroy', ['uses' => 'Admin\UsersController@massDestroy', 'as' => 'users.mass_destroy']);
     Route::post('provider_activation', ['uses' => 'Admin\UsersController@activation', 'as' => 'provider.activation']);
@@ -173,6 +173,51 @@ Route::group(['prefix' => 'administrator', 'middleware' => 'admin'], function ()
         Route::post('/send', [
             'uses' => 'Admin\NotificationController@send',
             'as' => 'notif-send'
+        ]);
+
+    });
+
+    // groups
+    Route::group(['prefix' => 'groups'], function () {
+
+        Route::get('/', [
+            'uses' => 'Admin\ManagementLevelController@getIndex',
+            'as' => 'levels'
+        ]);
+
+        Route::get('level-add', [
+            'uses' => 'Admin\ManagementLevelController@getAdd',
+            'as' => 'level-add'
+        ]);
+
+        Route::post('level-do-add', [
+            'uses' => 'Admin\ManagementLevelController@postAdd',
+            'as' => 'level-do-add'
+        ]);
+
+        Route::get('level-edit/{id}', [
+            'uses' => 'Admin\ManagementLevelController@getEdit',
+            'as' => 'level-edit'
+        ]);
+
+        Route::post('level-do-edit/{id}', [
+            'uses' => 'Admin\ManagementLevelController@postEdit',
+            'as' => 'level-do-edit'
+        ]);
+
+        Route::get('level-delete/{id}', [
+            'uses' => 'Admin\ManagementLevelController@getDelete',
+            'as' => 'level-delete'
+        ]);
+
+        Route::get('level-details/{id}', [
+            'uses' => 'Admin\ManagementLevelController@getDetails',
+            'as' => 'level-details'
+        ]);
+
+        Route::post('/delete-all/{route}', [
+            'uses' => 'Admin\ManagementLevelController@deleteAll',
+            'as' => 'lv-delete-all'
         ]);
 
     });

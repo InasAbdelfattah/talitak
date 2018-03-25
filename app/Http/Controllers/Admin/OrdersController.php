@@ -23,6 +23,10 @@ class OrdersController extends Controller
     public function index()
     {
 
+        if (!Gate::allows('orders_manage')) {
+            return abort(401);
+        }
+
         $orders = Order::join('companies','orders.company_id','companies.id')->join('users','orders.user_id','users.id')->join('services','orders.service_id','services.id')->select('orders.*','companies.id as company_id' , 'companies.name as company_name' , 'companies.category_id as serviceType' ,'companies.place as company_place' , 'companies.user_id as provider_id','companies.city_id as city_id','users.id as user_id' , 'users.name as username' , 'services.id as service_id' , 'services.name as service_name', 'services.description as service_desc')->get();
 
         return view('admin.orders.index' , compact('orders'));
@@ -30,6 +34,10 @@ class OrdersController extends Controller
 
     public function search(Request $request)
     {
+        if (!Gate::allows('orders_manage')) {
+            return abort(401);
+        }
+
         $orders = [] ;
         if ($request->service_type != '' && $request->service_provider == '') {
             
@@ -69,6 +77,10 @@ class OrdersController extends Controller
     public function getFinancialReports()
     {
         //status = 3 when order is finished
+        if (!Gate::allows('orders_manage')) {
+            return abort(401);
+        }
+
         $orders = Order::join('companies','orders.company_id','companies.id')->join('users','orders.user_id','users.id')->join('services','orders.service_id','services.id')->where('orders.status',3)->select('orders.*','companies.id as company_id' , 'companies.name as company_name' , 'companies.category_id as serviceType' ,'companies.place as company_place' , 'companies.user_id as provider_id','companies.city_id as city_id','users.id as user_id' , 'users.name as username' , 'services.id as service_id' , 'services.name as service_name', 'services.description as service_desc')->get();
 
         return view('admin.orders.reports' , compact('orders'));
@@ -76,6 +88,10 @@ class OrdersController extends Controller
 
     public function searchFinancialReports(Request $request)
     {
+        if (!Gate::allows('orders_manage')) {
+            return abort(401);
+        }
+
         $orders = [] ;
         //dd($request);
         if($request->from != '' && $request->to != ''){
@@ -118,12 +134,20 @@ class OrdersController extends Controller
 
     public function getFinancialAccounts()
     {
+        if (!Gate::allows('orders_manage')) {
+            return abort(401);
+        }
+
         $accounts = FinancialAccount::join('companies','financial_accounts.company_id','companies.id')->select('financial_accounts.*' , 'companies.id as company_id' , 'companies.name as company_name' , 'companies.user_id as provider_id')->get();
 
         return view('admin.orders.accounts' , compact('accounts'));
     }
 
     public function confirmPayment(Request $request){
+
+        if (!Gate::allows('orders_manage')) {
+            return abort(401);
+        }
 
         $finance = FinancialAccount::find($request->accountId);
         if($finance->net_app_ratio == 0){
@@ -182,6 +206,10 @@ class OrdersController extends Controller
 
     public function searchFinancialAccounts()
     {
+        if (!Gate::allows('orders_manage')) {
+            return abort(401);
+        }
+        
         $orders = [];
         return view('admin.orders.reports' , compact('orders'));
         

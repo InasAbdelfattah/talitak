@@ -13,7 +13,7 @@ class Company extends Model
     //use  Rateable;
     use Translatable;
 
-    public $translatedAttributes = ['name'];
+    public $translatedAttributes = ['name' , 'description'];
 
     protected $fillable = [
         'category_id'
@@ -141,7 +141,7 @@ class Company extends Model
 
     public function city()
     {
-        return $this->belongsTo(City::class);
+        return $this->belongsTo(City::class ,'city_id');
     }
 
     public function languages()

@@ -37,6 +37,10 @@ class SettingsController extends Controller
      */
     public function index()
     {
+        if (!Gate::allows('setting_manage')) {
+            return abort(401);
+        }
+
         $settings = Setting::all();
         return view('admin.settings.setting')->withSettings($settings);
     }
@@ -44,6 +48,10 @@ class SettingsController extends Controller
 
     public function commission()
     {
+        if (!Gate::allows('setting_manage')) {
+            return abort(401);
+        }
+
         $settings = Setting::all();
         return view('admin.settings.commission')->withSettings($settings);
     }
@@ -51,6 +59,10 @@ class SettingsController extends Controller
 
     public function commentsProjects()
     {
+        if (!Gate::allows('setting_manage')) {
+            return abort(401);
+        }
+
         $settings = Setting::all();
         $companies = Company::where('is_active', 1)->get();
         return view('admin.settings.projects')->withSettings($settings)->withCompanies($companies);
@@ -59,6 +71,10 @@ class SettingsController extends Controller
 
     public function commentsProjectsSettings(Request $request)
     {
+        if (!Gate::allows('setting_manage')) {
+            return abort(401);
+        }
+
         foreach ($request->all() as $key => $value) {
             if ($key != '_token' && $key != 'companies'):
                 Setting::updateOrCreate(['key' => $key], ['body' => $value]);
@@ -112,6 +128,10 @@ class SettingsController extends Controller
     public function ratingProjectsSettings(Request $request)
     {
 
+        if (!Gate::allows('setting_manage')) {
+            return abort(401);
+        }
+
         foreach ($request->all() as $key => $value) {
             if ($key != '_token' && $key != 'companies'):
                 Setting::updateOrCreate(['key' => $key], ['body' => $value]);
@@ -162,12 +182,20 @@ class SettingsController extends Controller
 
     public function aboutus()
     {
+        if (!Gate::allows('setting_manage')) {
+            return abort(401);
+        }
+
         $settings = Setting::all();
         return view('admin.settings.aboutus')->withSettings($settings);
     }
 
     public function socialLinks()
     {
+        if (!Gate::allows('setting_manage')) {
+            return abort(401);
+        }
+
         $settings = Setting::all();
         return view('admin.settings.socials')->withSettings($settings);
     }
@@ -175,6 +203,10 @@ class SettingsController extends Controller
 
     public function terms()
     {
+        if (!Gate::allows('setting_manage')) {
+            return abort(401);
+        }
+
         $settings = Setting::all();
         return view('admin.settings.terms')->withSettings($settings);
     }
@@ -182,6 +214,10 @@ class SettingsController extends Controller
 
     public function prohibitedgoods()
     {
+        if (!Gate::allows('setting_manage')) {
+            return abort(401);
+        }
+
         $settings = Setting::all();
         return view('admin.settings.prohibitedgoods')->withSettings($settings);
     }
@@ -193,6 +229,10 @@ class SettingsController extends Controller
      */
     public function create()
     {
+
+        if (!Gate::allows('setting_manage')) {
+            return abort(401);
+        }
 
         return view('admin.settings.index');
     }
@@ -206,6 +246,10 @@ class SettingsController extends Controller
     public function store(Request $request)
     {
 
+        if (!Gate::allows('setting_manage')) {
+            return abort(401);
+        }
+        
         foreach ($request->all() as $key => $value) {
             if ($key != '_token' && $key != 'about_app_image_old'):
                 Setting::updateOrCreate(['key' => $key], ['body' => $value]);

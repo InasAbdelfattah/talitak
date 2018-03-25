@@ -1,5 +1,5 @@
 @extends('admin.layouts.master')
-
+@section('title','اضافة مدينة')
 @section('content')
 
     <div id="messageError"></div>

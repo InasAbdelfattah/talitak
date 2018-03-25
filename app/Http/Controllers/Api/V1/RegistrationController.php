@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Events\NotifyAdminJoinApp;
 use App\Events\NotifyUsers;
 use App\Company;
+use App\UserInvitation;
 use App\Image;
 use App\Notifications\NotifyAdminForJoinCompanies;
 use App\User;
@@ -17,10 +18,12 @@ class RegistrationController extends Controller
 {
 
     public $public_path;
+    public $public_path_docs ;
 
     public function __construct()
     {
         $this->public_path = 'files/companies/';
+        $this->public_path_docs = 'files/docs/';
     }
 
     /**
@@ -30,58 +33,102 @@ class RegistrationController extends Controller
     public function store(Request $request)
     {
 
+        $rules = [
+            'name' => 'required|min:3|max:255',
+            'phone' => 'required|regex:/(05)[0-9]{8}/|unique:users,phone',
+            'password' => 'required|confirmed|min:3|max:255',
+        ];
 
-        // Get Input
-        $postData = $this->postData($request);
+        $validator = Validator::make($request->all(), $rules);
 
-        // Declare Validation Rules.
-        $valRules = $this->valRules();
+        if ($validator->fails()) {
 
-        // Declare Validation Messages
-        $valMessages = $this->valMessages();
-
-        // Validate Input
-        $valResult = Validator::make($postData, $valRules, $valMessages);
-
-        // Check Validate
-        if ($valResult->passes()) {
+            $error_arr = validateRules($validator->errors(), $rules);
+            return response()->json(['status'=>false,'data' => $error_arr]);
+            //return response()->json(['status'=>false,'data' => $validator->errors()->all()]);
+        }
 
             $user = new User();
-            $user->username = $request->name;
-            $user->email = $request->email;
-            $user->phone = $request->mobile;
-            $user->password = $request->password;
 
+            $user->gender = $request->gender;
+            $user->is_invited = $request->is_invited ;
+            $user->name = $request->name;
+            $user->email = '';
+            $user->phone = $request->phone;
+            $user->password = bcrypt(trim($request->password));
             $user->api_token = str_random(60);
             $code = rand(10000000, 99999999);
             $code = $user->userCode($code);
             $user->code = $code;
-
-            $user->is_user = $request->userType;
-
+            $user->is_user = 1;
+            $user->is_provider = $request->userType;
             $actionCode = rand(1000, 9999);
             $actionCode = $user->actionCode($actionCode);
             $user->action_code = $actionCode;
+            $user->save() ;
 
-            if ($user->save() && $request->userType == 1) {
+            if ($request->is_invited == 1) {
+
+                $invitor = User::where('phone',$request->invitor_phone)->first();
+                //dd($invitor);
+
+                if($invitor){
+                    $newModel = new UserInvitation();
+                    $newModel->invited_by = $invitor->id;
+                    $newModel->user_id = $user->id ;
+                    $newModel->save();
+                }
+                // else{
+                //     return response()->json([
+                //         'status' => true,
+                //         'data' => 'رقم هاتف المستخدم المدعو من خلاله المستخدم غير موجود',
+                //     ]);
+                // }    
+            }
+
+            if ($request->userType == 1) {
                 $company = new Company;
                 $company->user_id = $user->id;
-                $company->name = $request->name;
-                $company->address = $request->address;
-                $company->description = $request->description;
-                $company->lat = $request->lat;
-                $company->lng = $request->lng;
-                $company->category_id = $request->category;
+                $company->name = $request->name_ar;
+                $company->{'name:ar'} = $request->name_ar;
+                $company->{'name:en'} = $request->name_en;
+                $company->{'description:ar'} = $request->description_ar;
+                $company->{'description:en'} = $request->description_en;
                 $company->city_id = $request->city;
+                $company->type = $request->providerType ;
 
-                if ($request->hasFile('image')):
-                    $company->image = $request->root() . '/' . $this->public_path . UploadImage::uploadImage($request, 'image', $this->public_path);
+                //if ($request->hasFile('document_photo')):
+                if ($request->has('document_photo')):
+                    // $company->document_photo = uploadImage($request, 'document_photo', $this->public_path_docs, 1280, 583);
+                    $company->document_photo = save64Img($request->document_photo , $this->public_path_docs);
+                endif;
+
+                $company->description = $request->description_ar;
+                $company->category_id = $request->category;
+                $company->is_comment = 1;
+                $company->is_rate = 1;
+                $company->phone = '';
+                $company->place = '';
+                $company->facebook = '';
+                $company->twitter = '';
+                $company->google = '';
+                $company->is_agree = 0;
+                $company->is_active = 0;
+
+                $company->address = $request->address ? $request->address : '';
+                $company->lat = $request->lat ? $request->lat : '';
+                $company->lng = $request->lng ? $request->lng : '';
+                
+
+                //if ($request->hasFile('image')):
+                if ($request->has('image')):
+                    $company->image = save64Img($request->image , $this->public_path);
+                    // $company->image = $request->root() . '/' . $this->public_path . UploadImage::uploadImage($request, 'image', $this->public_path);
                 endif;
 
                 if ($company->save()) {
 
-
-                    $message = "لديك طلب إلتحاق منشأة جديدة للطبيق ($company->name)";
+                    $message = "لديك طلب إلتحاق مركز جديد للتطبيق ($company->{'name:ar'})";
                     $users = User::whereHas('roles', function ($q) {
                         $q->where('name', 'owner');
                     })->get();
@@ -92,6 +139,7 @@ class RegistrationController extends Controller
                         event(new NotifyAdminJoinApp($user->id, $company->id, $message, 0));
                         $user->notify(new NotifyAdminForJoinCompanies($user->id, $company->id, $message, 0));
                     }
+
 
 
                     return response()->json([
@@ -108,16 +156,6 @@ class RegistrationController extends Controller
                 ]);
             }
 
-
-        } else {
-            // Grab Messages From Validator
-            $valErrors = $valResult->messages();
-            return response()->json([
-                'status' => true,
-                'data' => $valErrors,
-
-            ], 400);
-        }
     }
 
 
@@ -180,50 +218,5 @@ class RegistrationController extends Controller
 
 
     }
-
-
-    /**
-     * @param $request
-     * @return array
-     */
-    private function postData($request)
-    {
-        return [
-            'username' => $request->name,
-            'mobile' => $request->mobile,
-            'password' => $request->password,
-            'password_confirmation' => $request->password_confirmation
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function valRules()
-    {
-        return [
-            'username' => 'required|unique:users,username',
-            'mobile' => 'required|unique:users,phone',
-            'password' => 'required',
-            'password_confirmation' => 'required|same:password'
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    private function valMessages()
-    {
-        return [
-            'username.required' => trans('global.field_required'),
-            'username.unique' => trans('global.unique_username'),
-            'mobile.required' => trans('global.field_required'),
-            'mobile.unique' => trans('global.unique_phone'),
-            'password.required' => trans('global.field_required'),
-            'password_confirmation.required' => trans('global.field_required'),
-            'password_confirmation.same' => trans('global.password_not_confirmed'),
-        ];
-    }
-
 
 }

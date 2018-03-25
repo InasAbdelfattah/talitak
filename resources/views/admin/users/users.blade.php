@@ -5,7 +5,7 @@
     <!-- Page-Title -->
     <div class="row zoomIn">
         <div class="col-sm-12">
-            <div class="btn-group pull-right m-t-15">
+           <!--  <div class="btn-group pull-right m-t-15">
 
                 <a href="{{ route('users.create') }}" type="button" class="btn btn-custom waves-effect waves-light"
                    aria-expanded="false"> إضافة
@@ -21,7 +21,7 @@
                     <li class="divider"></li>
                     <li><a href="#">Separated link</a></li>
                 </ul>
-            </div>
+            </div> -->
             <h4 class="page-title">@lang('global.users_management')</h4>
         </div>
     </div>

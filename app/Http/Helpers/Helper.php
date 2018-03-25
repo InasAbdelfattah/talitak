@@ -1,5 +1,7 @@
 <?php
 
+ 
+
     function company($id)
     {
         return \App\Company::where('user_id' , $id)->first();
@@ -39,7 +41,7 @@
 
            if( $errors->get($key) ) {
 
-               array_push($error_arr, array('key' => $key, 'value' => $errors->first($key)));
+               array_push($error_arr, array($key => $errors->first($key)));
            }
        }
 
@@ -71,6 +73,17 @@
             // RETURN path to save in images tables DATABASE
             return $filename;
         endif;
+    }
+
+    function save64Img($base64_img, $path) {
+        $image_data = base64_decode($base64_img);
+        $source = imagecreatefromstring($image_data);
+        $angle = 0;
+        $rotate = imagerotate($source, $angle, 0); // if want to rotate the image
+        $imageName = time() . str_random(20) . '.png';
+        $path = $path . $imageName;
+        $imageSave = imagejpeg($rotate, $path, 100);
+        return $imageName;
     }
 
 

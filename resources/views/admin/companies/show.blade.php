@@ -63,7 +63,7 @@
 
                             <div class="col-lg-3 col-xs-12">
                                 <label> نوع مزود الخدمة :</label>
-                                <p>{{ $company->type == 0 ? 'فرد' : 'منشأة' }}</p>
+                                <p>{{ $company->type == 0 ? 'فرد' : 'مركز' }}</p>
                             </div>
 
                             <!-- <div class="col-lg-3 col-xs-12">
@@ -79,8 +79,8 @@
                             <div class="col-lg-6 col-xs-12">
                                 <label> <p>{{ $company->type == 0 ? 'وثيقة الهوية' : 'وثيقة السجل التجارى' }} : </p></label>
                                 @if($company->document_photo != '')
-                                    <a data-fancybox="gallery" href="{{ url('public/files/docs/' . $company->document_photo) }}">
-                                        <img class="img-thumbnail" src="{{ url('public/files/docs/' . $company->document_photo) }}"/>
+                                    <a data-fancybox="gallery" href="{{ url('files/docs/' . $company->document_photo) }}">
+                                        <img class="img-thumbnail" src="{{ url('files/docs/' . $company->document_photo) }}"/>
                                     </a>
                                 @else
                                     <img class="img-thumbnail" src="{{request()->root().'/assets/admin/custom/images/default.png'}}"/>

@@ -10,12 +10,20 @@ class SupportsController extends Controller
 {
     public function index()
     {
+        if (!Gate::allows('support_manage')) {
+            return abort(401);
+        }
+
         $supports = Support::whereParentId(0)->get();
         return view('admin.supports.index')->with(compact('supports'));
     }
 
     public function show($id)
     {
+
+        if (!Gate::allows('support_manage')) {
+            return abort(401);
+        }
 
         //$message = Support::with('user')->whereId($id)->first();
         $message = Support::whereId($id)->first();
@@ -27,6 +35,10 @@ class SupportsController extends Controller
 
     public function reply(Request $request, $id)
     {
+        if (!Gate::allows('support_manage')) {
+            return abort(401);
+        }
+
         if ($request->message == '' && $request->reply_type == '') {
             return response()->json([
                 'status' => false,
@@ -82,6 +94,10 @@ class SupportsController extends Controller
 
     public function delete(Request $request)
     {
+        if (!Gate::allows('support_manage')) {
+            return abort(401);
+        }
+        
         $model = Support::findOrFail($request->id);
 
 

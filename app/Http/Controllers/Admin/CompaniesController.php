@@ -22,6 +22,10 @@ class CompaniesController extends Controller
      */
     public function index()
     {
+        if (!Gate::allows('companies_manage')) {
+            return abort(401);
+        }
+
         $companies = Company::with('user', 'category')
             ->whereIsAgree(1)
             ->get();
@@ -44,6 +48,10 @@ class CompaniesController extends Controller
      */
     public function orders()
     {
+        if (!Gate::allows('companies_manage')) {
+            return abort(401);
+        }
+
         $companies = Company::with('user', 'category')
             ->whereIsAgree(0)
             ->get();
@@ -59,6 +67,10 @@ class CompaniesController extends Controller
 
     public function activation(Request $request)
     {
+
+        if (!Gate::allows('companies_manage')) {
+            return abort(401);
+        }
 
         if ($request->agree == '') {
             return response()->json([
@@ -87,6 +99,10 @@ class CompaniesController extends Controller
 
     public function getCompanies()
     {
+        if (!Gate::allows('companies_manage')) {
+            return abort(401);
+        }
+
         $posts = Company::join('users', 'companies.user_id', '=', 'users.id')
             ->select(['companies.id', 'companies.name', 'users.name as uname', 'users.email', 'companies.created_at', 'companies.updated_at']);
 
@@ -135,6 +151,10 @@ class CompaniesController extends Controller
      */
     public function show($id)
     {
+        if (!Gate::allows('companies_manage')) {
+            return abort(401);
+        }
+        
         $company = Company::with('images', 'comments.user', 'favorites', 'rates', 'products' ,'workDays')->findOrFail($id);
 
 //
@@ -197,7 +217,7 @@ class CompaniesController extends Controller
     {
 
 
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('companies_manage')) {
             return abort(401);
         }
 
@@ -225,7 +245,7 @@ class CompaniesController extends Controller
     public function groupDelete(Request $request)
     {
 
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('companies_manage')) {
             return abort(401);
         }
 

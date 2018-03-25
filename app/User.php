@@ -94,10 +94,12 @@ class User extends Authenticatable
     }
 
 
-    // public function companies()
-    // {
-    //     return $this->hasMany(Company::class);
-    // }
+    public function company()
+    {
+        //return $this->hasMany(Company::class);
+        //return $this->belongsTo(Company::class, 'user_id');
+        return $this->hasOne('App\Company', 'user_id');
+    }
 
     
 
@@ -136,6 +138,18 @@ class User extends Authenticatable
     public function rates()
     {
         return $this->hasMany('App\Rate')->where('rate_from','provider');
+
+    }
+
+    public static function actionCode($code)
+    {
+
+        $rand = User::where('action_code', $code)->first();
+        if ($rand) {
+            return $randomCode = rand(1000, 9999);
+        } else {
+            return $code;
+        }
 
     }
 

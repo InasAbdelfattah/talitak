@@ -106,7 +106,7 @@ class AbilitiesController extends Controller
         $ability = Ability::findOrFail($id);
         $ability->delete();
 
-        return redirect()->route('admin.abilities.index');
+        return redirect()->route('abilities.index');
     }
 
     /**
@@ -119,6 +119,7 @@ class AbilitiesController extends Controller
         if (! Gate::allows('users_manage')) {
             return abort(401);
         }
+        
         if ($request->input('ids')) {
             $entries = Ability::whereIn('id', $request->input('ids'))->get();
 

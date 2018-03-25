@@ -32,6 +32,9 @@ class CategoriesController extends Controller
     public function index(Request $request)
     {
 
+        if (!Gate::allows('categories_manage')) {
+            return abort(401);
+        }
 
         /**
          * Get all Categories
@@ -51,6 +54,10 @@ class CategoriesController extends Controller
     public function create()
     {
         
+        if (!Gate::allows('categories_manage')) {
+            return abort(401);
+        }
+
         return view('admin.categories.create');
     }
 
@@ -62,6 +69,10 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
+
+        if (!Gate::allows('categories_manage')) {
+            return abort(401);
+        }
 
         $category = new Category;
         $category->name_ar = $request->name_ar;
@@ -105,6 +116,10 @@ class CategoriesController extends Controller
      */
     public function edit($id)
     {
+        if (!Gate::allows('categories_manage')) {
+            return abort(401);
+        }
+
         $category = Category::findOrFail($id);
         return view('admin.categories.edit')->with(compact('category'));
     }
@@ -118,6 +133,10 @@ class CategoriesController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (!Gate::allows('categories_manage')) {
+            return abort(401);
+        }
+
         $category = Category::findOrFail($id);
         $category->name_ar = $request->name_ar;
         $category->name_en = $request->name_en;
@@ -209,22 +228,24 @@ class CategoriesController extends Controller
     public function groupDelete(Request $request)
     {
 
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('categories_manage')) {
             return abort(401);
         }
 
         $ids = $request->ids;
         foreach ($ids as $id) {
+
             $model = Category::findOrFail($id);
+            
             if ($model->companies->count() > 0) {
                 return response()->json([
                     'status' => false,
                     'message' => "عفواً, لا يمكنك حذف النوع ($model->name) نظراً لوجود مراكز ملتحقة بهذا النوع"
                 ]);
             }
+
             $model->delete();
         }
-
 
         return response()->json([
             'status' => true,
@@ -243,8 +264,11 @@ class CategoriesController extends Controller
      */
     public function delete(Request $request)
     {
-        $model = Category::findOrFail($request->id);
+        if (!Gate::allows('categories_manage')) {
+            return abort(401);
+        }
 
+        $model = Category::findOrFail($request->id);
 
         if ($model->companies->count() > 0) {
             return response()->json([
@@ -260,6 +284,4 @@ class CategoriesController extends Controller
             ]);
         }
     }
-
-
 }

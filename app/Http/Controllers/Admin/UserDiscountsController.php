@@ -24,12 +24,20 @@ class UserDiscountsController extends Controller
     public function index()
     {
 
+        if (!Gate::allows('userDiscount_manage')) {
+            return abort(401);
+        }
+
         $users = User::all();
         
         return view('admin.discounts.index' , compact('users'));
     }
 
     public function show($id){
+
+        if (!Gate::allows('userDiscount_manage')) {
+            return abort(401);
+        }
 
         $user = User::find($id);
         $discounts = UserDiscount::where('user_id',$id)->get();
@@ -40,6 +48,10 @@ class UserDiscountsController extends Controller
 
     public function addDiscount(Request $request){
         
+        if (!Gate::allows('userDiscount_manage')) {
+            return abort(401);
+        }
+
         $user = User::find($request->userId);
 
         // $rules = [
@@ -126,6 +138,10 @@ class UserDiscountsController extends Controller
 
     public function userDiscounts(){
 
+        if (!Gate::allows('userDiscount_manage')) {
+            return abort(401);
+        }
+        
         $discounts = UserDiscount::join('users','user_discounts.user_id','users.id')->select('user_discounts.*' , 'users.id as user_id' , 'users.name as username' , 'users.phone as user_phone')->groupBy('user_discounts.user_id')->get();
 
         return view('admin.discounts.discounts' , compact('discounts'));
@@ -141,7 +157,7 @@ class UserDiscountsController extends Controller
     public function delete(Request $request)
     {
 
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('userDiscount_manage')) {
             return abort(401);
         }
 
@@ -170,7 +186,7 @@ class UserDiscountsController extends Controller
     public function groupDelete(Request $request)
     {
 
-        if (!Gate::allows('user_discounts_manage')) {
+        if (!Gate::allows('userDiscount_manage')) {
             return abort(401);
         }
 

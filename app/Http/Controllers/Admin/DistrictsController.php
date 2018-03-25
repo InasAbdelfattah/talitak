@@ -19,6 +19,10 @@ class DistrictsController extends Controller
      */
     public function index()
     {
+        if (!Gate::allows('districts_manage')) {
+            return abort(401);
+        }
+
         $districts = District::get();
 
         return view('admin.districts.index')->with(compact('districts'));
@@ -31,6 +35,10 @@ class DistrictsController extends Controller
      */
     public function create()
     {
+        if (!Gate::allows('districts_manage')) {
+            return abort(401);
+        }
+
         $cities = City::all();
         return view('admin.districts.create' , compact('cities'));
     }
@@ -43,7 +51,7 @@ class DistrictsController extends Controller
      */
     public function store(Request $request)
     {
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('districts_manage')) {
             return abort(401);
         }
 
@@ -115,6 +123,10 @@ class DistrictsController extends Controller
      */
     public function edit($id)
     {
+        if (!Gate::allows('districts_manage')) {
+            return abort(401);
+        }
+
         $district = District::findOrFail($id);
         $cities = City::all();
 
@@ -131,7 +143,7 @@ class DistrictsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('districts_manage')) {
             return abort(401);
         }
 
@@ -206,7 +218,7 @@ class DistrictsController extends Controller
     public function groupDelete(Request $request)
     {
 
-        if (!Gate::allows('users_manage')) {
+        if (!Gate::allows('districts_manage')) {
             return abort(401);
         }
 
@@ -241,6 +253,10 @@ class DistrictsController extends Controller
      */
     public function delete(Request $request)
     {
+        if (!Gate::allows('districts_manage')) {
+            return abort(401);
+        }
+        
         $model = District::findOrFail($request->id);
 
         // if ($model->centers->count() > 0) {

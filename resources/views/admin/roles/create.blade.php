@@ -31,7 +31,7 @@
                 <div class="card-box">
 
 
-                    <div id="errorsHere"></div>
+                   <!--  <div id="errorsHere"></div>
                     <div class="dropdown pull-right">
                         <a href="#" class="dropdown-toggle card-drop" data-toggle="dropdown" aria-expanded="false">
                             <i class="zmdi zmdi-more-vert"></i>
@@ -43,7 +43,7 @@
                             <li class="divider"></li>
                             <li><a href="#">Separated link</a></li>
                         </ul>
-                    </div>
+                    </div> -->
 
                     <h4 class="header-title m-t-0 m-b-30">إضافة دور جديد</h4>
 
@@ -79,13 +79,19 @@
                     {{--                                        {{ $abilities }}--}}
                     <div class="form-group{{ $errors->has('roles') ? ' has-error' : '' }}">
                         <label for="passWord2">الصلاحيات *</label>
-                        <select multiple="multiple" class="multi-select" id="my_multi_select1" name="abilities[]"
-                                required
-                                data-plugin="multiselect">
+                        <select multiple="multiple" class="multi-select" id="my_multi_select1" name="abilities[]" required data-plugin="multiselect">
+                            <optgroup label="الصلاحيات">
                             @foreach($abilities as  $ability)
-                                <option value="{{ $ability->name }}" {{ (collect(old('abilities'))->contains($ability->name)) ? 'selected':'' }}>@if($ability == '*')
-                                        كل الصلاحيات @else {{ $ability->title }}@endif</option>
+                            
+                                <option value="{{ $ability->name }}" {{ (collect(old('abilities'))->contains($ability->name)) ? 'selected':'' }}>
+                                    @if($ability == '*')
+                                        كل الصلاحيات 
+                                    @else {{ $ability->title }}
+                                    @endif
+                                </option>
+                           
                             @endforeach
+                         </optgroup>
                         </select>
 
                         @if($errors->has('abilities'))
@@ -152,8 +158,17 @@
 
 
         }
+
+        //In this code, if you click on one of the option group label, all sub-options will be selected automatically.
+
+        $("optgroup").on("click", function() {
+
+            $(this).children("option").prop("selected", "selected");
+            $(this).next().children("option").prop("selected", false);
+            $(this).prev().children("option").prop("selected", false); 
+
+        });
+
     </script>
-
-
 
 @endsection

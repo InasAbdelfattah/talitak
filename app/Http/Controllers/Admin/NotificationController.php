@@ -19,6 +19,9 @@ use FCM;
 class NotificationController extends Controller {
 
     public function getIndex(){
+        if (!Gate::allows('notifications_manage')) {
+            return abort(401);
+        }
         // if (auth()->check()) {
 
         //     $allowRoute = levels(auth()->user()->group_id);
@@ -35,6 +38,10 @@ class NotificationController extends Controller {
     }
 
     public function getNotif() {
+
+        if (!Gate::allows('notifications_manage')) {
+            return abort(401);
+        }
 
         // if (auth()->check()) {
 
@@ -57,6 +64,10 @@ class NotificationController extends Controller {
     public function send(Request $request) {
 
 
+        if (!Gate::allows('notifications_manage')) {
+            return abort(401);
+        }
+        
         $rules = [
             'msg' => 'required',
             'device_id' => 'required'

@@ -61,7 +61,7 @@
 
                             <div class="col-lg-3 col-xs-12">
                                 <label> نوع مزود الخدمة :</label>
-                                <p><?php echo e($company->type == 0 ? 'فرد' : 'منشأة'); ?></p>
+                                <p><?php echo e($company->type == 0 ? 'فرد' : 'مركز'); ?></p>
                             </div>
 
                             <!-- <div class="col-lg-3 col-xs-12">
@@ -77,8 +77,8 @@
                             <div class="col-lg-6 col-xs-12">
                                 <label> <p><?php echo e($company->type == 0 ? 'وثيقة الهوية' : 'وثيقة السجل التجارى'); ?> : </p></label>
                                 <?php if($company->document_photo != ''): ?>
-                                    <a data-fancybox="gallery" href="<?php echo e(url('public/files/docs/' . $company->document_photo)); ?>">
-                                        <img class="img-thumbnail" src="<?php echo e(url('public/files/docs/' . $company->document_photo)); ?>"/>
+                                    <a data-fancybox="gallery" href="<?php echo e(url('files/docs/' . $company->document_photo)); ?>">
+                                        <img class="img-thumbnail" src="<?php echo e(url('files/docs/' . $company->document_photo)); ?>"/>
                                     </a>
                                 <?php else: ?>
                                     <img class="img-thumbnail" src="<?php echo e(request()->root().'/assets/admin/custom/images/default.png'); ?>"/>

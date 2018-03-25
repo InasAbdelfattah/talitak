@@ -12,6 +12,10 @@ class ProductsController extends Controller
     public function delete(Request $request)
     {
 
+        if (!Gate::allows('companies_manage')) {
+            return abort(401);
+        }
+
         $model = Service::whereId($request->id)->first();
         if (!$model) {
             return response()->json([
@@ -32,6 +36,10 @@ class ProductsController extends Controller
     public function update(Request $request)
     {
 
+        if (!Gate::allows('companies_manage')) {
+            return abort(401);
+        }
+        
         $model = Service::whereId($request->id)->first();
         if (!$model) {
             return response()->json([

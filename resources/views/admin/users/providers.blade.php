@@ -5,7 +5,7 @@
     <!-- Page-Title -->
     <div class="row zoomIn">
         <div class="col-sm-12">
-            <div class="btn-group pull-right m-t-15">
+            <!-- <div class="btn-group pull-right m-t-15">
 
                 <a href="{{ route('users.create') }}" type="button" class="btn btn-custom waves-effect waves-light"
                    aria-expanded="false"> إضافة
@@ -21,8 +21,8 @@
                     <li class="divider"></li>
                     <li><a href="#">Separated link</a></li>
                 </ul>
-            </div>
-            <h4 class="page-title">@lang('global.users_management')</h4>
+            </div> -->
+            <h4 class="page-title">مشاهدة مزودى الخدمة</h4>
         </div>
     </div>
 
@@ -41,9 +41,9 @@
                             <i class="fa fa-trash" style="margin-left: 5px"></i> حذف المحدد
                         </a>
 
-                        <a style="float: left;" class="btn btn-info btn-sm getSelectedAndSuspend">
+                        <!-- <a style="float: left;" class="btn btn-info btn-sm getSelectedAndSuspend">
                             <i class="fa fa-users" style="margin-left: 5px"></i> حظر المستخدمين
-                        </a>
+                        </a> -->
                     </div>
                 </div>
 

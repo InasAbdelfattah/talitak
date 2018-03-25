@@ -70,7 +70,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('user/register', 'Api\V1\RegistrationController@store');
 
     // and can login with phone after send activation code successfully.
-    Route::post('activation', 'Api\V1\LoginController@postActivationCode');
+    Route::post('user/activation', 'Api\V1\LoginController@postActivationCode');
 
     // Resend Activation Code
     Route::post('resend/activation/code', 'Api\V1\LoginController@resendActivationCode');
@@ -81,17 +81,13 @@ Route::group(['prefix' => 'v1'], function () {
     // Change password first enter phone number and will check if is correct.
     Route::post('password/forgot', 'Api\V1\ForgotPasswordController@getResetTokens');
 
-
     Route::post('activation/code', 'Api\V1\ResetPasswordController@checkCode');
-
 
     // After arrive reset code send to check is true.
     Route::post('password/check', 'Api\V1\ResetPasswordController@check');
 
-
     // After arrive reset code send to other again and reset password.
     Route::post('password/reset', 'Api\V1\ResetPasswordController@reset');
-
 
     // Resent Reset Code
     Route::post('password/forgot/resend', 'Api\V1\ForgotPasswordController@resendResetPasswordCode');

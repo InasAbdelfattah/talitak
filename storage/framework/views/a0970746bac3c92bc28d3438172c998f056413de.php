@@ -148,6 +148,7 @@
                 
                     <?php endif; ?>
 
+                    <?php if($user->id != 1): ?>
                     <div class="form-group">
                         <label for="pass1">الحالة *</label>
                         <select class="form-control select2" name="is_active">
@@ -163,6 +164,7 @@
                             <option value="0" <?php echo e($user->is_suspend == 0 ? 'selected' : ''); ?>>غير محذور </option>
                         </select>
                     </div>
+                    <?php endif; ?>
 
                     <div class="form-group text-right m-t-20">
                         <button class="btn btn-primary waves-effect waves-light m-t-20" type="submit">

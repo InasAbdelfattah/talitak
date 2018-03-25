@@ -12,6 +12,10 @@ class AbuseController extends Controller
 {
     public function index()
     {
+        if (!Gate::allows('abuses_manage')) {
+            return abort(401);
+        }
+
         $abuses = Abuse::join('users','abuses.user_id','users.id')->join('companies','abuses.company_id','companies.id')->select('abuses.*','users.id as user_id' , 'users.name as username' , 'users.phone as user_phone' , 'companies.id as company_id' , 'companies.name as company_name')->get();
 
         return view('admin.abuses.index',compact('abuses'));
@@ -53,6 +57,10 @@ class AbuseController extends Controller
      */
     public function delete(Request $request)
     {
+        if (!Gate::allows('abuses_manage')) {
+            return abort(401);
+        }
+
         $model = Abuse::findOrFail($request->id);
 
         if ($model->delete()) {
@@ -65,7 +73,7 @@ class AbuseController extends Controller
 
     public function adoptAbuse(Request $request)
     {
-         if (!Gate::allows('abuses_manage')) {
+        if (!Gate::allows('abuses_manage')) {
             return abort(401);
         }
 
@@ -89,5 +97,4 @@ class AbuseController extends Controller
             ]
         ]);
     }
-
 }

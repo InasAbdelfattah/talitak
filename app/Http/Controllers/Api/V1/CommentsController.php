@@ -8,6 +8,7 @@ use App\Events\NotifyAdminJoinApp;
 use App\Events\NotifyUsers;
 use App\Notifications\CommentsNotification;
 use App\User;
+use App\Abuse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -20,9 +21,7 @@ class CommentsController extends Controller
      */
     public function saveComment(Request $request)
     {
-
-
-
+// `parent_id`, `user_id`, `commentable_id`, `commentable_type`, `comment`, `is_active`, `is_approve`, `is_suspend`,
         $company = Company::whereId($request->companyId)->first();
 
         $user = User::byToken($request->api_token);
@@ -38,9 +37,7 @@ class CommentsController extends Controller
             if ($company->comments()->save($comment)) {
 
 //                $message = "لديك تعليق جديد على المنشأة $company->name";
-//
 //                event(new NotifyUsers($user, $company, $message, 0));
-
 
                 return response()->json([
                     'status' => true,
@@ -197,5 +194,23 @@ class CommentsController extends Controller
                 ]);
             }
         }
+    }
+
+    public function abuseComment(Request $request){
+        // `user_id`, `company_id`, `abuseable_id`, `text`, `text`, `is_adopt`,
+        $newModel = new Abuse();
+        $newModel->user_id = $request->user_id ;
+        $newModel->company_id = $request->center_id ;
+        $newModel->abuseable_id = $request->comment_id ;
+        $newModel->abuseable_type = 'App\Comment' ;
+        $newModel->text = $request->text ;
+        $newModel->is_adopt = 0 ;
+        $newModel->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'commentabused',
+            'data' => []
+        ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Support;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 
 class SupportsController extends Controller
 {
@@ -78,7 +79,11 @@ class SupportsController extends Controller
         $support->is_read = 0;
 
         if ($support->save()) {
+            
             $support->created = $support->created_at->format(' Y/m/d  ||  H:i:s ');
+            $msg = Support::find($support->parent_id);
+            Sms::sendActivationCode($support->message , $msg->phone);
+
             return response()->json([
                 'status' => true,
                 'message' => 'لقد تم إرسال الرد بنجاح',

@@ -18,7 +18,6 @@ class ProductsController extends Controller
         $this->public_path = 'files/companies/products/';
     }
 
-
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -37,6 +36,8 @@ class ProductsController extends Controller
 
         $product = new Product;
         $product->name = $request->name;
+        $product->{'name:ar'} = $request->name_ar;
+        $product->{'name:en'} = $request->name_en;
         $product->price = $request->price;
         $product->description = $request->description;
 
@@ -54,10 +55,7 @@ class ProductsController extends Controller
                 'status' => false,
             ]);
         }
-
-
     }
-
 
     public function productsList(Request $request)
     {

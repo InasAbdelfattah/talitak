@@ -149,6 +149,22 @@ class UsersController extends Controller
         }
     }
 
+    public function getUserById($id){
+        $user = User::where('id',$id)->select('id','name','phone','gender','image')->first();
+        if(! $user){
+            return response()->json([
+                'status' => false,
+                'message' => 'مستخدم غير موجود',
+                'data' => null
+            ]);
+        }
+        return response()->json([
+                'status' => true,
+                'message' => 'تم',
+                'data' => $user
+            ]);
+    }
+
 
     public function logout(Request $request)
     {

@@ -48,7 +48,6 @@ class ForgotPasswordController extends Controller
 
         $user = User::wherePhone($request->phone)->first();
         
-
         if (!$user) {
             return response()->json([
                 'status' => false,
@@ -80,6 +79,5 @@ class ForgotPasswordController extends Controller
     {
         return $this->getResetTokens($request);
     }
-
 
 }

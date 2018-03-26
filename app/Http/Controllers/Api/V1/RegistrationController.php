@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
 use UploadImage;
+use Sms;
+
 
 class RegistrationController extends Controller
 {
@@ -53,11 +55,11 @@ class RegistrationController extends Controller
             $user->gender = $request->gender;
             $user->is_invited = $request->is_invited ;
             $user->name = $request->name;
-            $user->email = '';
-            $user->phone = $request->phone;
+            $user->email = $request->email ? $request->email : '';
+            $user->phone = trim($request->phone);
             $user->password = bcrypt(trim($request->password));
             $user->api_token = str_random(60);
-            $code = rand(10000000, 99999999);
+            $code = rand(1000, 9999);
             $code = $user->userCode($code);
             $user->code = $code;
             $user->is_user = 1;
@@ -65,7 +67,15 @@ class RegistrationController extends Controller
             $actionCode = rand(1000, 9999);
             $actionCode = $user->actionCode($actionCode);
             $user->action_code = $actionCode;
-            $user->save() ;
+            $user->address = $request->address ? $request->address : '';
+            $user->lat = $request->lat ? $request->lat : '';
+            $user->lng = $request->lng ? $request->lng : '';
+            $user->save();
+
+            if($user->id && $request->userType != 1){
+                    //send sms to user with activation code
+                Sms::sendActivationCode('activation code:'.$user->action_code , $user->phone);
+            }
 
             if ($request->is_invited == 1) {
 
@@ -78,6 +88,7 @@ class RegistrationController extends Controller
                     $newModel->user_id = $user->id ;
                     $newModel->save();
                 }
+
                 // else{
                 //     return response()->json([
                 //         'status' => true,
@@ -90,6 +101,7 @@ class RegistrationController extends Controller
                 $company = new Company;
                 $company->user_id = $user->id;
                 $company->name = $request->name_ar;
+                $company->nameAr = $request->name_ar;
                 $company->{'name:ar'} = $request->name_ar;
                 $company->{'name:en'} = $request->name_en;
                 $company->{'description:ar'} = $request->description_ar;
@@ -97,10 +109,10 @@ class RegistrationController extends Controller
                 $company->city_id = $request->city;
                 $company->type = $request->providerType ;
 
-                //if ($request->hasFile('document_photo')):
-                if ($request->has('document_photo')):
-                    // $company->document_photo = uploadImage($request, 'document_photo', $this->public_path_docs, 1280, 583);
-                    $company->document_photo = save64Img($request->document_photo , $this->public_path_docs);
+                if ($request->hasFile('document_photo')):
+                //if ($request->has('document_photo')):
+                    $company->document_photo = uploadImage($request, 'document_photo', $this->public_path_docs, 1280, 583);
+                    //$company->document_photo = save64Img($request->document_photo , $this->public_path_docs);
                 endif;
 
                 $company->description = $request->description_ar;

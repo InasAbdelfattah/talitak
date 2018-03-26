@@ -16,7 +16,12 @@ class AbuseController extends Controller
             return abort(401);
         }
 
-        $abuses = Abuse::join('users','abuses.user_id','users.id')->join('companies','abuses.company_id','companies.id')->select('abuses.*','users.id as user_id' , 'users.name as username' , 'users.phone as user_phone' , 'companies.id as company_id' , 'companies.name as company_name')->get();
+        $abuses = Abuse::join('users','abuses.user_id','users.id')->join('companies','abuses.company_id','companies.id')->select('abuses.*','users.id as user_id' , 'users.name as username' , 'users.phone as user_phone' , 'companies.id as company_id' , 'companies.nameAr as company_name')->get();
+        // $abuses->map(function ($q)  {
+        //     $q->name = $q->{'name:ar'};
+            
+
+        // });
 
         return view('admin.abuses.index',compact('abuses'));
         

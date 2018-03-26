@@ -12,7 +12,6 @@ use Validator;
 class ResetPasswordController extends Controller
 {
 
-
     public function reset(Request $request)
     {
         $validator = Validator::make($request->all(), [

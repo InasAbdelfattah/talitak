@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\PostsRequests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 use Auth;
 use Config;
 use Image;

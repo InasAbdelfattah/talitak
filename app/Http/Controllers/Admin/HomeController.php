@@ -15,6 +15,7 @@ use Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use willvincent\Rateable\Rating;
+use Illuminate\Support\Facades\Gate;
 
 class HomeController extends Controller
 {

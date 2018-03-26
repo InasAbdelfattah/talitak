@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\Api\v1;
 
-use App\Sponsor;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Setting;
-use App\Bankaccount;
-use App\Paid_ad;
 use App\User;
 use DB;
 
@@ -37,17 +34,11 @@ class SettingsController extends Controller
             'data' => [
                 'terms' => Setting::getBody('terms'),
                 'about_app_desc' => Setting::getBody('about_app_desc'),
-                'facebook' => Setting::getBody('facebook'),
-                'twitter' => Setting::getBody('twitter'),
-                'instagram' => Setting::getBody('instagram')
-            ],
-            'sponsors' => $this->sponsors()
+                // 'facebook' => Setting::getBody('facebook'),
+                // 'twitter' => Setting::getBody('twitter'),
+                // 'instagram' => Setting::getBody('instagram')
+            ]
         ]);
-    }
-
-    private function sponsors()
-    {
-        return Sponsor::get();
     }
 
 

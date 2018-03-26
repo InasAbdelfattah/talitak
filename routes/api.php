@@ -78,9 +78,10 @@ Route::group(['prefix' => 'v1'], function () {
     // Login after activate account
     Route::post('/user/login', 'Api\V1\LoginController@login');
 
+//change phone first change action code 
     // Change password first enter phone number and will check if is correct.
     Route::post('password/forgot', 'Api\V1\ForgotPasswordController@getResetTokens');
-
+//change phone after entering action code
     Route::post('activation/code', 'Api\V1\ResetPasswordController@checkCode');
 
     // After arrive reset code send to check is true.
@@ -98,62 +99,33 @@ Route::group(['prefix' => 'v1'], function () {
 
 
     // Social Login
-    Route::post('social/login', 'Api\V1\UsersController@socialLogin');
+    //Route::post('social/login', 'Api\V1\UsersController@socialLogin');
 
 
     Route::get('categories', 'Api\V1\CategoriesController@index');
-    Route::get('sub/categories/{id}', 'Api\V1\CategoriesController@getSubCategories');
+    //Route::get('sub/categories/{id}', 'Api\V1\CategoriesController@getSubCategories');
 
 
-    Route::get('daily/offers', 'Api\V1\OffersController@dailyOvers');
+    //Route::get('daily/offers', 'Api\V1\OffersController@dailyOvers');
 
 
     Route::get('general/info', 'Api\V1\SettingsController@generalInfo');
 
     Route::get('/user/{id}', 'Api\V1\UsersController@getUserById');
 
-
-    Route::post('report', 'Api\V1\AbusesController@store');
+    Route::post('report', 'Api\V1\CommentsController@abuseComment');
 
     Route::post('contactus', 'Api\V1\ContactusController@postMessage');
 
-
-    Route::post('advertisement/category/sub', 'Api\V1\AdvertisementsController@getSubCategories');
-    Route::get('brands', 'Api\V1\AdvertisementsController@getBrandsWithTypes');
-    Route::post('advertisement/category/list', 'Api\V1\AdvertisementsController@getAdvertisements');
-    Route::get('advertisement/details', 'Api\V1\AdvertisementsController@getAdvDetails');
-    Route::post('advertisement/image', 'Api\V1\AdvertisementsController@addImage');
-
-
-    Route::post('advertisement/search', 'Api\V1\AdvertisementsController@getCarsAdvertisements');
-    Route::post('advertisement/basic/search', 'Api\V1\AdvertisementsController@search');
-    Route::get('parent/categories', 'Api\V1\CategoriesController@getParentCategory');
-
-
-    Route::post('advertisement/comment', 'Api\V1\AdvertisementsController@getCommentTo');
-    Route::post('advertisement/delete', 'Api\V1\AdvertisementsController@deleteAdv');
-    Route::post('advertisement/status', 'Api\V1\AdvertisementsController@changeAdvStatus');
-    Route::post('advertisement/update', 'Api\V1\AdvertisementsController@updateAdvertisement');
-    Route::post('advertisement/update/image', 'Api\V1\AdvertisementsController@addAdvertisementImage');
-    Route::get('myadvs', 'Api\V1\AdvertisementsController@getMyAdvs');
-    Route::get('similar', 'Api\V1\AdvertisementsController@similarAdvs');
-    Route::get('advertisements/latest', 'Api\V1\AdvertisementsController@getLastAdvs');
-
+    //Route::get('parent/categories', 'Api\V1\CategoriesController@getParentCategory');
 
     Route::get('companies/list', 'Api\V1\CompaniesController@companiesList');
     Route::get('company/details', 'Api\V1\CompaniesController@details');
 
-
     Route::post('company/products/create', 'Api\V1\ProductsController@saveProduct');
     Route::post('company/product/delete', 'Api\V1\ProductsController@delete');
     Route::post('company/product/update', 'Api\V1\ProductsController@update');
-
-    Route::post('company/offer/update', 'Api\V1\OffersController@update');
-    Route::post('company/offers/create', 'Api\V1\OffersController@saveOffer');
-    Route::post('company/offer/delete', 'Api\V1\OffersController@delete');
-
     Route::get('company/products/list', 'Api\V1\ProductsController@productsList');
-
 
 });
 
@@ -177,7 +149,6 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
     Route::post('profile/update', 'Api\V1\UsersController@profileUpdate');
 
     Route::post('password/change', 'Api\V1\UsersController@changePassword');
-
 
     /*DONE*/
     Route::post('companies/complete', 'Api\V1\RegistrationController@companyCompleteData');
@@ -245,7 +216,6 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
     Route::get('conversations/messages', 'Api\V1\AdvertisementsController@messages');
     Route::get('conversations/list', 'Api\V1\ConversationsController@getListOfConversations');
 
-
     Route::post('conversations/asread', 'Api\V1\ConversationsController@markConversationAsRead');
     Route::get('conversations/messages/list', 'Api\V1\ConversationsController@getAllMessages');
     Route::post('conversation/offline', 'Api\V1\ConversationsController@makeUserConversationOffline');
@@ -253,9 +223,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
     Route::post('conversation/delete', 'Api\V1\ConversationsController@deleteConversation');
     Route::post('devices/delete', 'Api\V1\ConversationsController@deleteUserDevices');
 
-
 });
-
 
 Route::get('/test', function () {
     return response()->json([
@@ -266,7 +234,6 @@ Route::get('/test', function () {
         ]
     ]);
 });
-
 
 Route::get('/data', function () {
     // API access key from Google API's Console

@@ -31,7 +31,7 @@ class CategoriesController extends Controller
         $itemId = $request->itemId;
 
         $currentPage = $request->get('page', 1); // Default to 1
-        $query = Category::whereParentId(0);
+        $query = Category::select('id','name_ar','name_en','image')->whereParentId(0);
 
         /**
          * @ If item Id Exists skipping by it.

@@ -15,18 +15,16 @@ class Sms
 
     public static function sendActivationCode($message, $recepientNumber)
     {
-        
-        
             $getdata = http_build_query(
             $fields = array(
-                "Username" => "s12-Athathec",
-                "Password" => "Athathec2018",
+                "Username" => "s12-Talitak",
+                "Password" => "Talitak2018",
                 "Message" => $message,
                 "RecepientNumber" =>  $recepientNumber,
                 "ReplacementList" => "",
                 "SendDateTime" => "0",
                 "EnableDR" => False,
-                "Tagname" => "Athathec",
+                "Tagname" => "Talitak",
                 "VariableList" => "0"
             ));
 
@@ -114,12 +112,6 @@ class Sms
 // //close connection
 //         curl_close($ch);
 
-
-
-
-
-
     }
-
 
 }

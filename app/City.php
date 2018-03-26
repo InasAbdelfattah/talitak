@@ -30,9 +30,9 @@ class City extends Model
         return $this->hasMany(District::class);
     }
 
-    public function languages()
-    {
-        return $this->hasMany(CityTranslation::class ,'city_id');
-    }
+    // public function languages()
+    // {
+    //     return $this->hasMany(CityTranslation::class ,'city_id');
+    // }
 
 }

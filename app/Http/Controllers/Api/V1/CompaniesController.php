@@ -7,7 +7,8 @@ use App\Category;
 use App\User;
 use DB;
 use App\Company;
-use App\Visit;
+use App\Service;
+use App\CompanyWorkDay;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -18,44 +19,56 @@ class CompaniesController extends Controller
         $currentUser = User::whereApiToken($request->api_token)->first();
 
 
-        $company = Company::with('membership', 'images')->whereId($request->companyId)->first();
-
+        $company = Company::with('images')->whereId($request->centerId)->select('id','user_id','category_id','phone','type','city_id','image','document_photo','visits_count')->first();
+        $company->visits_count += 1;
+        $company->save();
 
         $company->user->id;
         $currentUser->id;
 
-        $hasConversation = Conversation::whereHas('users', function ($q) use ($company) {
-            $q->whereId($company->user->id);
-        })->whereHas('users', function ($q) use ($currentUser) {
-            $q->whereId($currentUser->id);
-        })->first();
+        $company->name_ar = $company->{'name:ar'};
+        $company->name_en = $company->{'name:en'};
+        $company->description_ar = $company->{'description:ar'};
+        $company->description_en = $company->{'description:en'};
+        $company->place = $company->place == 0 ? 'منزل' : 'مركز';
+        $company->providerType = $company->type == 0 ? 'فرد' : 'مركز';
+
+        // $hasConversation = Conversation::whereHas('users', function ($q) use ($company) {
+        //     $q->whereId($company->user->id);
+        // })->whereHas('users', function ($q) use ($currentUser) {
+        //     $q->whereId($currentUser->id);
+        // })->first();
 
 
-        $visit = $company->visits()->where([
-            'company_id' => $request->companyId,
-            'ip' => $request->playerId
-        ])->first();
+        // $visit = $company->visits()->where([
+        //     'company_id' => $request->companyId,
+        //     'ip' => $request->playerId
+        // ])->first();
 
-        if (!$visit && $request->playerId) {
-            $view = new Visit;
-            $view->ip = $request->playerId;
-            $company->visits()->save($view);
-        }
+        // if (!$visit && $request->playerId) {
+        //     $view = new Visit;
+        //     $view->ip = $request->playerId;
+        //     $company->visits()->save($view);
+        // }
 
 //        if(auth()->user())
 //        {
-        $company->likes = $company->likes()->where('like', 1)->count();
-        $company->dislike = $company->likes()->where('like', 0)->count();
+        //$company->likes = $company->likes()->where('like', 1)->count();
+        //$company->dislike = $company->likes()->where('like', 0)->count();
+        $company->services = $this->getCompanyServices($company->id);
+        $company->workDays = $this->getCompanyWorkDays($company->id);
+        $company->workDaysCount = $company->workDays()->count();
         $company->favorites = $company->favorites()->count();
-        $company->ratings = $company->ratings()->where('user_id', auth()->id())->count();
+        $company->ratings = $company->rates()->where('user_id', auth()->id())->count();
+        $company->rate = $company->rates()->avg('rate');
         $company->commentsCount = $company->comments()->count();
-        $company->hasConversation = ($hasConversation) ? true : false;
-        if ($hasConversation)
-            $company->conversationId = $hasConversation->id;
+        //$company->hasConversation = ($hasConversation) ? true : false;
+        // if ($hasConversation)
+        //     $company->conversationId = $hasConversation->id;
 
 
 //        }
-        $company->visits = $company->visits()->count();
+        //$company->visits = $company->visits()->count();
 
         /**
          * Return Data Array
@@ -91,8 +104,7 @@ class CompaniesController extends Controller
         $query = Company::orderBy('created_at', 'desc')->select();
 
 
-        $query->where('membership_id', '!=', NULL)
-            ->whereIsAgree(1);
+        $query->whereIsAgree(1);
         /**
          *
          * @@ Get By Name Of Company.
@@ -188,27 +200,32 @@ class CompaniesController extends Controller
 //
 //        }
 
-        $companies = $query->get();
+        $companies = $query->select('id','user_id','category_id','phone','type','city_id','image','document_photo','visits_count')->get();
         $companies->map(function ($q) use ($request) {
-            $q->likes = $q->likes()->where('like', 1)->count();
-            $q->dislike = $q->likes()->where('like', 0)->count();
-            $q->favorites = $q->favorites()->count();
-            $q->currentUserRating = $q->ratings()->where('user_id', auth()->id())->count();
-            $q->ratings = $q->averageRating();
-            $q->visits = $q->visits()->count();
-            $q->phone = ($user = $this->companyCompleteFromUser($q->id)) ? $user->phone : null;
+            //$q->likes = $q->likes()->where('like', 1)->count();
+            //$q->dislike = $q->likes()->where('like', 0)->count();
+            $q->name_ar = $q->{'name:ar'};
+            $q->name_en = $q->{'name:en'};
+            $q->description_ar = $q->{'description:ar'};
+            $q->description_en = $q->{'description:en'};
+            $q->place = $q->place == 0 ? 'منزل' : 'مركز';
+            $q->providerType = $q->type == 0 ? 'فرد' : 'مركز';
+            //$q->favorites = $q->favorites()->count();
+            //$q->currentUserRating = $q->rates()->where('user_id', auth()->id())->count();
+            $q->rate = $q->rates()->avg('rate');
+            //$q->visits = $q->visits()->count();
+            $q->email = ($user = $this->companyCompleteFromUser($q->id)) ? $user->email : null;
             $q->city = $this->getCityForCompany($q->id);
             $q->commentsCount = $this->getCountsForCompany($q->id);
-            $q->membership = $this->getMembershipForCompany($q->id);
+            $q->services = $this->getCompanyServices($q->id);
+            $q->workDays = $this->getCompanyWorkDays($q->id);
 
         });
-
 
         if (isset($request->filterby) && $request->filterby == 'visits') {
             $sorted = $companies->sortByDesc('visits');
             $companies = $sorted->values()->all();
         }
-
 
         if (isset($request->filterby) && $request->filterby == 'rate') {
             $sorted = $companies->sortByDesc('ratings');
@@ -283,7 +300,6 @@ class CompaniesController extends Controller
 
     }
 
-
     /**
      * @param $company
      * @return array|null
@@ -296,6 +312,34 @@ class CompaniesController extends Controller
         return ($company && $company->comments) ? $company->comments->count() : NULL;
     }
 
+    /**
+     * @param $company
+     * @return array|null
+     */
+
+    private function getCompanyServices($company)
+    {
+        $services = Service::where('company_id',$company)->select('id','company_id as centerId')->get();
+        $services->map(function ($q)  {
+            $q->name_ar = $q->{'name:ar'};
+            $q->name_en = $q->{'name:en'};
+            
+
+        });
+        return $services ? $services : NULL;
+    }
+
+    private function getCompanyWorkDays($company)
+    {
+        $workDays = CompanyWorkDay::where('company_id',$company)->select('id','day' ,'from' ,'to' , 'company_id as centerId')->get();
+        $workDays->map(function ($q)  {
+            $q->name_ar = day($q->day);
+            $q->name_en = $q->day;
+            
+
+        });
+        return $workDays ? $workDays : NULL;
+    }
 
     /**
      * @param $company
@@ -332,4 +376,6 @@ class CompaniesController extends Controller
         $company = Company::with('user')->whereId($company)->first();
         return ($company && $company->user) ? $company->user : NULL;
     }
+
+
 }

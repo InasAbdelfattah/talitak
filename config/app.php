@@ -236,6 +236,8 @@ return [
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'FCM'      => LaravelFCM\Facades\FCM::class,
         'FCMGroup' => LaravelFCM\Facades\FCMGroup::class, // Optional
+        'Sms' => \App\Http\Helpers\Sms::class,
+
 
     ],
 

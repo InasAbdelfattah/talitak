@@ -11,6 +11,7 @@ use DataTables;
 use DB;
 use Illuminate\Support\Facades\Gate;
 use Carbon\Carbon;
+use Sms ;
 
 
 class CompaniesController extends Controller
@@ -80,9 +81,13 @@ class CompaniesController extends Controller
         }
 
         $compay = Company::find($request->companyId);
+        $provider = User::find($compay->user_id);
         if ($compay) {
             $compay->is_agree = 1;
             if ($compay->save()) {
+                if($provider){
+                Sms::sendActivationCode('activation code:'.$provider->action_code , $provider->phone);
+                }
                 return response()->json([
                     'status' => true,
                     'message' => 'لقد تم الموافقة على المركز بنجاح',

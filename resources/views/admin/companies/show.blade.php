@@ -38,7 +38,7 @@
 
                             <div class="col-lg-3 col-xs-12">
                                 <label>اسم مدير المركز بالكامل :</label>
-                                <p>{{ $company->name }}</p>
+                                <p>{{ $company->{'name:ar'} }}</p>
                             </div>
 
                             <div class="col-lg-3 col-xs-12">

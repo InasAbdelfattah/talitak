@@ -23,7 +23,6 @@ class UsersController extends Controller
         $this->public_path = 'files/users/';
     }
 
-
     /**
      * Display a listing of User.
      *

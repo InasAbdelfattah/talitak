@@ -36,7 +36,7 @@
 
                             <div class="col-lg-3 col-xs-12">
                                 <label>اسم مدير المركز بالكامل :</label>
-                                <p><?php echo e($company->name); ?></p>
+                                <p><?php echo e($company->{'name:ar'}); ?></p>
                             </div>
 
                             <div class="col-lg-3 col-xs-12">
@@ -107,12 +107,13 @@
                         <thead>
                         <tr>
                             <th>#</th>
-                            <!-- <th>صورة المنتج</th> -->
+                            <th>صورة الخدمة</th>
                             <th>اسم الخدمة</th>
                             <th>نوع مستقبل الخدمة</th>
                             <th>نوع مزود الخدمة</th>
                             <th>مكان الخدمة</th>
-                            <th>الحى</th>
+                            <th>السعر</th>
+                            <!-- <th>الحى</th> -->
                             <th>الخيارات</th>
                         </tr>
                         </thead>
@@ -120,18 +121,24 @@
                         <?php $__currentLoopData = $company->products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $row): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <td>#</td>
-                                <!-- <td>
+                                <td>
                                     <a data-fancybox="gallery"
-                                       href="<?php echo e($helper->getDefaultImage($row->image, request()->root().'/assets/admin/custom/images/default.png')); ?>">
+                                       href="<?php echo e($helper->getDefaultImage(request()->root().'/files/companies/products/'.$row->photo, request()->root().'/assets/admin/custom/images/default.png')); ?>">
                                         <img style="width: 50px; height: 50px; border-radius: 50%"
-                                             src="<?php echo e($helper->getDefaultImage($row->image, request()->root().'/assets/admin/custom/images/default.png')); ?>"/>
+                                             src="<?php echo e($helper->getDefaultImage(request()->root().'/files/companies/products/'.$row->photo, request()->root().'/assets/admin/custom/images/default.png')); ?>"/>
                                     </a>
-                                </td> -->
-                                <td><?php echo e($row->name); ?></td>
-                                <td><?php echo e($row->gender_type == 'male' ? 'رجال' : 'نساء'); ?></td>
+                                </td>
+                                <td><?php echo e($row->{'name:ar'}); ?></td>
+                                <td>
+                                    <?php if( $row->gender_type == 'male'): ?> رجال 
+                                    <?php elseif($row->gender_type == 'female'): ?>نساء
+                                    <?php else: ?> كلاهما
+                                    <?php endif; ?>
+                                </td>
                                 <td><?php echo e($row->provider_type == 'male' ? 'رجال' : 'نساء'); ?></td>
                                 <td><?php echo e($row->service_place == 'center' ? 'مركز' : 'منازل'); ?></td>
-                                <td> <?php if($row->district): ?> <?php echo e($row->district->{'name:ar'}); ?> <?php endif; ?></td>
+                                <td><?php echo e($row->price); ?></td>
+                                <!-- <td> <?php if($row->district): ?> <?php echo e($row->district->{'name:ar'}); ?> <?php endif; ?></td> -->
                                 <td>
                                     <!-- <a href="javascript:;" id="updateRow<?php echo e($row->id); ?>" data-id="<?php echo e($row->id); ?>"
                                        data-url="<?php echo e(route('product.update')); ?>" class="btn btn-xs btn-info"><i class="fa fa-eye"></i></a> -->

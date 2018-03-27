@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Company;
-use App\Product;
+use App\Service;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use UploadImage;
@@ -29,22 +29,32 @@ class ProductsController extends Controller
         /**
          * @ GET company...
          */
-        $company = Company::whereId($request->companyId)->first();
+        $company = Company::whereId($request->centerId)->first();
 
         if (!$company)
             return response()->json(['status' => false, 'message' => 'Company Not Found in System']);
 
-        $product = new Product;
-        $product->name = $request->name;
+        $product = new Service;
+        //$product->name = $request->name_ar;
+        $product->{'description:ar'} = $request->description_ar;
+        $product->{'description:en'} = $request->description_en;
         $product->{'name:ar'} = $request->name_ar;
         $product->{'name:en'} = $request->name_en;
         $product->price = $request->price;
-        $product->description = $request->description;
+        $product->gender_type = $request->gender;
+        $product->provider_type = $request->provider_type;
+        $product->serviceType_id = $request->serviceType_id;
+        $product->service_place = $request->service_place;
+        $product->provider_id = $company->user_id;
+        $product->district_id = 0;
+        $product->seen_count = 0;
+        $product->status = 0;
 
         if ($request->hasFile('image')):
-            $product->image = $request->root() . '/' . $this->public_path . UploadImage::uploadImage($request, 'image', $this->public_path);
+            $product->photo = UploadImage::uploadImage($request, 'image', $this->public_path);
+        else:
+            $product->photo = '';
         endif;
-
 
         if ($company->products()->save($product)) {
             return response()->json([
@@ -76,8 +86,7 @@ class ProductsController extends Controller
 
         $currentPage = $request->get('page', 1); // Default to 1
 
-        $query = Product::with('company')
-            ->where('company_id', $request->companyId)
+        $query = Service::where('company_id', $request->centerId)
             ->orderBy('created_at', 'desc')
             ->select();
 
@@ -98,7 +107,16 @@ class ProductsController extends Controller
          * @ Get All Data Array
          */
 
-        $products = $query->get();
+        $products = $query->select('id','price','photo as image' , 'gender_type as gender' , 'provider_type' ,'service_place' ,'serviceType_id' , 'company_id' , 'created_at')->get();
+
+        $products->map(function ($q)  {
+
+            $q->name_ar = $q->{'name:ar'};
+            $q->name_en = $q->{'name:en'};
+            $q->description_ar = $q->{'description:ar'};
+            $q->description_en = $q->{'description:en'};
+            
+        });
 
         /**
          * Return Data Array
@@ -114,15 +132,48 @@ class ProductsController extends Controller
 
     public function update(Request $request)
     {
-        $model = Product::whereId($request->productId)->first();
+        $model = Service::whereId($request->serviceId)->first();
 
-        $model->name = $request->name;
-        $model->price = $request->price;
-
-        $model->description = $request->description;
-        if ($request->hasFile('image')):
-            $model->image = $request->root() . '/' . $this->public_path . UploadImage::uploadImage($request, 'image', $this->public_path);
+        if($request->has('description_ar') && $request->description_ar != ''):
+            $model->{'description:ar'} = $request->description_ar;
         endif;
+
+        if($request->has('description_en') && $request->description_en != ''):
+            $model->{'description:en'} = $request->description_en;
+        endif;
+
+        if($request->has('name_ar') && $request->name_ar != ''):
+            $model->{'name:ar'} = $request->name_ar;
+        endif;
+
+        if($request->has('name_en') && $request->name_en != ''):
+            $model->{'name:en'} = $request->name_en;
+        endif;
+
+        if($request->has('price') && $request->price != ''):
+            $model->price = $request->price;
+        endif;
+
+        if($request->has('gender') && $request->gender != ''):
+            $model->gender_type = $request->gender;
+        endif;
+
+        if($request->has('provider_type') && $request->provider_type != ''):
+            $model->provider_type = $request->provider_type;
+        endif;
+
+        if($request->has('serviceType_id') && $request->serviceType_id != ''):
+            $model->serviceType_id = $request->serviceType_id;
+        endif;
+
+        if($request->has('service_place') && $request->service_place != ''):
+            $model->service_place = $request->service_place;
+        endif;
+
+        if ($request->hasFile('image') && $request->image != ''):
+            $model->photo = UploadImage::uploadImage($request, 'image', $this->public_path);
+        endif;
+
         if ($model->save()) {
             return response()->json([
                 'status' => true,
@@ -139,19 +190,19 @@ class ProductsController extends Controller
 
     public function delete(Request $request)
     {
-        $model = Product::whereId($request->productId)->first();
+        $model = Service::whereId($request->centerId)->first();
 
         if (!$model) {
             return response()->json([
                 'status' => false,
-                'message' => 'هذا المنتج غير موجود'
+                'message' => 'هذه الخدمة غير موجودة'
             ]);
         }
 
         if ($model->delete()) {
             return response()->json([
                 'status' => true,
-                'message' => 'لقد تم حذف المنتج بنجاح'
+                'message' => 'لقد تم حذف الخدمة بنجاح'
             ]);
         } else {
             return response()->json([

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Company;
 use App\User;
+use App\Rate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
@@ -13,15 +14,16 @@ class RatesController extends Controller
 {
     public function postRating(Request $request)
     {
-
-
+        // `user_id`, `company_id`, `order_id`, `rate`, `rate_from`, `price`
         $user = User::byToken($request->api_token);
 
         $validator = Validator::make($request->all(), [
-            'companyId' => 'required',
+            'centerId' => 'required',
+            'orderId' => 'required',
+            'userId' => 'required',
             'rateValue' => 'required',
+            'price' => 'required',
         ]);
-
 
         if ($validator->fails()) {
             return response()->json([
@@ -30,13 +32,11 @@ class RatesController extends Controller
             ]);
         }
 
-
         if ($request->api_token) {
-            $company = Company::find($request->companyId);
+            $company = Company::find($request->centerId);
 
-            $rating = new Rating;
-            $userRatingBefore = $rating->where('rateable_id', $request->companyId)->where('user_id', auth()->id())->first();
-
+            $rating = new Rate;
+            $userRatingBefore = $rating->where('company_id', $request->centerId)->where('user_id', auth()->id())->first();
 
             if ($userRatingBefore) {
                 $userRatingBefore->rating = $request->rateValue;
@@ -53,9 +53,7 @@ class RatesController extends Controller
             $rating->rating = $request->rateValue;
             $rating->user_id = $user->id;
 
-
             $company->ratings()->save($rating);
-
 
             if ($company->ratings) {
                 // $userCurrent = User::whereId($request->user_id)->whereIsActive(1)->first();

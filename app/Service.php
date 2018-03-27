@@ -3,9 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Dimsav\Translatable\Translatable;
 
 class Service extends Model
 {
+    //use  Rateable;
+    use Translatable;
+
+    public $translatedAttributes = ['name' , 'description'];
+
     public function company()
     {
         return $this->belongsTo(Company::class);

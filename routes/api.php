@@ -20,49 +20,10 @@ use Illuminate\Http\Request;
 
 Route::get('notification/firebase', function () {
 
-
-//// API access key from Google API's Console
-//    define( 'API_ACCESS_KEY', 'AAAARjiKmhE:APA91bEK_5sSQjZe86ELZSlk3bFIqw7QzSf3nHYx-xT2wmSDbl9ojpwAajobZhbSLu_QG4DQT4Uh5cmC8H7YlScGqAo_BP4Bj78zYUb0IxJ4gy6s6Ojtyi3OpHmnMnZORx7m5TDi4ete' );
-//    $registrationIds = array( 'dVRONID1al8:APA91bHdUFINArcXeD50YoxwBKK2spUqw7h_-s0nSsdy_HQDeUqVWWg-02XKyXt4ia3VQ0F_Ij77CawiYq_wZu4WfDVDvHHf52s2Ub_Bg6CZ67Hnc1VTMnoWkEWBYklmsWygRs5MgyLe' );
-//// prep the bundle
-//    $msg = array
-//    (
-//        'message' 	=> 'here is a message. message',
-//        'title'		=> 'This is a title. title',
-//        'subtitle'	=> 'This is a subtitle. subtitle',
-//        'tickerText'	=> 'Ticker text here...Ticker text here...Ticker text here',
-//        'vibrate'	=> 1,
-//        'sound'		=> 1,
-//        'largeIcon'	=> 'large_icon',
-//        'smallIcon'	=> 'small_icon'
-//    );
-//    $fields = array
-//    (
-//        'registration_ids' 	=> $registrationIds,
-//        'data'			=> $msg
-//    );
-//
-//    $headers = array
-//    (
-//        'Authorization: key=' . API_ACCESS_KEY,
-//        'Content-Type: application/json'
-//    );
-//
-//    $ch = curl_init();
-//    curl_setopt( $ch,CURLOPT_URL, 'https://android.googleapis.com/gcm/send' );
-//    curl_setopt( $ch,CURLOPT_POST, true );
-//    curl_setopt( $ch,CURLOPT_HTTPHEADER, $headers );
-//    curl_setopt( $ch,CURLOPT_RETURNTRANSFER, true );
-//    curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
-//    curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $fields ) );
-//    $result = curl_exec($ch );
-//    curl_close( $ch );
-//    echo $result;
-
-
     $push = new \App\Libraries\PushNotification();
     return $push->sendPushNotification();
 });
+
 Route::group(['prefix' => 'v1'], function () {
 
 
@@ -93,21 +54,14 @@ Route::group(['prefix' => 'v1'], function () {
     // Resent Reset Code
     Route::post('password/forgot/resend', 'Api\V1\ForgotPasswordController@resendResetPasswordCode');
 
-
     // Get list of cities
     Route::get('cities', 'Api\V1\CitiesController@index');
-
 
     // Social Login
     //Route::post('social/login', 'Api\V1\UsersController@socialLogin');
 
-
+    //serviceTypes
     Route::get('categories', 'Api\V1\CategoriesController@index');
-    //Route::get('sub/categories/{id}', 'Api\V1\CategoriesController@getSubCategories');
-
-
-    //Route::get('daily/offers', 'Api\V1\OffersController@dailyOvers');
-
 
     Route::get('general/info', 'Api\V1\SettingsController@generalInfo');
 
@@ -119,29 +73,26 @@ Route::group(['prefix' => 'v1'], function () {
 
     //Route::get('parent/categories', 'Api\V1\CategoriesController@getParentCategory');
 
-    Route::get('companies/list', 'Api\V1\CompaniesController@companiesList');
-    Route::get('company/details', 'Api\V1\CompaniesController@details');
+    //centers
+    Route::get('centers/list', 'Api\V1\CompaniesController@companiesList');
+    Route::get('center/details', 'Api\V1\CompaniesController@details');
 
-    Route::post('company/products/create', 'Api\V1\ProductsController@saveProduct');
-    Route::post('company/product/delete', 'Api\V1\ProductsController@delete');
-    Route::post('company/product/update', 'Api\V1\ProductsController@update');
-    Route::get('company/products/list', 'Api\V1\ProductsController@productsList');
+    //center services 
+    Route::post('center/services/create', 'Api\V1\ProductsController@saveProduct');
+    Route::post('center/service/delete', 'Api\V1\ProductsController@delete');
+    Route::post('center/service/update', 'Api\V1\ProductsController@update');
+    Route::get('center/services/list', 'Api\V1\ProductsController@productsList');
+
+    //center work days 
+    Route::post('center/workDays/create', 'Api\V1\CenterWorkDaysController@saveWorkDay');
+    Route::post('center/workDays/delete', 'Api\V1\CenterWorkDaysController@delete');
+    Route::post('center/workDays/update', 'Api\V1\CenterWorkDaysController@update');
+    Route::get('center/workDays/list', 'Api\V1\CenterWorkDaysController@list');
 
 });
 
-
 Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
 
-    /**
-     * Categories Routing
-     *  1- Get all categories.
-     *  2- Get Category By ID
-     */
-
-//    Route::get('categories/{id?}', 'Api\V1\CategoriesController@index');
-
-
-    ## Done
     Route::post('/rating', 'Api\V1\RatesController@postRating');
 
     Route::get('profile', 'Api\V1\UsersController@profile');
@@ -157,7 +108,6 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
     Route::post('comment/delete', 'Api\V1\CommentsController@deleteComment');
     Route::get('comments/list', 'Api\V1\CommentsController@commentList');
 
-
     /**
      * Favorite Company
      */
@@ -171,7 +121,6 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
      */
 
     Route::get('favorites/user', 'Api\V1\FavoritesController@getFavoriteListForUser');
-
 
     /**
      * Supports Controllers Routes

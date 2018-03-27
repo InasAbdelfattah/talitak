@@ -22,7 +22,7 @@ class CommentsController extends Controller
     public function saveComment(Request $request)
     {
 // `parent_id`, `user_id`, `commentable_id`, `commentable_type`, `comment`, `is_active`, `is_approve`, `is_suspend`,
-        $company = Company::whereId($request->companyId)->first();
+        $company = Company::whereId($request->centerId)->first();
 
         $user = User::byToken($request->api_token);
         if ($request->comment) {

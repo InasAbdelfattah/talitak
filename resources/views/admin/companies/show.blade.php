@@ -109,12 +109,13 @@
                         <thead>
                         <tr>
                             <th>#</th>
-                            <!-- <th>صورة المنتج</th> -->
+                            <th>صورة الخدمة</th>
                             <th>اسم الخدمة</th>
                             <th>نوع مستقبل الخدمة</th>
                             <th>نوع مزود الخدمة</th>
                             <th>مكان الخدمة</th>
-                            <th>الحى</th>
+                            <th>السعر</th>
+                            <!-- <th>الحى</th> -->
                             <th>الخيارات</th>
                         </tr>
                         </thead>
@@ -122,18 +123,24 @@
                         @foreach($company->products  as $row)
                             <tr>
                                 <td>#</td>
-                                <!-- <td>
+                                <td>
                                     <a data-fancybox="gallery"
-                                       href="{{ $helper->getDefaultImage($row->image, request()->root().'/assets/admin/custom/images/default.png') }}">
+                                       href="{{ $helper->getDefaultImage(request()->root().'/files/companies/products/'.$row->photo, request()->root().'/assets/admin/custom/images/default.png') }}">
                                         <img style="width: 50px; height: 50px; border-radius: 50%"
-                                             src="{{ $helper->getDefaultImage($row->image, request()->root().'/assets/admin/custom/images/default.png') }}"/>
+                                             src="{{ $helper->getDefaultImage(request()->root().'/files/companies/products/'.$row->photo, request()->root().'/assets/admin/custom/images/default.png') }}"/>
                                     </a>
-                                </td> -->
-                                <td>{{ $row->name }}</td>
-                                <td>{{ $row->gender_type == 'male' ? 'رجال' : 'نساء' }}</td>
+                                </td>
+                                <td>{{ $row->{'name:ar'} }}</td>
+                                <td>
+                                    @if( $row->gender_type == 'male') رجال 
+                                    @elseif($row->gender_type == 'female')نساء
+                                    @else كلاهما
+                                    @endif
+                                </td>
                                 <td>{{ $row->provider_type == 'male' ? 'رجال' : 'نساء' }}</td>
                                 <td>{{ $row->service_place == 'center' ? 'مركز' : 'منازل' }}</td>
-                                <td> @if($row->district) {{$row->district->{'name:ar'} }} @endif</td>
+                                <td>{{ $row->price }}</td>
+                                <!-- <td> @if($row->district) {{$row->district->{'name:ar'} }} @endif</td> -->
                                 <td>
                                     <!-- <a href="javascript:;" id="updateRow{{ $row->id }}" data-id="{{ $row->id }}"
                                        data-url="{{ route('product.update')  }}" class="btn btn-xs btn-info"><i class="fa fa-eye"></i></a> -->

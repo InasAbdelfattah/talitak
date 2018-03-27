@@ -377,5 +377,4 @@ class CompaniesController extends Controller
         return ($company && $company->user) ? $company->user : NULL;
     }
 
-
 }

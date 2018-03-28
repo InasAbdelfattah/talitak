@@ -14,7 +14,8 @@ use App\Http\Controllers\Controller;
 use Validator;
 use UploadImage;
 use Sms;
-
+use Auth;
+ 
 
 class RegistrationController extends Controller
 {
@@ -39,8 +40,8 @@ class RegistrationController extends Controller
             'name' => 'required|min:3|max:255',
             'phone' => 'required|regex:/(05)[0-9]{8}/|unique:users,phone',
             'password' => 'required|confirmed|min:3|max:255',
-            'document_photo' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-            'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            //'document_photo' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            //'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -73,6 +74,8 @@ class RegistrationController extends Controller
             $user->lat = $request->lat ? $request->lat : '';
             $user->lng = $request->lng ? $request->lng : '';
             $user->save();
+
+            $access_token = $user->createToken($request->name)->accessToken;
 
             if($user->id && $request->userType != 1){
                     //send sms to user with activation code
@@ -109,7 +112,7 @@ class RegistrationController extends Controller
                 $company->{'description:ar'} = $request->description_ar;
                 $company->{'description:en'} = $request->description_en;
                 $company->city_id = $request->city;
-                $company->type = $request->providerType ;
+                $company->type = $request->providerType;
 
                 if ($request->hasFile('document_photo')):
                 //if ($request->has('document_photo')):
@@ -159,14 +162,17 @@ class RegistrationController extends Controller
                     return response()->json([
                         'status' => true,
                         'data' => $user,
-                        'code' => $user->action_code
+                        'code' => $user->action_code ,
+                        'token' => $access_token
                     ]);
                 }
             } else {
                 return response()->json([
                     'status' => true,
                     'data' => $user,
-                    'code' => $user->action_code
+                    'code' => $user->action_code,
+                    'token' => $access_token
+
                 ]);
             }
 

@@ -6,6 +6,7 @@ use App\Company;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Validator ; 
 
 class FavoritesController extends Controller
 {
@@ -17,14 +18,28 @@ class FavoritesController extends Controller
      */
     public function favoriteCompany(Request $request)
     {
+        $rules = [
+            'centerId' => 'integer|required',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+
+            $error_arr = validateRules($validator->errors(), $rules);
+            return response()->json(['status'=>false,'data' => $error_arr]);
+        }
+
         $user = auth()->user();
+
         try {
             if ($request->type == 1):
-                $user->favorites()->syncWithoutDetaching($request->companyId);
+                $user->favorites()->syncWithoutDetaching($request->centerId);
             else:
-                $user->favorites()->detach($request->companyId);
+                $user->favorites()->detach($request->centerId);
             endif;
 
+            
             return response()->json([
                 'status' => true,
                 'message' => 'successaddtofavorite',
@@ -44,7 +59,8 @@ class FavoritesController extends Controller
 
     public function getFavoriteListForUser(Request $request)
     {
-        $user = User::whereApiToken($request->api_token)->first();
+
+        $user = auth()->user();
         $arrs = [];
         foreach ($user->favorites as $row) {
             $arrs[] = $row->id;
@@ -92,82 +108,5 @@ class FavoritesController extends Controller
 
 
     }
-
-
-//    public function favorite(Request $request)
-//    {
-//        $user = User::whereApiToken($request->api_token)->first();
-//        try {
-//            $user->favorites()->syncWithoutDetaching($request->advId);
-//            return response()->json([
-//                'status' => true,
-//                'message' => 'successaddtofavorite',
-//                'data' => []
-//            ]);
-//
-//        } catch (QueryException $e) {
-//
-//            return response()->json([
-//                'status' => false,
-//                'message' => 'erroraddtofavorite',
-//                'data' => []
-//            ]);
-//        }
-//    }
-//
-//
-//    public function unfavorite(Request $request)
-//    {
-//        $user = User::whereApiToken($request->api_token)->first();
-//        try {
-//
-//            $user->favorites()->detach($request->advId);
-//            return response()->json([
-//                'status' => true,
-//                'message' => 'successremovefromfavorite',
-//                'data' => []
-//            ]);
-//        } catch (QueryException $e) {
-//
-//            return response()->json([
-//                'status' => false,
-//                'message' => 'errorremovefromfavorite',
-//                'data' => []
-//            ]);
-//        }
-//    }
-//
-//
-//    public function favoritesList(Request $request, $pageSize = 15)
-//    {
-//        $user = User::whereApiToken($request->api_token)
-//            ->with('favorites')
-//            ->first();
-//
-//
-//        $favs = $user->favorites;
-//        $favs->map(function ($q)  {
-//            $q->names = $this->getLangsNames($q->id);
-//
-//
-//            $q->cities = $this->getCityNames($q->id);
-//
-//            return $q;
-//        });
-//
-//
-//
-//        if ($favs->count() > 0)
-//            return response()->json([
-//                'status' => true,
-//                'data' => $this->paginate($favs, $request->pageSize, $request->page)
-//            ]);
-//        else
-//            return response()->json([
-//                'status' => true,
-//                'data' => $this->paginate($favs, $request->pageSize, $request->page)
-//            ]);
-//    }
-
 
 }

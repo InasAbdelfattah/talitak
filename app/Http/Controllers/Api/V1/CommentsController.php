@@ -11,6 +11,8 @@ use App\User;
 use App\Abuse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Auth;
+use Validator;
 
 class CommentsController extends Controller
 {
@@ -21,10 +23,24 @@ class CommentsController extends Controller
      */
     public function saveComment(Request $request)
     {
-// `parent_id`, `user_id`, `commentable_id`, `commentable_type`, `comment`, `is_active`, `is_approve`, `is_suspend`,
+
+        $rules = [
+            'centerId' => 'integer|required',
+            'comment' => 'required|string|min:2',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+
+            $error_arr = validateRules($validator->errors(), $rules);
+            return response()->json(['status'=>false,'data' => $error_arr]);
+        }
+
         $company = Company::whereId($request->centerId)->first();
 
         $user = User::byToken($request->api_token);
+        //$user = Auth::user();
         if ($request->comment) {
             $comment = new Comment;
             $comment->comment = $request->comment;
@@ -32,6 +48,7 @@ class CommentsController extends Controller
                 $comment->parent_id = $request->parent_id;
             else
                 $comment->parent_id = 0;
+
             $comment->user_id = $user->id;
 
             if ($company->comments()->save($comment)) {
@@ -72,6 +89,20 @@ class CommentsController extends Controller
     public function updateComment(Request $request)
     {
 
+        $rules = [
+            'commentId' => 'integer|required',
+            'comment' => 'required|string|min:2',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+
+            $error_arr = validateRules($validator->errors(), $rules);
+            return response()->json(['status'=>false,'data' => $error_arr]);
+        }
+
+
         $comment = Comment::whereId($request->commentId)->first();
 
         if (!$comment) {
@@ -107,6 +138,17 @@ class CommentsController extends Controller
 
     public function commentList(Request $request)
     {
+        $rules = [
+            'centerId' => 'integer|required',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+
+            $error_arr = validateRules($validator->errors(), $rules);
+            return response()->json(['status'=>false,'data' => $error_arr]);
+        }
         /**
          * Set Default Value For Skip Count To Avoid Error In Service.
          * @ Default Value 15...
@@ -125,7 +167,7 @@ class CommentsController extends Controller
         $currentPage = $request->get('page', 1); // Default to 1
 
         $query = Comment::with('user')
-            ->where('commentable_id', $request->companyId)
+            ->where('commentable_id', $request->centerId)
             ->orderBy('created_at', 'desc')
             ->select();
 
@@ -169,6 +211,18 @@ class CommentsController extends Controller
      */
     public function deleteComment(Request $request)
     {
+        $rules = [
+            'commentId' => 'integer|required',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+
+            $error_arr = validateRules($validator->errors(), $rules);
+            return response()->json(['status'=>false,'data' => $error_arr]);
+        }
+
         $comment = Comment::whereId($request->commentId)->first();
         if (!$comment) {
             return response()->json([

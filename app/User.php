@@ -6,12 +6,13 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Passport\HasApiTokens;
 //use App\Notifications\MyAdminResetPassword as ResetPasswordNotification;
 
 
 class User extends Authenticatable
 {
-    use Notifiable , HasRolesAndAbilities;
+    use Notifiable , HasRolesAndAbilities , HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -101,8 +102,6 @@ class User extends Authenticatable
         return $this->hasOne('App\Company', 'user_id');
     }
 
-    
-
     public static function scopeByToken($query, $token)
     {
 
@@ -139,6 +138,11 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Rate')->where('rate_from','provider');
 
+    }
+
+    public function favorites()
+    {
+        return $this->belongsToMany(Company::class, 'favourites');
     }
 
     public static function actionCode($code)

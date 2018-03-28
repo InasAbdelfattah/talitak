@@ -63,6 +63,8 @@ class LoginController extends Controller
                 auth()->user()->save();
             }
 
+
+
             $this->manageDevices($request, auth()->user());
             $this->makeUserOnline(auth()->user());
 

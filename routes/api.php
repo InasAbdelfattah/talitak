@@ -24,6 +24,7 @@ Route::get('notification/firebase', function () {
     return $push->sendPushNotification();
 });
 
+
 Route::group(['prefix' => 'v1'], function () {
 
 
@@ -112,8 +113,8 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
      * Favorite Company
      */
 
-    Route::post('company/favorite', 'Api\V1\FavoritesController@favoriteCompany');
-    Route::post('company/like', 'Api\V1\likesController@likeCompany');
+    // add and remove user favourite depending on type request
+    Route::post('center/favorite', 'Api\V1\FavoritesController@favoriteCompany');
     Route::post('upload/image', 'Api\V1\ImagesController@postImage');
 
     /**
@@ -137,40 +138,8 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
     Route::get('notifications', 'Api\V1\NotificationsController@getUserNotifications');
     Route::post('notification/delete', 'Api\V1\NotificationsController@delete');
 
-
-//    Route::post('ad/follow', 'Api\V1\AdvertisementsController@following');
-//    Route::post('ad/unfollow', 'Api\V1\AdvertisementsController@unfollowing');
-//    Route::get('ad/following', 'Api\V1\AdvertisementsController@followsList');
-
-
 //    Route::get('favorites/category', 'Api\V1\CategoriesController@categoriesFavoriteList');
 
-
-//    Route::post('ad/favorite', 'Api\V1\AdvertisementsController@favorite');
-//    Route::post('ad/unfavorite', 'Api\V1\AdvertisementsController@unfavorite');
-//    Route::get('ad/favorites', 'Api\V1\AdvertisementsController@favoritesList');
-
-
-    Route::post('conversations', 'Api\V1\ConversationsController@sendMessage');
-
-    /**
-     * Comment Follow
-     */
-
-    Route::get('counts/list', 'Api\V1\SettingsController@countList');
-
-    Route::post('comment/follow', 'Api\V1\AdvertisementsController@followComment');
-    Route::post('comment/unfollow', 'Api\V1\AdvertisementsController@unfollowComment');
-    Route::get('comment/follow/list', 'Api\V1\AdvertisementsController@followCommentList');
-    Route::get('conversations/messages', 'Api\V1\AdvertisementsController@messages');
-    Route::get('conversations/list', 'Api\V1\ConversationsController@getListOfConversations');
-
-    Route::post('conversations/asread', 'Api\V1\ConversationsController@markConversationAsRead');
-    Route::get('conversations/messages/list', 'Api\V1\ConversationsController@getAllMessages');
-    Route::post('conversation/offline', 'Api\V1\ConversationsController@makeUserConversationOffline');
-
-    Route::post('conversation/delete', 'Api\V1\ConversationsController@deleteConversation');
-    Route::post('devices/delete', 'Api\V1\ConversationsController@deleteUserDevices');
 
 });
 

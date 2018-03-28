@@ -19,6 +19,7 @@ class UsersController extends Controller
     {
         $this->public_path = 'files/companies/';
         $this->public_path_user = 'files/users/';
+        $this->public_path_docs = 'files/docs/';
     }
 
 
@@ -29,7 +30,13 @@ class UsersController extends Controller
     public function profile(Request $request)
     {
 
-        $user = User::with('companies.city')->whereApiToken($request->api_token)->first();
+        $user = User::with('company.city')->whereApiToken($request->api_token)->first();
+        $user->company->name_en = $user->company->{'name:en'};
+        $user->company->name_ar = $user->company->{'name:ar'};
+        $user->company->description_en = $user->company->{'description:en'};
+        $user->company->description_ar = $user->company->{'description:ar'};
+        $user->company->city->name_ar = $user->company->city->{'name:ar'};
+        $user->company->city->name_en = $user->company->city->{'name:en'};
         return response()->json([
             'status' => true,
             'data' => $user
@@ -40,8 +47,8 @@ class UsersController extends Controller
 
     public function profileUpdate(Request $request)
     {
-        $user = User::whereApiToken($request->api_token)->first();
-
+        $user = auth()->user();
+        //$user = User::whereApiToken($request->api_token)->first();
 
         // Get Input
         $postData = $this->postData($request);
@@ -58,33 +65,81 @@ class UsersController extends Controller
         // Check Validate
         if ($valResult->passes()) {
 
-
-            $user->username = $request->name;
-            $user->email = $request->email;
-            $user->phone = $request->mobile;
-
-            if ($request->hasFile('userImage')):
-                $user->image = $request->root() . '/' . $this->public_path_user . UploadImage::uploadImage($request, 'userImage', $this->public_path_user);
+            if($request->has('username') && $request->username != ''):
+                $user->name = $request->username;
             endif;
 
-            if ($user->save() && $user->is_user == 1) {
-                $company = $user->companies->first();
-                $company->name = $request->name;
-                $company->address = $request->address;
-                $company->description = $request->description;
-                $company->lat = $request->lat;
-                $company->lng = $request->lng;
-                $company->category_id = $request->category;
-                $company->city_id = $request->city;
-                $company->facebook = $request->facebook;
-                $company->twitter = $request->twitter;
-                $company->google = $request->google;
+            if($request->has('user_email') && $request->user_email != ''):
+                $user->email = $request->user_email;
+            endif;
+
+            if($request->has('user_phone') && $request->user_phone != ''):
+                $user->phone = $request->user_phone;
+            endif;
+
+            if ($request->hasFile('userImage')):
+                $user->image = UploadImage::uploadImage($request, 'userImage', $this->public_path_user);
+            endif;
+
+            if ($user->save() && $user->is_provider == 1) {
+                $company = $user->company->first();
+
+                if($request->has('name_ar') && $request->name_ar != ''):
+                    $company->{'name:ar'} = $request->name_ar;
+                    $company->nameAr = $request->name_ar;
+                endif;
+
+                if($request->has('name_en') && $request->name_en != ''):
+                    $company->{'name:en'} = $request->name_en;
+                endif;
+
+                if($request->has('description_ar') && $request->description_ar != ''):
+                    $company->{'description:ar'} = $request->description_ar;
+                endif;
+
+                if($request->has('description_en') && $request->description_en != ''):
+                    $company->{'description:en'} = $request->description_en;
+                endif;
+
+                if($request->has('city') && $request->city != ''):
+                    $company->city_id = $request->city;
+                endif;
+
+                if($request->has('providerType') && $request->providerType != ''):
+                    $company->type = $request->providerType;
+                endif;
+
+                if ($request->hasFile('document_photo')):
+                //if ($request->has('document_photo')):
+                    $company->document_photo = uploadImage($request, 'document_photo', $this->public_path_docs, 1280, 583);
+                    //$company->document_photo = save64Img($request->document_photo , $this->public_path_docs);
+                endif;
+
+                if($request->has('address') && $request->address != ''):
+                    $company->address = $request->address;
+                endif;
+
+                if($request->has('lat') && $request->lat != ''):
+                    $company->lat = $request->lat;
+                endif;
+
+                if($request->has('lng') && $request->lng != ''):
+                    $company->lng = $request->lng;
+                endif;
+
+                if($request->has('category') && $request->category != ''):
+                    $company->category_id = $request->category;
+                endif;
 
                 if ($request->hasFile('image')):
-                    $company->image = $request->root() . '/' . $this->public_path . UploadImage::uploadImage($request, 'image', $this->public_path);
+                    $company->image = UploadImage::uploadImage($request,'image', $this->public_path);
                 endif;
 
                 if ($company->save()) {
+                    $user->company->name_en = $user->company->{'name:en'};
+                    $user->company->name_ar = $user->company->{'name:ar'};
+                    $user->company->description_en = $user->company->{'description:en'};
+                    $user->company->description_ar = $user->company->{'description:ar'};
                     return response()->json([
                         'status' => true,
                         'data' => $user,
@@ -159,21 +214,29 @@ class UsersController extends Controller
             ]);
         }
         return response()->json([
-                'status' => true,
-                'message' => 'تم',
-                'data' => $user
-            ]);
+            'status' => true,
+            'message' => 'تم',
+            'data' => $user
+        ]);
     }
 
 
     public function logout(Request $request)
     {
+        
         // Get User By Api Token
+        //$user = auth()->user();
+
         $user = User::where('api_token', $request->api_token)->first();
+        if(!$user){
+            return response()->json([
+                'status' => false,
+            ]);
+        }
 
         // Check if user exist and have devices
 
-        //@@ then delete device Received from Resquest (PLAYESID)
+        //@@ then delete device Received from Resquest (PLAYERID)
         if ($user && $user->devices):
             $user->devices()->where('device', $request->playerId)->delete();
             return response()->json([
@@ -181,15 +244,12 @@ class UsersController extends Controller
             ]);
 
         else :
-
             return response()->json([
                 'status' => false,
-
             ]);
 
         endif;
     }
-
 
     /**
      * @param $request
@@ -198,8 +258,9 @@ class UsersController extends Controller
     private function postData($request)
     {
         return [
-            'username' => $request->name,
-            'mobile' => $request->mobile,
+            'username' => $request->username,
+            'phone' => $request->user_phone,
+            'email' => $request->user_email,
         ];
     }
 
@@ -209,8 +270,9 @@ class UsersController extends Controller
     private function valRules($id)
     {
         return [
-            'username' => 'required|unique:users,username,' . $id,
-            'mobile' => 'required|unique:users,phone,' . $id,
+            //'username' => 'required',
+            'phone' => 'regex:/(05)[0-9]{8}/|unique:users,phone,' . $id,
+            'password' =>'confirmed'
         ];
     }
 
@@ -220,8 +282,8 @@ class UsersController extends Controller
     private function valMessages()
     {
         return [
-            'mobile.required' => trans('global.field_required'),
-            'mobile.unique' => trans('global.unique_phone'),
+            'phone.required' => trans('global.field_required'),
+            'phone.unique' => trans('global.unique_phone'),
             'password.required' => trans('global.field_required'),
             'password_confirmation.required' => trans('global.field_required'),
             'password_confirmation.same' => trans('global.password_not_confirmed'),

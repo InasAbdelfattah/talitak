@@ -22,7 +22,7 @@ class City extends Model
 
     public function centers()
     {
-        return $this->hasMany(Center::class);
+        return $this->hasMany(Company::class);
     }
 
     public function districts()

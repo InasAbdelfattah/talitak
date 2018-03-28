@@ -97,7 +97,7 @@ class Company extends Model
 
     public function favorites()
     {
-        return $this->hasMany('App\Favourite');
+        return $this->belongsToMany(User::class, 'favourites');
     }
 
     public function workDays()

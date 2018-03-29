@@ -14,24 +14,26 @@ class ResetPasswordController extends Controller
 
     public function reset(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-                'reset_code' => 'required',
-                'phone' => 'required',
-                'password' => 'required',
-                'password_confirmation' => 'required|same:password']
-        );
+
+        $rules = [
+            'reset_code' => 'required',
+            'phone' => 'required|regex:/(05)[0-9]{8}/',
+            'password' => 'required|confirmed',
+            //'password_confirmation' => 'required|same:password'
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors()
-            ]);
+
+            $error_arr = validateRules($validator->errors(), $rules);
+            return response()->json(['status'=>false,'data' => $error_arr]);
         }
 
         $user = User::whereActionCode($request->reset_code)->where('phone', $request->phone)
             ->first();
         if ($user) {
-            $user->password = bcrypt($request->password);
+            $user->password = bcrypt(trim($request->password));
             $user->save();
             return response()->json([
                 'status' => true,
@@ -42,7 +44,7 @@ class ResetPasswordController extends Controller
             return response()->json([
                 'status' => false,
                 'data' => null,
-                'message' => 'Reset Code is invalid.',
+                'message' => 'Reset Code or phone is invalid.',
             ]);
         }
     }

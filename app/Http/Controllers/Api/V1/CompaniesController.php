@@ -18,7 +18,6 @@ class CompaniesController extends Controller
     {
         $currentUser = User::whereApiToken($request->api_token)->first();
 
-
         $company = Company::with('images')->whereId($request->centerId)->select('id','user_id','category_id','phone','type','city_id','image','document_photo','visits_count')->first();
         $company->visits_count += 1;
         $company->save();
@@ -336,7 +335,6 @@ class CompaniesController extends Controller
             $q->name_ar = day($q->day);
             $q->name_en = $q->day;
             
-
         });
         return $workDays ? $workDays : NULL;
     }

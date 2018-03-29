@@ -59,7 +59,7 @@
 
                             <td><?php if(user($row->provider_id)): ?><?php echo e(user($row->provider_id)->name); ?><?php endif; ?></td>
                             <td><?php echo e($row->orders_count); ?></td>
-                            <td id="app_ratio<?php echo e($row->id); ?>"> <?php echo e($row->net_app_ratio); ?> </td>
+                            <td id="appRatio<?php echo e($row->id); ?>"> <?php echo e($row->net_app_ratio); ?> </td>
                             <td id="paid<?php echo e($row->id); ?>"><?php echo e($row->paid); ?></td>
                             <td id="remain<?php echo e($row->id); ?>"><?php echo e($row->remain); ?></td>
                             <td> <?php echo e($row->pay_status == 1 ? 'نعم' : 'لا'); ?> </td>
@@ -279,7 +279,9 @@
 
                         $("#currentRow" + data.id).html('تم حفظ حالة الدفع');
                         $("#currentRow" + data.id).addClass('btn-danger').removeClass('btn-success');
-                        $("#paid" + data.id).html('تم حفظ حالة الدفع');
+                        $("#paid" + data.id).html(data.paid);
+                        $("#remain" + data.id).html(data.remain);
+                        $("#appRatio" + data.id).html(data.appRatio);
                         setTimeout(function () {
                             $('#currentRowOn' + data.id).parents('table').DataTable()
                                 .row($('#currentRowOn' + data.id))

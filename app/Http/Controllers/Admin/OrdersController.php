@@ -171,7 +171,7 @@ class OrdersController extends Controller
         
             if($request ->is_confirmed == 1){
 
-                $finance->paid = $finance->net_app_ratio ;
+                $finance->paid = $finance->paid + $finance->net_app_ratio ;
                 $finance->net_app_ratio = 0 ;
                 $finance->remain = 0 ;
                 
@@ -179,7 +179,7 @@ class OrdersController extends Controller
 
                 if($request->paid != ''){
 
-                    $finance->paid = $request->paid ;
+                    $finance->paid = $finance->paid + $request->paid ;
                     $finance->remain = $finance->net_app_ratio - $request->paid ;
 
                 }else{
@@ -193,7 +193,11 @@ class OrdersController extends Controller
                 return response()->json([
                     'status' => true,
                     'message' => 'تم الحفظ',
-                    'id' => $finance->id
+                    'id' => $finance->id,
+                    'paid' => $finance->paid ,
+                    'remain' =>$finance->remain,
+                    'appRatio' =>$finance->net_app_ratio
+
                 ]);
             }
         } else {

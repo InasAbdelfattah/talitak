@@ -115,7 +115,6 @@ class Company extends Model
 
     }
 
-
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

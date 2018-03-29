@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Hash;
 use Validator;
 use UploadImage;
+use Sms;
 
 class UsersController extends Controller
 {
@@ -75,6 +76,9 @@ class UsersController extends Controller
 
             if($request->has('user_phone') && $request->user_phone != ''):
                 $user->phone = $request->user_phone;
+                $reset_code = rand(1000, 9999);
+                $user->action_code = $user->actionCode($reset_code);
+                Sms::sendActivationCode('activation code:'.$user->action_code , $user->phone);
             endif;
 
             if ($request->hasFile('userImage')):

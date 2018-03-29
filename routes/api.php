@@ -110,6 +110,13 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
     Route::get('comments/list', 'Api\V1\CommentsController@commentList');
 
     /**
+     * orders
+     */
+    Route::get('orders/provider-orders', 'Api\V1\OrderController@providerOrders');    
+    Route::post('orders/pay-app-ratio', 'Api\V1\OrderController@payAppRatio');    
+    Route::post('orders/save-new-order', 'Api\V1\OrderController@saveOrder');    
+
+    /**
      * Favorite Company
      */
 

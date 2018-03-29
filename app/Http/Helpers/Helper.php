@@ -9,7 +9,7 @@
     }
 
     function day($key){
-        $days_arr = ['saturday'=>'السبت' , 'sunday'=>'الأحد' , 'monday'=>'الإثنين' ,'tuesday'=>'الثلاثاء' , 'wednesday'=>'الأربعاء' , 'thursday'=>'الخميس' , 'friday'=>'الجمعة'] ;
+        $days_arr = ['sat'=>'السبت' , 'sun'=>'الأحد' , 'mon'=>'الإثنين' ,'tue'=>'الثلاثاء' , 'wed'=>'الأربعاء' , 'thu'=>'الخميس' , 'fri'=>'الجمعة'] ;
          return $days_arr[$key];
     }
 

@@ -10,6 +10,7 @@ use Validator;
 use Auth;
 use \App\Device;
 use App\Http\Helpers\Main;
+use Sms;
 
 class LoginController extends Controller
 {
@@ -180,6 +181,8 @@ class LoginController extends Controller
             $activation_code = $user->actionCode($code);
             $user->action_code = $activation_code;
             if ($user->save()) {
+
+                Sms::sendActivationCode('activation code:'.$user->action_code , $user->phone);
 
                 return response()->json([
                     'status' => true,

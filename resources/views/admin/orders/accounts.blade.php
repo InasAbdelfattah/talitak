@@ -79,7 +79,7 @@
 
                             <td>@if(user($row->provider_id)){{ user($row->provider_id)->name }}@endif</td>
                             <td>{{ $row->orders_count }}</td>
-                            <td id="app_ratio{{ $row->id }}"> {{$row->net_app_ratio}} </td>
+                            <td id="appRatio{{ $row->id }}"> {{$row->net_app_ratio}} </td>
                             <td id="paid{{ $row->id }}">{{$row->paid}}</td>
                             <td id="remain{{ $row->id }}">{{$row->remain}}</td>
                             <td> {{ $row->pay_status == 1 ? 'نعم' : 'لا' }} </td>
@@ -298,7 +298,9 @@
 
                         $("#currentRow" + data.id).html('تم حفظ حالة الدفع');
                         $("#currentRow" + data.id).addClass('btn-danger').removeClass('btn-success');
-                        $("#paid" + data.id).html('تم حفظ حالة الدفع');
+                        $("#paid" + data.id).html(data.paid);
+                        $("#remain" + data.id).html(data.remain);
+                        $("#appRatio" + data.id).html(data.appRatio);
                         setTimeout(function () {
                             $('#currentRowOn' + data.id).parents('table').DataTable()
                                 .row($('#currentRowOn' + data.id))

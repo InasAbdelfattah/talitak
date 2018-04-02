@@ -112,9 +112,12 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
     /**
      * orders
      */
-    Route::get('orders/provider-orders', 'Api\V1\OrderController@providerOrders');    
+    Route::get('orders/provider-new-orders', 'Api\V1\OrderController@providerNewOrders');    
+    Route::get('orders/user-orders', 'Api\V1\OrderController@getUserOrders');    
+    Route::get('orders/provider-finished-orders', 'Api\V1\OrderController@providerFinishedOrders');    
     Route::post('orders/pay-app-ratio', 'Api\V1\OrderController@payAppRatio');    
     Route::post('orders/save-new-order', 'Api\V1\OrderController@saveOrder');    
+    Route::post('order/change-order-status', 'Api\V1\OrderController@changeOrderStatus');    
 
     /**
      * Favorite Company

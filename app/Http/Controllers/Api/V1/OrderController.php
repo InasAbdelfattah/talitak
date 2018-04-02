@@ -12,6 +12,7 @@ use Validator;
 use App\FinancialAccount;
 use UploadImage;
 use App\CompanyWorkDay;
+use App\Service;
 
 class OrderController extends Controller
 {
@@ -29,7 +30,112 @@ class OrderController extends Controller
      *
      */
 
-    public function providerOrders(){
+    public function getUserOrders(){
+
+        $user = auth()->user();
+        if(!$user){
+            return response()->json([
+                'status' => false,
+                'message' => 'user not found',
+                'data' => []
+            ]);
+        }
+
+        $orders = Order::where('user_id', $user->id)->select('id','place','order_date','order_time','lat','lng','address','price','discount_accept','user_id','service_id','company_id as centerId' , 'provider_id' , 'status' , 'refuse_reasons','user_is_finished')->get();
+
+        $ordersCount = $orders->count();
+
+        return response()->json([
+            'status' => true,
+            'message' => '',
+            'data' => ['ordersCount' => $ordersCount , 'orders' => $orders ]
+        ]);
+    }
+
+    public function changeOrderStatus(Request $request){
+        $provider = auth()->user();
+        if(!$provider){
+            return response()->json([
+                'status' => false,
+                'message' => 'user not found',
+                'data' => []
+            ]);
+        }
+
+        $order = Order::find($request->orderId);
+
+        if(!$order){
+            return response()->json([
+                'status' => false,
+                'message' => 'order not found',
+                'data' => []
+            ]);
+        }
+
+        if($order->provider_id != $provider->id){
+            return response()->json([
+                'status' => false,
+                'message' => 'user is not the provider of this service',
+                'data' => []
+            ]);
+        }
+
+        $order->status = $request->status;
+        if($request->status == 2){
+            $rules = [
+                'refuse_reason' => 'required|string|min:2',
+            ];
+
+            // $msgs = [
+            //     'refuse_reasons.required' => 'لا بد مم ذكر سبب الرفض',
+            // ];
+
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                //$errors = $validator->messages();
+                $errors = validateRules($validator->errors(), $rules);
+                return response()->json(['status'=>false,'message' => $errors]);
+            }
+
+            $order->refuse_reasons = $request->refuse_reason;
+        }
+
+        $order->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'done',
+            'data' => ['order' => $order ]
+        ]);
+
+    }
+
+    public function providerNewOrders(){
+
+        $provider = auth()->user();
+        $center = Company::where('user_id',$provider->id)->first();
+
+        if(!$center){
+            return response()->json([
+                'status' => false,
+                'message' => 'center not found',
+                'data' => []
+            ]);
+        }
+
+        $orders = Order::where('company_id', $center->id)->where('status',0)->select('id','place','order_date','order_time','lat','lng','address','price','discount_accept','user_id','service_id','company_id as centerId' , 'provider_id' , 'status')->get();
+
+        $ordersCount = $orders->count();
+
+        return response()->json([
+            'status' => true,
+            'message' => '',
+            'data' => ['ordersCount' => $ordersCount , 'orders' => $orders ]
+        ]);
+    }
+
+    public function providerFinishedOrders(){
 
         $provider = auth()->user();
         $center = Company::where('user_id',$provider->id)->first();
@@ -181,7 +287,7 @@ class OrderController extends Controller
             'place' => 'required',
             'centerId' => 'required',
             'serviceId' => 'required',
-            'order_date' => 'date_format:"d-m-Y"|required',
+            'order_date' => 'date_format:"Y-m-d"|required',
             'order_time' => 'date_format:"H:i:s"|required',
         ];
 
@@ -195,10 +301,19 @@ class OrderController extends Controller
         }
 
         $company = Company::find($request->centerId);
+        $service = Service::find($request->serviceId);
         if(!$company){
             return response()->json([
                 'status' => false,
                 'message' => 'center not found',
+                'data' => []
+            ]);
+        }
+
+        if(!$service){
+            return response()->json([
+                'status' => false,
+                'message' => 'service not found',
                 'data' => []
             ]);
         }
@@ -218,20 +333,16 @@ class OrderController extends Controller
 
         $time_range = $workDays->where('day',$day)->first();
 
-        if(!( $request->order_time > $time_range->from && $request->order_time < $time_range->to )){
+        if(!( $request->order_time >= $time_range->from && $request->order_time <= $time_range->to )){
 
             return response()->json([
                 'status' => false,
-                'message' => 'time out of work day',
+                'message' => 'time out of work day time',
                 'data' => $day
             ]);
         }
 
-        return response()->json([
-            'status' => true,
-            'message' => 'done',
-            'data' => $time_range
-        ]);
+        
 
         //`gender`, `place`, `order_date`, `order_time`, `notes`, `lat`, `lng`, `address`, `price`, `discount_accept`, `user_id`, `service_id`, `company_id`, `provider_id`, `status`, `user_is_finished`, `is_considered`, `refuse_reasons`
 
@@ -240,10 +351,25 @@ class OrderController extends Controller
         $newModel->gender = 'male';
         $newModel->place = $request->place;
         if($request->place == 'home'){
+
+            $rules = [
+                'lat' => 'required',
+                'lng' => 'required',
+                'address' => 'required',
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                $errors = validateRules($validator->errors(), $rules);
+                return response()->json(['status'=>false,'message' => $errors]);
+            }
+
             $newModel->lat = $request->lat ;
             $newModel->lng = $request->lng ;
             $newModel->address = $request->address;
         }else{
+
             $newModel->lat = '' ;
             $newModel->lng = '' ;
             $newModel->address = '';
@@ -251,7 +377,7 @@ class OrderController extends Controller
         $newModel->notes = '';
         $newModel->order_date = $request->order_date;
         $newModel->order_time = $request->order_time;
-        $newModel->price = 0;
+        $newModel->price = $service->price;
         $newModel->discount_accept = $request->discount_accept;
         $newModel->company_id = $request->centerId;
         $newModel->service_id = $request->serviceId;
@@ -261,10 +387,17 @@ class OrderController extends Controller
         $newModel->is_considered = 0;
         $newModel->refuse_reasons = '';
         $newModel->save();
+
+        if($request->discount_accept == 1){
+            //send order with user discount to provider
+        }else{
+            //send order only ti provider
+        }
         return response()->json([
             'status' => true,
             'message' => 'done',
             'data' => []
         ]);
     }
+
 }

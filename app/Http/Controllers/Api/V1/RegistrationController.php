@@ -112,6 +112,7 @@ class RegistrationController extends Controller
                 $company->{'description:ar'} = $request->description_ar;
                 $company->{'description:en'} = $request->description_en;
                 $company->city_id = $request->city;
+                $company->district_id = $request->district;
                 $company->type = $request->providerType;
 
                 if ($request->hasFile('document_photo')):

@@ -9,6 +9,7 @@ use Hash;
 use Validator;
 use UploadImage;
 use Sms;
+use App\Company;
 
 class UsersController extends Controller
 {
@@ -86,69 +87,75 @@ class UsersController extends Controller
             endif;
 
             if ($user->save() && $user->is_provider == 1) {
-                $company = $user->company->first();
+                $company = Company::where('user_id',$user->id)->first();
+               
+                if($company){
+                    if($request->has('name_ar') && $request->name_ar != ''):
+                        $company->{'name:ar'} = $request->name_ar;
+                        $company->nameAr = $request->name_ar;
+                    endif;
 
-                if($request->has('name_ar') && $request->name_ar != ''):
-                    $company->{'name:ar'} = $request->name_ar;
-                    $company->nameAr = $request->name_ar;
-                endif;
+                    if($request->has('name_en') && $request->name_en != ''):
+                        $company->{'name:en'} = $request->name_en;
+                    endif;
 
-                if($request->has('name_en') && $request->name_en != ''):
-                    $company->{'name:en'} = $request->name_en;
-                endif;
+                    if($request->has('description_ar') && $request->description_ar != ''):
+                        $company->{'description:ar'} = $request->description_ar;
+                    endif;
 
-                if($request->has('description_ar') && $request->description_ar != ''):
-                    $company->{'description:ar'} = $request->description_ar;
-                endif;
+                    if($request->has('description_en') && $request->description_en != ''):
+                        $company->{'description:en'} = $request->description_en;
+                    endif;
 
-                if($request->has('description_en') && $request->description_en != ''):
-                    $company->{'description:en'} = $request->description_en;
-                endif;
+                    if($request->has('city') && $request->city != ''):
+                        $company->city_id = $request->city;
+                    endif;
 
-                if($request->has('city') && $request->city != ''):
-                    $company->city_id = $request->city;
-                endif;
+                    if($request->has('district') && $request->district != ''):
+                        $company->district_id = $request->district;
+                    endif;
 
-                if($request->has('providerType') && $request->providerType != ''):
-                    $company->type = $request->providerType;
-                endif;
+                    if($request->has('providerType') && $request->providerType != ''):
+                        $company->type = $request->providerType;
+                    endif;
 
-                if ($request->hasFile('document_photo')):
-                //if ($request->has('document_photo')):
-                    $company->document_photo = uploadImage($request, 'document_photo', $this->public_path_docs, 1280, 583);
-                    //$company->document_photo = save64Img($request->document_photo , $this->public_path_docs);
-                endif;
+                    if ($request->hasFile('document_photo')):
+                    //if ($request->has('document_photo')):
+                        $company->document_photo = uploadImage($request, 'document_photo', $this->public_path_docs, 1280, 583);
+                        //$company->document_photo = save64Img($request->document_photo , $this->public_path_docs);
+                    endif;
 
-                if($request->has('address') && $request->address != ''):
-                    $company->address = $request->address;
-                endif;
+                    if($request->has('address') && $request->address != ''):
+                        $company->address = $request->address;
+                    endif;
 
-                if($request->has('lat') && $request->lat != ''):
-                    $company->lat = $request->lat;
-                endif;
+                    if($request->has('lat') && $request->lat != ''):
+                        $company->lat = $request->lat;
+                    endif;
 
-                if($request->has('lng') && $request->lng != ''):
-                    $company->lng = $request->lng;
-                endif;
+                    if($request->has('lng') && $request->lng != ''):
+                        $company->lng = $request->lng;
+                    endif;
 
-                if($request->has('category') && $request->category != ''):
-                    $company->category_id = $request->category;
-                endif;
+                    if($request->has('category') && $request->category != ''):
+                        $company->category_id = $request->category;
+                    endif;
 
-                if ($request->hasFile('image')):
-                    $company->image = UploadImage::uploadImage($request,'image', $this->public_path);
-                endif;
+                    if ($request->hasFile('image')):
+                        $company->image = UploadImage::uploadImage($request,'image', $this->public_path);
+                    endif;
 
-                if ($company->save()) {
-                    $user->company->name_en = $user->company->{'name:en'};
-                    $user->company->name_ar = $user->company->{'name:ar'};
-                    $user->company->description_en = $user->company->{'description:en'};
-                    $user->company->description_ar = $user->company->{'description:ar'};
-                    return response()->json([
-                        'status' => true,
-                        'data' => $user,
-                        'code' => $user->action_code
-                    ]);
+                    if ($company->save()) {
+                        $user->company->name_en = $company->{'name:en'};
+                        $user->company->name_ar = $company->{'name:ar'};
+                        $user->company->description_en = $company->{'description:en'};
+                        $user->company->description_ar = $company->{'description:ar'};
+                        return response()->json([
+                            'status' => true,
+                            'data' => $user,
+                            'code' => $user->action_code
+                        ]);
+                    }
                 }
             } else {
                 return response()->json([

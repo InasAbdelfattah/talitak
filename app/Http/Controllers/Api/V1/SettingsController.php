@@ -25,15 +25,15 @@ class SettingsController extends Controller
     }
 
 
-    public function generalInfo(Request $request)
+    public function generalInfo($locale)
     {
-        app()->setLocale($request->lang);
+        //app()->setLocale($request->lang);
 
         return response()->json([
             'status' => 'true',
             'data' => [
-                'terms' => Setting::getBody('terms'),
-                'about_app_desc' => Setting::getBody('about_app_desc'),
+                'terms' => Setting::getBody('terms_'.$locale),
+                'about_app_desc' => Setting::getBody('about_app_desc_'.$locale),
                 // 'facebook' => Setting::getBody('facebook'),
                 // 'twitter' => Setting::getBody('twitter'),
                 // 'instagram' => Setting::getBody('instagram')

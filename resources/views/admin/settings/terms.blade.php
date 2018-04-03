@@ -45,8 +45,21 @@
                     <div class="col-xs-12">
                         <div class="form-group">
                             <label for="userName">العنوان *</label>
-                            <input type="text" name="terms_title"
-                                   value="{{ $setting->getBody('terms_title') }}" class="form-control"
+                            <input type="text" name="terms_title_ar"
+                                   value="{{ $setting->getBody('terms_title_ar') }}" class="form-control"
+                                   required
+                                   placeholder="العنوان ..."/>
+                            <p class="help-block"></p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="userName">العنوان - انجليزى*</label>
+                            <input type="text" name="terms_title_en"
+                                   value="{{ $setting->getBody('terms_title_en') }}" class="form-control"
                                    required
                                    placeholder="العنوان ..."/>
                             <p class="help-block"></p>
@@ -57,11 +70,20 @@
 
 
                     <div class="col-xs-12">
-                        <div class="form-group {{ $errors->has('terms') ? 'has-error' : '' }}">
-                            <label for="terms">المحتوي</label>
-                            <textarea id="editor"
-                                      name="terms">
-                                {{ $setting->getBody('terms') }}
+                        <div class="form-group {{ $errors->has('terms_ar') ? 'has-error' : '' }}">
+                            <label for="terms_ar">المحتوي</label>
+                            <textarea id="editor" name="terms_ar">
+                                {{ $setting->getBody('terms_ar') }}
+                            </textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="col-xs-12">
+                        <div class="form-group {{ $errors->has('terms_en') ? 'has-error' : '' }}">
+                            <label for="terms_en">المحتوي - انجليزى</label>
+                            <textarea name="terms_en">
+                                {{ $setting->getBody('terms_en') }}
                             </textarea>
                         </div>
 
@@ -100,4 +122,11 @@
         </div>
         <!-- end row -->
     </form>
+@endsection
+
+@section('scripts')
+    <script src="https://cdn.ckeditor.com/4.7.0/full/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace( 'terms_en' );
+    </script>
 @endsection

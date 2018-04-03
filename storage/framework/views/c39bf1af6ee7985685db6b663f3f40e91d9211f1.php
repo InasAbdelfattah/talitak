@@ -1,10 +1,9 @@
-@extends('admin.layouts.master')
-
-@section('content')
-    <form action="{{ route('administrator.settings.store') }}" data-parsley-validate="" novalidate="" method="post"
+<?php $__env->startSection('content'); ?>
+    <form action="<?php echo e(route('administrator.settings.store')); ?>" data-parsley-validate="" novalidate="" method="post"
           enctype="multipart/form-data">
 
-    {{ csrf_field() }}
+    <?php echo e(csrf_field()); ?>
+
 
     <!-- Page-Title -->
 
@@ -16,12 +15,12 @@
                                     class="fa fa-cog"></i></span></button>
 
                 </div> -->
-                <h4 class="page-title">ضبط عن التطبيق </h4>
+                <h4 class="page-title">ضبط بنود الإستخدام</h4>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <div class="card-box">
 
 
@@ -39,14 +38,27 @@
                         </ul>
                     </div> -->
 
-                    <h4 class="header-title m-t-0 m-b-30">بيانات عن التطبيق</h4>
+                    <h4 class="header-title m-t-0 m-b-30">بيانات بنود الإستخدام</h4>
 
 
                     <div class="col-xs-12">
                         <div class="form-group">
                             <label for="userName">العنوان *</label>
-                            <input type="text" name="about_app_name"
-                                   value="{{ $setting->getBody('about_app_name') }}" class="form-control"
+                            <input type="text" name="terms_title_ar"
+                                   value="<?php echo e($setting->getBody('terms_title_ar')); ?>" class="form-control"
+                                   required
+                                   placeholder="العنوان ..."/>
+                            <p class="help-block"></p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-xs-12">
+                        <div class="form-group">
+                            <label for="userName">العنوان - انجليزى*</label>
+                            <input type="text" name="terms_title_en"
+                                   value="<?php echo e($setting->getBody('terms_title_en')); ?>" class="form-control"
                                    required
                                    placeholder="العنوان ..."/>
                             <p class="help-block"></p>
@@ -57,20 +69,22 @@
 
 
                     <div class="col-xs-12">
-                        <div class="form-group {{ $errors->has('about_app_desc_ar') ? 'has-error' : '' }}">
-                            <label for="about_app_desc_ar">المحتوي - عربى</label>
-                            <textarea id="editor" name="about_app_desc_ar">
-                                {{ $setting->getBody('about_app_desc_ar') }}
+                        <div class="form-group <?php echo e($errors->has('terms_ar') ? 'has-error' : ''); ?>">
+                            <label for="terms_ar">المحتوي</label>
+                            <textarea id="editor" name="terms_ar">
+                                <?php echo e($setting->getBody('terms_ar')); ?>
+
                             </textarea>
                         </div>
 
                     </div>
 
                     <div class="col-xs-12">
-                        <div class="form-group {{ $errors->has('about_app_desc_en') ? 'has-error' : '' }}">
-                            <label for="about_app_desc_en">المحتوي - انجليزى</label>
-                            <textarea name="about_app_desc_en">
-                                {{ $setting->getBody('about_app_desc_en') }}
+                        <div class="form-group <?php echo e($errors->has('terms_en') ? 'has-error' : ''); ?>">
+                            <label for="terms_en">المحتوي - انجليزى</label>
+                            <textarea name="terms_en">
+                                <?php echo e($setting->getBody('terms_en')); ?>
+
                             </textarea>
                         </div>
 
@@ -90,30 +104,31 @@
                 </div>
             </div><!-- end col -->
 
-            <!-- <div class="col-lg-4">
-                <div class="card-box" style="overflow: hidden;">
-                    <h4 class="header-title m-t-0 m-b-30">الصورة </h4>
-                    <div class="form-group">
-                        <div class="col-sm-12">
+            
+                
+                    
+                    
+                        
 
-                            <input type="hidden" name="about_app_image_old"
-                                   value="{{ $setting->getBody('about_app_image') }}">
-                            <input type="file" name="about_app_image" class="dropify" data-max-file-size="6M"
-                                   data-default-file="{{ request()->root() . '/' . $setting->getBody('about_app_image') }}"/>
+                            
+                                   
+                            
+                                   
 
-                        </div>
-                    </div>
+                        
+                    
 
-                </div>
-            </div> -->
+                
+            
         </div>
         <!-- end row -->
     </form>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('scripts')
+<?php $__env->startSection('scripts'); ?>
     <script src="https://cdn.ckeditor.com/4.7.0/full/ckeditor.js"></script>
     <script>
-        CKEDITOR.replace( 'about_app_desc_en' );
+        CKEDITOR.replace( 'terms_en' );
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('admin.layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

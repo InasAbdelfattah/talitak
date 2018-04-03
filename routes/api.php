@@ -56,15 +56,15 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('password/forgot/resend', 'Api\V1\ForgotPasswordController@resendResetPasswordCode');
 
     // Get list of cities
-    Route::get('cities', 'Api\V1\CitiesController@index');
+    Route::get('cities/{locale}', 'Api\V1\CitiesController@index');
 
     // Social Login
     //Route::post('social/login', 'Api\V1\UsersController@socialLogin');
 
     //serviceTypes
-    Route::get('categories', 'Api\V1\CategoriesController@index');
+    Route::get('categories/{locale}', 'Api\V1\CategoriesController@index');
 
-    Route::get('general/info', 'Api\V1\SettingsController@generalInfo');
+    Route::get('general/info/{locale}', 'Api\V1\SettingsController@generalInfo');
 
     Route::get('/user/{id}', 'Api\V1\UsersController@getUserById');
 
@@ -75,20 +75,20 @@ Route::group(['prefix' => 'v1'], function () {
     //Route::get('parent/categories', 'Api\V1\CategoriesController@getParentCategory');
 
     //centers
-    Route::get('centers/list', 'Api\V1\CompaniesController@companiesList');
-    Route::get('center/details', 'Api\V1\CompaniesController@details');
+    Route::get('centers/list/{locale}', 'Api\V1\CompaniesController@companiesList');
+    Route::get('center/details/{locale}', 'Api\V1\CompaniesController@details');
 
     //center services 
     Route::post('center/services/create', 'Api\V1\ProductsController@saveProduct');
     Route::post('center/service/delete', 'Api\V1\ProductsController@delete');
     Route::post('center/service/update', 'Api\V1\ProductsController@update');
-    Route::get('center/services/list', 'Api\V1\ProductsController@productsList');
+    Route::get('center/services/list/{locale}', 'Api\V1\ProductsController@productsList');
 
     //center work days 
     Route::post('center/workDays/create', 'Api\V1\CenterWorkDaysController@saveWorkDay');
     Route::post('center/workDays/delete', 'Api\V1\CenterWorkDaysController@delete');
     Route::post('center/workDays/update', 'Api\V1\CenterWorkDaysController@update');
-    Route::get('center/workDays/list', 'Api\V1\CenterWorkDaysController@list');
+    Route::get('center/workDays/list/{locale}', 'Api\V1\CenterWorkDaysController@list');
 
 });
 
@@ -118,7 +118,8 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
     Route::post('orders/pay-app-ratio', 'Api\V1\OrderController@payAppRatio');    
     Route::post('orders/save-new-order', 'Api\V1\OrderController@saveOrder');    
     Route::post('order/change-order-status', 'Api\V1\OrderController@changeOrderStatus');    
-
+    Route::get('orders/check-user-discounts', 'Api\V1\OrderController@checkUserDiscounts');    
+    
     /**
      * Favorite Company
      */
@@ -132,6 +133,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'v1'], function () {
      */
 
     Route::get('favorites/user', 'Api\V1\FavoritesController@getFavoriteListForUser');
+   
 
     /**
      * Supports Controllers Routes

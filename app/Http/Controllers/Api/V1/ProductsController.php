@@ -67,7 +67,7 @@ class ProductsController extends Controller
         }
     }
 
-    public function productsList(Request $request)
+    public function productsList(Request $request , $locale)
     {
         /**
          * Set Default Value For Skip Count To Avoid Error In Service.
@@ -109,12 +109,12 @@ class ProductsController extends Controller
 
         $products = $query->select('id','price','photo as image' , 'gender_type as gender' , 'provider_type' ,'service_place' ,'serviceType_id' , 'company_id' , 'created_at')->get();
 
-        $products->map(function ($q)  {
+        $products->map(function ($q) use($locale) {
 
-            $q->name_ar = $q->{'name:ar'};
-            $q->name_en = $q->{'name:en'};
-            $q->description_ar = $q->{'description:ar'};
-            $q->description_en = $q->{'description:en'};
+            $q->name = $q->{'name:'.$locale};
+            //$q->name_en = $q->{'name:en'};
+            $q->description = $q->{'description:'.$locale};
+            //$q->description_en = $q->{'description:en'};
             
         });
 

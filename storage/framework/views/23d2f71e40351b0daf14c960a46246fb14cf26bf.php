@@ -56,11 +56,21 @@
 
 
                     <div class="col-xs-12">
-                        <div class="form-group <?php echo e($errors->has('about_app_desc') ? 'has-error' : ''); ?>">
-                            <label for="about_app_desc">المحتوي</label>
-                            <textarea id="editor"
-                                      name="about_app_desc">
-                                <?php echo e($setting->getBody('about_app_desc')); ?>
+                        <div class="form-group <?php echo e($errors->has('about_app_desc_ar') ? 'has-error' : ''); ?>">
+                            <label for="about_app_desc_ar">المحتوي - عربى</label>
+                            <textarea id="editor" name="about_app_desc_ar">
+                                <?php echo e($setting->getBody('about_app_desc_ar')); ?>
+
+                            </textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="col-xs-12">
+                        <div class="form-group <?php echo e($errors->has('about_app_desc_en') ? 'has-error' : ''); ?>">
+                            <label for="about_app_desc_en">المحتوي - انجليزى</label>
+                            <textarea name="about_app_desc_en">
+                                <?php echo e($setting->getBody('about_app_desc_en')); ?>
 
                             </textarea>
                         </div>
@@ -81,7 +91,7 @@
                 </div>
             </div><!-- end col -->
 
-            <div class="col-lg-4">
+            <!-- <div class="col-lg-4">
                 <div class="card-box" style="overflow: hidden;">
                     <h4 class="header-title m-t-0 m-b-30">الصورة </h4>
                     <div class="form-group">
@@ -96,10 +106,16 @@
                     </div>
 
                 </div>
-            </div><!-- end col -->
+            </div> -->
         </div>
         <!-- end row -->
     </form>
 <?php $__env->stopSection(); ?>
 
+<?php $__env->startSection('scripts'); ?>
+    <script src="https://cdn.ckeditor.com/4.7.0/full/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace( 'about_app_desc_en' );
+    </script>
+<?php $__env->stopSection(); ?>
 <?php echo $__env->make('admin.layouts.master', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

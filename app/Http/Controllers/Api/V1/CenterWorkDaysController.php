@@ -99,7 +99,7 @@ class CenterWorkDaysController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'هذا اليوم غير موجود'
-            ]);
+             ]);
         }
 
         if ($model->delete()) {
@@ -115,17 +115,29 @@ class CenterWorkDaysController extends Controller
         }
     }
 
-    public function list(Request $request)
+    public function list(Request $request , $locale)
     {
         
         $workDays = CompanyWorkDay::where('company_id', $request->centerId)
             ->select('id','day','from','to','company_id as centerId')->get();
 
-        $workDays->map(function ($q)  {
+        // $workDays->map(function ($q)  {
 
-            $q->day_ar = day($q->day);
-            //$q->day_en = $q->day;
-        });
+        //     $q->day_ar = day($q->day);
+        //     //$q->day_en = $q->day;
+        // });
+
+        if($workDays->count() > 0){
+            if($locale == 'ar'){
+                $workDays->map(function ($q) {
+                    $q->name = day($q->day);
+                });
+            }else{
+                $workDays->map(function ($q) {
+                    $q->name = $q->day;
+                });
+            }
+        }
 
         return response()->json([
             'status' => true,

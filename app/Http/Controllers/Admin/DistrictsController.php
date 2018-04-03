@@ -23,7 +23,9 @@ class DistrictsController extends Controller
             return abort(401);
         }
 
-        $districts = District::get();
+        $districts = District::join('cities','districts.city_id','cities.id')->select('districts.*')->get();
+
+        //dd($districts);
 
         return view('admin.districts.index')->with(compact('districts'));
     }

@@ -14,21 +14,35 @@ use App\Http\Controllers\Controller;
 
 class CompaniesController extends Controller
 {
-    public function details(Request $request)
+    public function details(Request $request ,$locale)
     {
-        $currentUser = User::whereApiToken($request->api_token)->first();
+        $currentUser = User::where('api_token', $request->api_token)->first();
+        if(!$currentUser){
+            return response()->json([
+                'status' => false,
+                'message' => 'user not found',
+                'data' => []
+            ]);
+        }
 
         $company = Company::with('images')->whereId($request->centerId)->select('id','user_id','category_id','phone','type','city_id','image','document_photo','visits_count')->first();
+        if(!$company){
+            return response()->json([
+                'status' => false,
+                'message' => 'center not found',
+                'data' => []
+            ]);
+        }
         $company->visits_count += 1;
         $company->save();
 
         $company->user->id;
         $currentUser->id;
 
-        $company->name_ar = $company->{'name:ar'};
-        $company->name_en = $company->{'name:en'};
-        $company->description_ar = $company->{'description:ar'};
-        $company->description_en = $company->{'description:en'};
+        $company->name = $company->{'name:'.$locale};
+        //$company->name_en = $company->{'name:en'};
+        $company->description = $company->{'description:'.$locale};
+        //$company->description_en = $company->{'description:en'};
         $company->place = $company->place == 0 ? 'منزل' : 'مركز';
         $company->providerType = $company->type == 0 ? 'فرد' : 'مركز';
 
@@ -54,8 +68,8 @@ class CompaniesController extends Controller
 //        {
         //$company->likes = $company->likes()->where('like', 1)->count();
         //$company->dislike = $company->likes()->where('like', 0)->count();
-        $company->services = $this->getCompanyServices($company->id);
-        $company->workDays = $this->getCompanyWorkDays($company->id);
+        $company->services = $this->getCompanyServices($company->id , $locale);
+        $company->workDays = $this->getCompanyWorkDays($company->id , $locale);
         $company->workDaysCount = $company->workDays()->count();
         $company->favorites = $company->favorites()->count();
         $company->ratings = $company->rates()->where('user_id', auth()->id())->count();
@@ -79,7 +93,7 @@ class CompaniesController extends Controller
     }
 
 
-    public function companiesList(Request $request)
+    public function companiesList(Request $request , $locale)
     {
 
         /**
@@ -200,13 +214,13 @@ class CompaniesController extends Controller
 //        }
 
         $companies = $query->select('id','user_id','category_id','phone','type','city_id','image','document_photo','visits_count')->get();
-        $companies->map(function ($q) use ($request) {
+        $companies->map(function ($q) use ($request , $locale) {
             //$q->likes = $q->likes()->where('like', 1)->count();
             //$q->dislike = $q->likes()->where('like', 0)->count();
-            $q->name_ar = $q->{'name:ar'};
-            $q->name_en = $q->{'name:en'};
-            $q->description_ar = $q->{'description:ar'};
-            $q->description_en = $q->{'description:en'};
+            $q->name = $q->{'name:'.$locale};
+            //$q->name_en = $q->{'name:en'};
+            $q->description = $q->{'description:'.$locale};
+            //$q->description_en = $q->{'description:en'};
             $q->place = $q->place == 0 ? 'منزل' : 'مركز';
             $q->providerType = $q->type == 0 ? 'فرد' : 'مركز';
             //$q->favorites = $q->favorites()->count();
@@ -216,8 +230,8 @@ class CompaniesController extends Controller
             $q->email = ($user = $this->companyCompleteFromUser($q->id)) ? $user->email : null;
             $q->city = $this->getCityForCompany($q->id);
             $q->commentsCount = $this->getCountsForCompany($q->id);
-            $q->services = $this->getCompanyServices($q->id);
-            $q->workDays = $this->getCompanyWorkDays($q->id);
+            $q->services = $this->getCompanyServices($q->id , $locale);
+            $q->workDays = $this->getCompanyWorkDays($q->id , $locale);
 
         });
 
@@ -316,26 +330,40 @@ class CompaniesController extends Controller
      * @return array|null
      */
 
-    private function getCompanyServices($company)
+    private function getCompanyServices($company , $locale)
     {
         $services = Service::where('company_id',$company)->select('id','company_id as centerId')->get();
-        $services->map(function ($q)  {
-            $q->name_ar = $q->{'name:ar'};
-            $q->name_en = $q->{'name:en'};
+        $services->map(function ($q) use($locale) {
+            $q->name = $q->{'name:'.$locale};
+            $q->description = $q->{'description:'.$locale};
+            //$q->name_en = $q->{'name:en'};
             
 
         });
         return $services ? $services : NULL;
     }
 
-    private function getCompanyWorkDays($company)
+    private function getCompanyWorkDays($company , $locale)
     {
         $workDays = CompanyWorkDay::where('company_id',$company)->select('id','day' ,'from' ,'to' , 'company_id as centerId')->get();
-        $workDays->map(function ($q)  {
-            $q->name_ar = day($q->day);
-            $q->name_en = $q->day;
+
+        // $workDays->map(function ($q) {
+        //     $q->name_ar = day($q->day);
+        //     $q->name_en = $q->day;
             
-        });
+        // });
+
+        if($workDays->count() > 0){
+            if($locale == 'ar'){
+                $workDays->map(function ($q) {
+                    $q->name = day($q->day);
+                });
+            }else{
+                $workDays->map(function ($q) {
+                    $q->name = $q->day;
+                });
+            }
+        }
         return $workDays ? $workDays : NULL;
     }
 

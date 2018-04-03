@@ -221,7 +221,7 @@
                                         <li><a href="<?php echo e(route('settings.commission')); ?>">نسبة التطبيق</a></li>
                                         <li><a href="<?php echo e(route('settings.socials')); ?>">روابط وسائل التواصل</a></li>
                                         <li><a href="<?php echo e(route('cities.index')); ?>">المدن</a></li>
-                                        <!-- <li><a href="<?php echo e(route('districts.index')); ?>">الأحياء</a></li> -->
+                                        <li><a href="<?php echo e(route('districts.index')); ?>">الأحياء</a></li>
                                         <li><a href="<?php echo e(route('new-notif')); ?>">ارسال اشعار</a></li>
                                 
                                     </ul>

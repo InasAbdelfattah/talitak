@@ -4,11 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Dimsav\Translatable\Translatable;
-use Illuminate\Database\Eloquent\SoftDeletes;
+//use Illuminate\Database\Eloquent\SoftDeletes;
 
 class District extends Model
 {
-    use SoftDeletes;
+   // use SoftDeletes;
     use Translatable;
 
     public $translatedAttributes = ['name'];
@@ -18,7 +18,7 @@ class District extends Model
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+   // protected $dates = ['deleted_at'];
 
     public function city()
     {

@@ -13,6 +13,7 @@ use App\FinancialAccount;
 use UploadImage;
 use App\CompanyWorkDay;
 use App\Service;
+use App\UserDiscount;
 
 class OrderController extends Controller
 {
@@ -124,7 +125,7 @@ class OrderController extends Controller
             ]);
         }
 
-        $orders = Order::where('company_id', $center->id)->where('status',0)->select('id','place','order_date','order_time','lat','lng','address','price','discount_accept','user_id','service_id','company_id as centerId' , 'provider_id' , 'status')->get();
+        $orders = Order::where('company_id', $center->id)->where('status',0)->select('id','place','order_date','order_time','lat','lng','address','price','discount_accept','discount','user_id','service_id','company_id as centerId' , 'provider_id' , 'status')->get();
 
         $ordersCount = $orders->count();
 
@@ -291,6 +292,16 @@ class OrderController extends Controller
             'order_time' => 'date_format:"H:i:s"|required',
         ];
 
+        $discounts = UserDiscount::where('user_id',$user->id)->where('to_date','>=',date('Y-m-d'))->where('is_used',0)->get();
+
+        if($discounts->count() > 0){
+            $rules['discount_accept'] = 'required';
+        }
+
+        if($request->discount_accept == 1){
+            $rules['discountId'] = 'required';
+        }
+
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
@@ -342,8 +353,6 @@ class OrderController extends Controller
             ]);
         }
 
-        
-
         //`gender`, `place`, `order_date`, `order_time`, `notes`, `lat`, `lng`, `address`, `price`, `discount_accept`, `user_id`, `service_id`, `company_id`, `provider_id`, `status`, `user_is_finished`, `is_considered`, `refuse_reasons`
 
         $newModel = new Order();
@@ -386,18 +395,59 @@ class OrderController extends Controller
         $newModel->user_is_finished = 0;
         $newModel->is_considered = 0;
         $newModel->refuse_reasons = '';
-        $newModel->save();
+        
 
         if($request->discount_accept == 1){
             //send order with user discount to provider
+            $discount = UserDiscount::where('id',$request->discountId)->first();
+
+            if($discount){
+
+                $discount->is_used = 1 ;
+                $discount->save();
+                $newModel->discount = $discount->discount;
+            }
+
         }else{
-            //send order only ti provider
+            //send order only to provider
+            $newModel->discount = 0;
         }
+
+        $newModel->save();
+
         return response()->json([
             'status' => true,
             'message' => 'done',
             'data' => []
         ]);
+    }
+
+    public function checkUserDiscounts(){
+        $user = auth()->user();
+        if(!$user){
+            return response()->json([
+                'status' => false ,
+                'message' => 'user not found' ,
+                'data' => []
+            ]);
+        }
+
+        $discounts = UserDiscount::where('user_id',$user->id)->where('to_date','>=',date('Y-m-d'))->where('is_used',0)->get();
+
+        if($discounts->count() > 0){
+            return response()->json([
+                'status' => true ,
+                'message' => '' ,
+                'data' => $discounts
+            ]);
+        }else{
+            return response()->json([
+                'status' => false ,
+                'message' => 'no discounts' ,
+                'data' => []
+            ]);
+        }
+
     }
 
 }

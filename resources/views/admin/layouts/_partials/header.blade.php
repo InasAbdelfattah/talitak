@@ -220,7 +220,7 @@
                                         <li><a href="{{ route('settings.commission') }}">نسبة التطبيق</a></li>
                                         <li><a href="{{ route('settings.socials') }}">روابط وسائل التواصل</a></li>
                                         <li><a href="{{ route('cities.index') }}">المدن</a></li>
-                                        <!-- <li><a href="{{ route('districts.index') }}">الأحياء</a></li> -->
+                                        <li><a href="{{ route('districts.index') }}">الأحياء</a></li>
                                         <li><a href="{{ route('new-notif') }}">ارسال اشعار</a></li>
                                 
                                     </ul>

@@ -14,13 +14,12 @@ class RatesController extends Controller
 {
     public function postRating(Request $request)
     {
-        // `user_id`, `company_id`, `order_id`, `rate`, `rate_from`, `price`
         $user = User::byToken($request->api_token);
 
         $validator = Validator::make($request->all(), [
             'centerId' => 'required',
             'orderId' => 'required',
-            'userId' => 'required',
+            //'userId' => 'required',
             'rateValue' => 'required',
             'price' => 'required',
         ]);
@@ -33,27 +32,53 @@ class RatesController extends Controller
         }
 
         if ($request->api_token) {
-            $company = Company::find($request->centerId);
 
-            $rating = new Rate;
-            $userRatingBefore = $rating->where('company_id', $request->centerId)->where('user_id', auth()->id())->first();
-
-            if ($userRatingBefore) {
-                $userRatingBefore->rating = $request->rateValue;
-                $company->ratings()->save($userRatingBefore);
-
+            $user = auth()->user();
+            if (!$user) {
                 return response()->json([
-                    'status' => true,
-                    'message' => 'the user ' . auth()->user()->name . ' updated the rate.',
-                    'data' => $request->rateValue,
-                    'rating' => $company->averageRating
+                    'status' => false,
+                    'message' => 'user not found',
+                    'data' => []
                 ]);
             }
 
-            $rating->rating = $request->rateValue;
-            $rating->user_id = $user->id;
+            $company = Company::where('id',$request->centerId)->first();
+            if(!$company){
+                return response()->json([
+                    'status' => false,
+                    'message' => 'center not found',
+                    'data' => []
+                ]);
+            }
+            
+            $userRatingBefore = Rate::where('company_id', $request->centerId)->where('user_id', $user->id)->where('order_id', $request->orderId)->first();
 
-            $company->ratings()->save($rating);
+            if ($userRatingBefore) {
+                $userRatingBefore->rate = $request->rateValue;
+                $userRatingBefore->price = $request->price;
+                $userRatingBefore->save();
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'the user ' . $user->name . ' updated the rate.',
+                    'data' => $request->rateValue,
+                    'rating' => $company->rates()->avg('rate')
+                ]);
+            }
+
+            $rating = new Rate;
+            $rating->rate = $request->rateValue;
+            $rating->price = $request->price;
+            $rating->order_id = $request->orderId;
+            $rating->company_id = $request->centerId;
+            $rating->user_id = $user->id;
+            if($user->is_provider == 1){
+                $rating->rate_from = 'provider';
+            }else{
+                $rating->rate_from = 'user' ;
+            }
+
+            $rating->save();
 
             if ($company->ratings) {
                 // $userCurrent = User::whereId($request->user_id)->whereIsActive(1)->first();
@@ -62,7 +87,7 @@ class RatesController extends Controller
                     'status' => true,
                     'message' => 'you rated successfully.',
                     'data' => $request->rateValue,
-                    'rating' => $company->averageRating
+                    'rating' => $company->rates()->avg('rate')
                 ]);
             }
         }

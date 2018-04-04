@@ -9,11 +9,19 @@ use App\Category;
 
 class CategoriesController extends Controller
 {
+    
+    
+    
+    function __construct(){
+        app()->setlocale(request('lang'));
+    }
+    
+    
     /**
      * @return \Illuminate\Http\JsonResponse
      */
 
-    public function index(Request $request , $locale)
+    public function index(Request $request)
     {
         /**
          * Set Default Value For Skip Count To Avoid Error In Service.
@@ -33,8 +41,7 @@ class CategoriesController extends Controller
         $currentPage = $request->get('page', 1); // Default to 1
         //$query = Category::select('id','name_ar','name_en','image')->whereParentId(0);
         
-        $query = Category::select('id','name_'.$locale.' as name','image')->whereParentId(0);
-
+        $query = Category::select('id','name_'.$request->lang.' as name','description_'.$request->lang.' as description','image')->whereParentId(0);
         /**
          * @ If item Id Exists skipping by it.
          */

@@ -121,7 +121,7 @@
                             <td>{{ $row->{'name:ar'} }}</td>
                             <td>{{ $row->email }}</td>
                             <td>@if($row->user){{ $row->user->phone }}@endif</td>
-                            <td>{{ $row->type == 0 ? 'فرد' : 'منشأة' }}</td>
+                            <td>{{ $row->type == 0 ? 'فرد' :'مركز' }}</td>
                             <td> @if($row->city) {{ $row->city->{'name:ar'} }} @endif </td>
 
                             {{--<td>--}}
@@ -155,7 +155,7 @@
                                     <button type="button" class="close" onclick="Custombox.close();">
                                         <span>&times;</span><span class="sr-only">Close</span>
                                     </button>
-                                    <h4 class="custom-modal-title">تفعيل المنشأة {{ $row->name }}</h4>
+                                    <h4 class="custom-modal-title">تفعيل المركز :  {{ $row->name }}</h4>
                                     <div class="custom-modal-text text-right" style="text-align: right !important;">
                                         <form action="{{ route('company.activation') }}" method="post"
                                               data-id="{{ $row->id }}">

@@ -22,7 +22,7 @@ class CenterWorkDaysController extends Controller
         $rules = [
            //'from' => array('regex:/^([01]?[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)$/'),
             'centerId' => 'integer|required',
-            'day'      => 'string|required|min:6|max:9',
+            'day'      => 'string|required|min:3|max:3',
             //'day'      => 'date_format:"D"|required',
             'from'     => 'date_format:"H:i"|required|before:to',
             'to'       => 'date_format:"H:i"|required|after:from',
@@ -99,7 +99,7 @@ class CenterWorkDaysController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'هذا اليوم غير موجود'
-             ]);
+            ]);
         }
 
         if ($model->delete()) {
@@ -138,7 +138,7 @@ class CenterWorkDaysController extends Controller
                 });
             }
         }
-
+        
         return response()->json([
             'status' => true,
             'data' => $workDays

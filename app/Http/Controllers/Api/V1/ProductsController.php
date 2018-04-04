@@ -35,7 +35,7 @@ class ProductsController extends Controller
             return response()->json(['status' => false, 'message' => 'Company Not Found in System']);
 
         $product = new Service;
-        //$product->name = $request->name_ar;
+        $product->name = $request->name_ar;
         $product->{'description:ar'} = $request->description_ar;
         $product->{'description:en'} = $request->description_en;
         $product->{'name:ar'} = $request->name_ar;
@@ -67,7 +67,7 @@ class ProductsController extends Controller
         }
     }
 
-    public function productsList(Request $request , $locale)
+    public function productsList(Request $request ,$locale)
     {
         /**
          * Set Default Value For Skip Count To Avoid Error In Service.
@@ -190,7 +190,7 @@ class ProductsController extends Controller
 
     public function delete(Request $request)
     {
-        $model = Service::whereId($request->centerId)->first();
+        $model = Service::whereId($request->serviceId)->first();
 
         if (!$model) {
             return response()->json([

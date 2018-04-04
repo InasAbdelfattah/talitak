@@ -117,7 +117,8 @@ class RegistrationController extends Controller
 
                 if ($request->hasFile('document_photo')):
                 //if ($request->has('document_photo')):
-                    $company->document_photo = uploadImage($request, 'document_photo', $this->public_path_docs, 1280, 583);
+                    //$company->document_photo = uploadImage($request, 'document_photo', $this->public_path_docs, 1280, 583);
+                    $company->document_photo = UploadImage::uploadImage($request, 'document_photo', $this->public_path_docs);
                     //$company->document_photo = save64Img($request->document_photo , $this->public_path_docs);
                 endif;
 
@@ -140,7 +141,8 @@ class RegistrationController extends Controller
 
                 //if ($request->hasFile('image')):
                 if ($request->has('image')):
-                    $company->image = save64Img($request->image , $this->public_path);
+                    //$company->image = save64Img($request->image , $this->public_path);
+                    $company->image = UploadImage::uploadImage($request, 'image', $this->public_path);
                     // $company->image = $request->root() . '/' . $this->public_path . UploadImage::uploadImage($request, 'image', $this->public_path);
                 endif;
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Company;
 use App\CompanyWorkDay;
 use App\Comment;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DataTables;
@@ -53,9 +54,11 @@ class CompaniesController extends Controller
             return abort(401);
         }
 
-        $companies = Company::with('user', 'category')
-            ->whereIsAgree(0)
-            ->get();
+        // $companies = Company::with('user', 'category')
+        //     ->whereIsAgree(0)
+        //     ->get();
+            
+        $companies = Company::join('users','companies.user_id','users.id')->where('users.is_user',1)->where('users.is_provider',1)->where('users.is_approved',1)->select('companies.*','users.id as user_id' , 'users.name as username' ,'users.phone as user_phone')->get();
 
 //        $companies->map(function ($q) {
 //            $q->likesCount = $q->likes()->where('like', 1)->count();

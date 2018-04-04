@@ -82,7 +82,7 @@ class UsersController extends Controller
 
             $user->gender = 'male';
             $user->is_invited = 0;
-            $user->is_active = 0;
+            $user->is_active = $request->is_active ? $request->is_active : 0;
             $user->is_suspend = 0;
             $user->is_online = 0;
             $user->is_user = 0;
@@ -417,7 +417,7 @@ class UsersController extends Controller
      */
     public function getProviders()
     {
-        $users = User::join('companies','users.id','companies.user_id')->where('users.is_user',1)->where('users.is_provider',1)->where('users.is_approved',0)->select('users.*','companies.id as company_id' , 'companies.name as company_name')->get();
+        $users = User::join('companies','users.id','companies.user_id')->where('users.is_user',1)->where('users.is_provider',1)->where('users.is_approved',1)->select('users.*','companies.id as company_id' , 'companies.name as company_name')->get();
         
         return view('admin.users.providers', compact('users'));
     }

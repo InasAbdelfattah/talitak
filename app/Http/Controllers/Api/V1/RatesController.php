@@ -72,7 +72,7 @@ class RatesController extends Controller
             $rating->order_id = $request->orderId;
             $rating->company_id = $request->centerId;
             $rating->user_id = $user->id;
-            if($user->is_provider == 1){
+            if($user->is_provider == 1 && $user->id == $company->user_id){
                 $rating->rate_from = 'provider';
             }else{
                 $rating->rate_from = 'user' ;
@@ -80,16 +80,15 @@ class RatesController extends Controller
 
             $rating->save();
 
-            if ($company->ratings) {
-                // $userCurrent = User::whereId($request->user_id)->whereIsActive(1)->first();
-                // $userCurrent->notify(new \App\Notifications\AddRateForAgentNotification($user->averageRating));
-                return response()->json([
-                    'status' => true,
-                    'message' => 'you rated successfully.',
-                    'data' => $request->rateValue,
-                    'rating' => $company->rates()->avg('rate')
-                ]);
-            }
+            // $userCurrent = User::whereId($request->user_id)->whereIsActive(1)->first();
+            // $userCurrent->notify(new \App\Notifications\AddRateForAgentNotification($user->averageRating));
+            return response()->json([
+                'status' => true,
+                'message' => 'you rated successfully.',
+                'data' => $request->rateValue,
+                'rating' => $company->rates()->avg('rate')
+            ]);
+
         }
     }
 

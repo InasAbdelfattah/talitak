@@ -88,63 +88,63 @@ class UsersController extends Controller
 
             if ($user->save() && $user->is_provider == 1) {
                 $company = Company::where('user_id',$user->id)->first();
-               
-                if($company){
+               if($company){
+
                     if($request->has('name_ar') && $request->name_ar != ''):
                         $company->{'name:ar'} = $request->name_ar;
                         $company->nameAr = $request->name_ar;
                     endif;
-
+    
                     if($request->has('name_en') && $request->name_en != ''):
                         $company->{'name:en'} = $request->name_en;
                     endif;
-
+    
                     if($request->has('description_ar') && $request->description_ar != ''):
                         $company->{'description:ar'} = $request->description_ar;
                     endif;
-
+    
                     if($request->has('description_en') && $request->description_en != ''):
                         $company->{'description:en'} = $request->description_en;
                     endif;
-
+    
                     if($request->has('city') && $request->city != ''):
                         $company->city_id = $request->city;
                     endif;
-
+                    
                     if($request->has('district') && $request->district != ''):
                         $company->district_id = $request->district;
                     endif;
-
+    
                     if($request->has('providerType') && $request->providerType != ''):
                         $company->type = $request->providerType;
                     endif;
-
+    
                     if ($request->hasFile('document_photo')):
                     //if ($request->has('document_photo')):
                         $company->document_photo = uploadImage($request, 'document_photo', $this->public_path_docs, 1280, 583);
                         //$company->document_photo = save64Img($request->document_photo , $this->public_path_docs);
                     endif;
-
+    
                     if($request->has('address') && $request->address != ''):
                         $company->address = $request->address;
                     endif;
-
+    
                     if($request->has('lat') && $request->lat != ''):
                         $company->lat = $request->lat;
                     endif;
-
+    
                     if($request->has('lng') && $request->lng != ''):
                         $company->lng = $request->lng;
                     endif;
-
+    
                     if($request->has('category') && $request->category != ''):
                         $company->category_id = $request->category;
                     endif;
-
+    
                     if ($request->hasFile('image')):
                         $company->image = UploadImage::uploadImage($request,'image', $this->public_path);
                     endif;
-
+    
                     if ($company->save()) {
                         $user->company->name_en = $company->{'name:en'};
                         $user->company->name_ar = $company->{'name:ar'};
@@ -156,7 +156,8 @@ class UsersController extends Controller
                             'code' => $user->action_code
                         ]);
                     }
-                }
+                
+               }
             } else {
                 return response()->json([
                     'status' => true,

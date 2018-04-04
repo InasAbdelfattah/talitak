@@ -34,13 +34,12 @@ class SettingsController extends Controller
             'data' => [
                 'terms' => Setting::getBody('terms_'.$locale),
                 'about_app_desc' => Setting::getBody('about_app_desc_'.$locale),
-                // 'facebook' => Setting::getBody('facebook'),
-                // 'twitter' => Setting::getBody('twitter'),
-                // 'instagram' => Setting::getBody('instagram')
+                 'facebook' => Setting::getBody('facebook'),
+                 'twitter' => Setting::getBody('twitter'),
+                 'instagram' => Setting::getBody('instagram')
             ]
         ]);
     }
-
 
     public function countList()
     {
